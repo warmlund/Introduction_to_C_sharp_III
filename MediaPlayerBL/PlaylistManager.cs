@@ -4,26 +4,32 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MediaStorage;
+using MediaPlayerDA;
+
 
 namespace MediaPlayerBL
 {
+    /// <summary>
+    /// This class stores the logic and manages the current playlist in the player.
+    /// 
+    /// </summary>
     public class PlaylistManager
     {
-        private Playlist playlist;
+        public Playlist Playlist { get; set; }
 
         public PlaylistManager()
         {
-            this.playlist = new Playlist();
+            Playlist = new Playlist();
         }
 
-        public void SavePlaylist(string filepath)
+        public bool SavePlaylist(IMediaDA mediaDA, string filepath, Playlist playlist)
         {
-
+            return mediaDA.SavePlaylist(playlist, filepath);
         }
 
-        public void LoadPlaylist(string filepath)
+        public void LoadPlaylist(IMediaDA mediaDA, string filepath)
         {
-
+            Playlist = mediaDA.LoadPlaylist(filepath);
         }
     }
 }
