@@ -12,3 +12,5 @@
 /MediaPlayerFrontEnd/obj/Release/net8.0-windows
 /MediaPlayerFrontEnd/bin/Debug/net8.0-windows
 /MediaPlayerDA/obj/Release
+/MediaPlayerFrontEnd/obj
+/MediaPlayerBL/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
