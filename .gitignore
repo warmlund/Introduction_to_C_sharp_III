@@ -15,3 +15,4 @@
 /MediaPlayerFrontEnd/obj
 /.gitignore
 /MediaPlayerBL/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
+/MediaStorage/obj/Debug/MediaDTO.csproj.AssemblyReference.cache
