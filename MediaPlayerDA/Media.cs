@@ -15,5 +15,7 @@ namespace MediaPlayerDA
         public string Name; 
         public string Description;
         public string Format;
+        public string FilePath;
+        public string PlaylistName;
     }
 }
