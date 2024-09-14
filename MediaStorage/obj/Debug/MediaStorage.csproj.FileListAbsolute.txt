@@ -1,0 +1,6 @@
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\MediaStorage.dll
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\MediaStorage.pdb
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\MediaStorage.csproj.AssemblyReference.cache
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\MediaStorage.csproj.CoreCompileInputs.cache
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\MediaStorage.dll
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\MediaStorage.pdb

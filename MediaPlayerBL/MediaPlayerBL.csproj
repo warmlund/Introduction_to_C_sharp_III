@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MediaStorage">
+      <HintPath>..\MediaStorage\bin\Debug\MediaStorage.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -42,12 +45,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IMediaBL.cs" />
-    <Compile Include="Media.cs" />
     <Compile Include="MediaBL.cs" />
     <Compile Include="MediaManager.cs" />
-    <Compile Include="Playlist.cs" />
     <Compile Include="PlaylistManager.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
