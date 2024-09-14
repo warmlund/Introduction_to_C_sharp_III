@@ -1,46 +1,55 @@
 ﻿using System.Collections.Generic;
 using MediaStorage;
+using MediaPlayerDA;
 
 namespace MediaPlayerBL
 {
     public class MediaBL : IMediaBL
     {
-        private List<Media> loadedMedia;
         private PlaylistManager playlistManager;
-        private int interval = 5;
-        public List<Media> LoadMedia()
+        private MediaManager mediaManager;
+        private IMediaDA mediaDA;
+
+        public MediaBL(IMediaDA mediaDA)
         {
-            return loadedMedia = new List<Media>();
+            this.mediaDA = mediaDA;
+            playlistManager = new PlaylistManager();
+            mediaManager = new MediaManager();
+        }
+        public void LoadMedia(IMediaDA mediaDA, string[] filenames)
+        {
+            mediaManager.LoadMedia(mediaDA,filenames);
         }
 
-        public void LoadPlaylist(string pathname)
+        public void LoadPlaylist(IMediaDA mediaDA, string filepath)
         {
-
+            playlistManager.LoadPlaylist(mediaDA,filepath);
+            mediaManager.LoadedMedia =playlistManager.Playlist.MediaFiles;
         }
 
-        public void SavePlaylist(string pathname)
+        public bool SavePlaylist(IMediaDA mediaDA, string filepath, Playlist playliste)
         {
-
+            return playlistManager.SavePlaylist(mediaDA,filepath,playliste);
         }
 
-        public int SetInterval(int interval)
+        public void SetInterval(int interval)
         {
-            return interval;
+            mediaManager.SetPlaySpeed(interval);
         }
 
-        public void ArrangeMedia()
+        public void ArrangeMedia(List<Media> NewSorting)
         {
-
+            mediaManager.ArrangeMedia(NewSorting);
         }
 
         public void PlayMedia()
         {
-
+            mediaManager.PlayMedia();
         }
 
-        public void StopMedia()
+        public void PauseMedia()
         {
-
+            mediaManager.PauseMedia();
         }
 
     }

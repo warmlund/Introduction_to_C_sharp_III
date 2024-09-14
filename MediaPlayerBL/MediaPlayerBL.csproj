@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="MediaPlayerDA">
+      <HintPath>..\MediaPlayerDA\bin\Debug\MediaPlayerDA.dll</HintPath>
+    </Reference>
     <Reference Include="MediaStorage">
       <HintPath>..\MediaStorage\bin\Debug\MediaStorage.dll</HintPath>
     </Reference>
