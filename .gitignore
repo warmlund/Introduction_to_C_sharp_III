@@ -1,0 +1,9 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs
+/MediaPlayerBL/obj
+/MediaPlayerDA/obj
+/MediaPlayerFrontEnd/obj/Release/net8.0-windows
+/MediaPlayerFrontEnd/obj/Debug/net8.0-windows
