@@ -1,0 +1,71 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\EMWA\\OneDrive - Bjerking AB\\Dokument\\Plugg\\Malmö\\introduktion_to_c_sharp_III\\Assignment_One\\MediaPlayerFrontEnd\\MediaPlayerPL.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\EMWA\\OneDrive - Bjerking AB\\Dokument\\Plugg\\Malmö\\introduktion_to_c_sharp_III\\Assignment_One\\MediaPlayerFrontEnd\\MediaPlayerPL.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\EMWA\\OneDrive - Bjerking AB\\Dokument\\Plugg\\Malmö\\introduktion_to_c_sharp_III\\Assignment_One\\MediaPlayerFrontEnd\\MediaPlayerPL.csproj",
+        "projectName": "MediaPlayerPL",
+        "projectPath": "C:\\Users\\EMWA\\OneDrive - Bjerking AB\\Dokument\\Plugg\\Malmö\\introduktion_to_c_sharp_III\\Assignment_One\\MediaPlayerFrontEnd\\MediaPlayerPL.csproj",
+        "packagesPath": "C:\\Users\\EMWA\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\EMWA\\OneDrive - Bjerking AB\\Dokument\\Plugg\\Malmö\\introduktion_to_c_sharp_III\\Assignment_One\\MediaPlayerFrontEnd\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\EMWA\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net8.0-windows"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net8.0-windows7.0": {
+            "targetAlias": "net8.0-windows",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net8.0-windows7.0": {
+          "targetAlias": "net8.0-windows",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            },
+            "Microsoft.WindowsDesktop.App.WPF": {
+              "privateAssets": "none"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.401/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
