@@ -8,4 +8,9 @@
     <UseWPF>true</UseWPF>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\MediaPlayerBL\MediaPlayerBL.csproj" />
+    <ProjectReference Include="..\MediaStorage\MediaDTO.csproj" />
+  </ItemGroup>
+
 </Project>

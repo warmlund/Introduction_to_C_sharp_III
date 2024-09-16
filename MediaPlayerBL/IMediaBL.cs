@@ -1,21 +1,18 @@
-﻿using System;
+﻿using MediaDTO;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediaPlayerDA;
-using MediaStorage;
 
 namespace MediaPlayerBL
 {
     public interface IMediaBL
     {
-        void LoadMedia(IMediaDA mediaDA, string[] filenames);
+        List<Media> LoadMedia(string[] filenames);
         void SetInterval(int interval);
-        void ArrangeMedia(List<Media> NewSorting);
-        void LoadPlaylist(IMediaDA mediaDA, string filepath);
-        bool SavePlaylist(IMediaDA mediaDA, string filepath, Playlist playlist);
-        void PlayMedia();
+        int GetInterval();
+        List<Media> LoadPlaylist(string filepath);
+        void SavePlaylist(string filepath, List<Media> loadedMedia);
+        void PlayMedia(List<Media> loadedMedia);
         void PauseMedia();
+        string GetPlaylistTitle();
+        void SetPlaylistTitle(string title);
     }
 }

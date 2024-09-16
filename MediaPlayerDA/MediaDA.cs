@@ -1,4 +1,4 @@
-﻿using MediaStorage;
+﻿using MediaDTO;
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
@@ -45,8 +45,12 @@ namespace MediaPlayerDA
             }
         }
 
-        public bool SavePlaylist(Playlist playlist, string path)
+        public bool SavePlaylist(string path, string title, List<Media> currentMedia)
         {
+            var playlist = new Playlist();
+            playlist.PlaylistName = title;
+            playlist.MediaFiles = currentMedia;
+
             try
             {
                 string jsonPlaylist = JsonConvert.SerializeObject(playlist, Formatting.Indented);
