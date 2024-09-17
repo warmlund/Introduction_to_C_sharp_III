@@ -8,11 +8,11 @@ namespace MediaPlayerBL
     {
         private PlaylistManager playlistManager;
         private MediaManager mediaManager;
-        private IMediaDA _mediaDA;
+        private MediaDA _mediaDA;
 
-        public MediaBL(IMediaDA mediaDA)
+        public MediaBL()
         {
-            this._mediaDA = mediaDA;
+            this._mediaDA = new MediaDA();
             playlistManager = new PlaylistManager();
             mediaManager = new MediaManager();
         }

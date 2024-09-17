@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace MediaPlayerDA
 {
-    internal class MediaDA : IMediaDA
+    public class MediaDA : IMediaDA
     {
 
         public List<Media> LoadMedia(string[] filenames)
