@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediaStorage;
+using MediaDTO;
 using MediaPlayerDA;
 
 
@@ -21,10 +21,9 @@ namespace MediaPlayerBL
         {
             Playlist = new Playlist();
         }
-
-        public bool SavePlaylist(IMediaDA mediaDA, string filepath, Playlist playlist)
+        public void SavePlaylist(IMediaDA mediaDA,string filepath, List<Media> currentMedia)
         {
-            return mediaDA.SavePlaylist(playlist, filepath);
+            mediaDA.SavePlaylist(filepath, Playlist.PlaylistName, currentMedia);
         }
 
         public void LoadPlaylist(IMediaDA mediaDA, string filepath)

@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using MediaStorage;
+﻿using MediaDTO;
 using MediaPlayerDA;
+using System.Collections.Generic;
 
 namespace MediaPlayerBL
 {
@@ -8,49 +8,36 @@ namespace MediaPlayerBL
     {
         private PlaylistManager playlistManager;
         private MediaManager mediaManager;
-        private IMediaDA mediaDA;
+        private MediaDA _mediaDA;
 
-        public MediaBL(IMediaDA mediaDA)
+        public MediaBL()
         {
-            this.mediaDA = mediaDA;
+            this._mediaDA = new MediaDA();
             playlistManager = new PlaylistManager();
             mediaManager = new MediaManager();
         }
-        public void LoadMedia(IMediaDA mediaDA, string[] filenames)
+        public List<Media> LoadPlaylist(string filepath)
         {
-            mediaManager.LoadMedia(mediaDA,filenames);
+            playlistManager.LoadPlaylist(_mediaDA, filepath);
+            return playlistManager.Playlist.MediaFiles;
         }
 
-        public void LoadPlaylist(IMediaDA mediaDA, string filepath)
-        {
-            playlistManager.LoadPlaylist(mediaDA,filepath);
-            mediaManager.LoadedMedia =playlistManager.Playlist.MediaFiles;
-        }
+        public List<Media> LoadMedia(string[] filenames) => mediaManager.LoadMedia(_mediaDA, filenames);
 
-        public bool SavePlaylist(IMediaDA mediaDA, string filepath, Playlist playliste)
-        {
-            return playlistManager.SavePlaylist(mediaDA,filepath,playliste);
-        }
+        public void SavePlaylist(string filepath, List<Media> loadedMedia) => playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia);
 
-        public void SetInterval(int interval)
-        {
-            mediaManager.SetPlaySpeed(interval);
-        }
+        public void SetInterval(int interval) => mediaManager.SetPlaySpeed(interval);
 
-        public void ArrangeMedia(List<Media> NewSorting)
-        {
-            mediaManager.ArrangeMedia(NewSorting);
-        }
+        public int GetInterval() => mediaManager.PlaySpeed;
 
-        public void PlayMedia()
-        {
-            mediaManager.PlayMedia();
-        }
+        public void SetPlaylistTitle(string title) => playlistManager.Playlist.PlaylistName = title;
 
-        public void PauseMedia()
-        {
-            mediaManager.PauseMedia();
-        }
+        public string GetPlaylistTitle() => playlistManager.Playlist.PlaylistName;
 
+        public void PlayMedia(List<Media> loadedMedia) => mediaManager.PlayMedia(loadedMedia);
+
+        public void PauseMedia() => mediaManager.PauseMedia();
+
+        public bool IsMediaPlaying => mediaManager.IsPlaying;
     }
 }

@@ -4,15 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using MediaPlayerDA;
-using MediaStorage;
+using MediaDTO;
 
 namespace MediaPlayerBL
 {
     internal class MediaManager
     {
-        public List<Media> LoadedMedia {  get; set; }
         public int PlaySpeed {  get; set; }
-        public Media CurrentMedia { get; set; }
+        public Media ShownMedia { get; set; }
         public string CurrentFormat { get; set; }   
         public bool IsPlaying { get; set; }
 
@@ -20,28 +19,25 @@ namespace MediaPlayerBL
 
         public MediaManager()
         {
-            LoadedMedia = new List<Media>();   
+            PlaySpeed = 5;
+            IsPlaying = false;
+            CurrentFormat = string.Empty;
+            ShownMedia = null;
         }
 
-        public void LoadMedia(IMediaDA mediaDA, string[] filenames)
+        public List<Media> LoadMedia(IMediaDA mediaDA, string[] filenames)
         {
-            LoadedMedia = mediaDA.LoadMedia(filenames);
+            return mediaDA.LoadMedia(filenames);
         }
 
-        public void ArrangeMedia(List<Media> newSorting)
-        {
-            PauseMedia();
-            LoadedMedia = newSorting;
-        }
-
-        public void PlayMedia()
+        public void PlayMedia(List<Media> loadedMedia)
         {
             while (IsPlaying)
             {
-                for (int i = currentIndex; i < LoadedMedia.Count; i++)
+                for (int i = currentIndex; i < loadedMedia.Count; i++)
                 {
-                    CurrentMedia = LoadedMedia[i];
-                    CurrentFormat = CurrentMedia.Format;
+                    ShownMedia = loadedMedia[i];
+                    CurrentFormat = ShownMedia.Format;
                     Thread.Sleep(PlaySpeed * 1000);
                 }
             }

@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using MediaPlayerBL;
+using MediaPlayerPL;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -19,6 +21,9 @@ namespace MediaPlayerFrontEnd
         public MainWindow()
         {
             InitializeComponent();
+            var mediaBl = new MediaBL();
+            var viewModel = new MediaPLViewModel(mediaBl);
+            this.DataContext = viewModel;
         }
     }
 }
