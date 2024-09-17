@@ -52,5 +52,11 @@
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MediaStorage\MediaDTO.csproj">
+      <Project>{df7d15fe-b111-4bf0-b82e-325d849a9046}</Project>
+      <Name>MediaDTO</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

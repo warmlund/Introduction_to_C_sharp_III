@@ -11,7 +11,6 @@ namespace MediaPlayerPL
         private int _interval;
         private string _playlistTitle;
         private string[] _selectedFiles;
-        private string _playlistPath;
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
 
@@ -24,7 +23,6 @@ namespace MediaPlayerPL
         public ObservableCollection<Media> CurrentLoadedMedia { get { return _currentLoadedMedia; } set { if (_currentLoadedMedia != value) { _currentLoadedMedia = value; OnPropertyChanged(nameof(CurrentLoadedMedia)); } } }
         public int Interval { get { return _interval; } set { if (_interval != value) { _interval = value; OnPropertyChanged(nameof(Interval)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
-        public string PlaylistPath { get { return _playlistPath; } set { if (_playlistPath != value) { _playlistPath = value; OnPropertyChanged(nameof(PlaylistPath)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
 
         public MediaPLViewModel(IMediaBL mediaBL)
@@ -57,22 +55,46 @@ namespace MediaPlayerPL
 
         private void LoadExistingPlaylist()
         {
-            CurrentLoadedMedia = new ObservableCollection<Media>(_mediaBl.LoadPlaylist(PlaylistPath));
-            PlaylistTitle = _mediaBl.GetPlaylistTitle();
+            var openManager = new OpenManager();
+            if (openManager.ShowDialog())
+            {
+                CurrentLoadedMedia = new ObservableCollection<Media>(_mediaBl.LoadPlaylist(openManager.FilePath));
+                PlaylistTitle = _mediaBl.GetPlaylistTitle();
+            }
+
+            else
+            {
+                openManager.AlertUser();
+            }
         }
 
         private bool CanSaveNewPlaylist() => CurrentLoadedMedia != null;
 
         private void SaveNewPlaylist()
         {
-            _mediaBl.SavePlaylist(PlaylistPath, CurrentLoadedMedia.ToList());
+            var saveManager = new SaveManager();
+           if( saveManager.ShowDialog())
+                _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList());
+           else
+            {
+                saveManager.AlertUser();
+            }
         }
 
         private bool CanLoadNewMedia() => true;
 
         private void LoadNewMedia()
         {
-            _mediaBl.LoadMedia(_selectedFiles);
+            var openManager = new OpenManager();
+            if (openManager.ShowDialog())
+            {
+                _mediaBl.LoadMedia(_selectedFiles);
+            }
+            
+            else
+            {
+                openManager.AlertUser();
+            }
         }
     }
 }

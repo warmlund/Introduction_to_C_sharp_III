@@ -1,4 +1,5 @@
 ﻿using Microsoft.Win32;
+using System.Windows;
 
 namespace MediaPlayerPL
 {
@@ -23,5 +24,9 @@ namespace MediaPlayerPL
             return result;
         }
 
+        public override void AlertUser()
+        {
+            MessageBox.Show("Home Mediaplayer", "Failed to load", MessageBoxButton.OK);
+        }
     }
 }
