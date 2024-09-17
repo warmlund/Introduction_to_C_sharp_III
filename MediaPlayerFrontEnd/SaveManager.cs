@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
 
 namespace MediaPlayerPL
 {
@@ -29,5 +30,9 @@ namespace MediaPlayerPL
             return result;
         }
 
+        public override void AlertUser()
+        {
+            MessageBox.Show("Home Mediaplayer", "Failed to save playlist", MessageBoxButton.OK);
+        }
     }
 }

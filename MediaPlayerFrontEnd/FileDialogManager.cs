@@ -8,5 +8,8 @@
 
         public string Filter { get; protected set; } = "JSON Files (*.json)|*.json";
         public abstract bool ShowDialog();
+
+        public abstract void AlertUser();
+
     }
 }

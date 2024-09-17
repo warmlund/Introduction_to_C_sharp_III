@@ -3,6 +3,7 @@
     public interface IFileDialogManager
     {
         bool ShowDialog();
+        void AlertUser();
         string FilePath { get; }
         string Extension { get; }
 
