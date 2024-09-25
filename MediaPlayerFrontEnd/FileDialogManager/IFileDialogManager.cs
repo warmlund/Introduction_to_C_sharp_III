@@ -6,7 +6,8 @@
         void AlertUser();
         string FilePath { get; }
         string Extension { get; }
-
-        string Filter { get; }
+        string PlaylistFilter { get; }
+        string MediaFilter { get; }
+        string[] SelectedFiles { get; }
     }
 }

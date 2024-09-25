@@ -219,4 +219,69 @@
     </Style>
 
     <!--#endregion-->
+    <Style x:Key="GridViewHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
+        <Setter Property="Visibility" Value="Collapsed" />
+    </Style>
+
+    <Style x:Name="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
+        <Setter Property="Background" Value="#d0605f"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Height" Value="40"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListViewItem}">
+                    <Border x:Name="ListItemBorder" Background="{TemplateBinding Background}" CornerRadius="10" Margin="0,5,5,5">
+                        <Border.Effect>
+                            <DropShadowEffect BlurRadius="2"
+                                              ShadowDepth="1"
+                                              Direction="270"
+                                              Color="Black"
+                                              Opacity="0.3" />
+                        </Border.Effect>
+                        <Label Content="{Binding Path=FileName}" 
+                               HorizontalAlignment="Center" 
+                               FontSize="{TemplateBinding FontSize}" 
+                               FontWeight="{TemplateBinding FontWeight}" 
+                               Foreground="{TemplateBinding Foreground}"
+                               Width="Auto"/>
+                        </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.9"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter Property="Background" Value="#FFEB6E6D"/>
+                        </Trigger>
+                        <Trigger Property="IsFocused" Value="False">
+                            <Setter Property="Background" Value="#d0605f"/>
+                        </Trigger>
+
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Name="ListviewStyle" TargetType="{x:Type ListView}">
+        <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="VerticalContentAlignment" Value="Center" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListView}">
+                    <Border x:Name="ListViewBorder" BorderBrush="white" BorderThickness="1" CornerRadius="5">
+                        <ScrollViewer>
+                            <ItemsPresenter />
+                        </ScrollViewer>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 </ResourceDictionary>

@@ -1,7 +1,7 @@
 ﻿using MediaDTO;
 using MediaPlayerBL;
 using System.Collections.ObjectModel;
-using System.Windows;
+using System.Collections.Specialized;
 
 namespace MediaPlayerPL
 {
@@ -13,6 +13,7 @@ namespace MediaPlayerPL
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
         private bool _isPlaying = false;
+        private Media _currentPlayingMedia;
 
         public Command Play { get; private set; }
         public Command Pause { get; private set; }
@@ -25,7 +26,8 @@ namespace MediaPlayerPL
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); } } }
-        
+        public Media CurrentPlayingMedia { get { return _mediaBl.CurrentPlayingMedia; } set { if (_mediaBl.CurrentPlayingMedia != value) { _mediaBl.CurrentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); } } }
+
         public MediaPLViewModel(IMediaBL mediaBL)
         {
             _mediaBl = mediaBL;
@@ -35,14 +37,10 @@ namespace MediaPlayerPL
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
             LoadMedia = new Command(LoadNewMedia, CanLoadNewMedia);
             Interval = mediaBL.GetInterval();
-
+            _currentLoadedMedia = new ObservableCollection<Media>();
+            CurrentLoadedMedia.CollectionChanged += OnCollectionChanged;
         }
-        private bool CanPlayMedia()
-        {
-            if (CurrentLoadedMedia == null) return false;
-            return true;
-        }
-
+        private bool CanPlayMedia() => CurrentLoadedMedia.Count > 0;
         private bool CanPauseMedia()
         {
             if (IsPlaying)
@@ -75,10 +73,15 @@ namespace MediaPlayerPL
 
         private void LoadExistingPlaylist()
         {
-            var openManager = new OpenManager();
+            var openManager = new OpenManager("Load Playlist");
             if (openManager.ShowDialog())
             {
-                CurrentLoadedMedia = new ObservableCollection<Media>(_mediaBl.LoadPlaylist(openManager.FilePath));
+                CurrentLoadedMedia.Clear();
+                foreach (Media media in _mediaBl.LoadPlaylist(openManager.FilePath))
+                {
+                    CurrentLoadedMedia.Add(media);
+                }
+
                 PlaylistTitle = _mediaBl.GetPlaylistTitle();
             }
 
@@ -105,16 +108,27 @@ namespace MediaPlayerPL
 
         private void LoadNewMedia()
         {
-            var openManager = new OpenManager();
+            var openManager = new OpenManager("Load Media");
             if (openManager.ShowDialog())
             {
-                _mediaBl.LoadMedia(_selectedFiles);
+                _selectedFiles = openManager.SelectedFiles;
+                foreach (Media m in _mediaBl.LoadMedia(_selectedFiles))
+                {
+                    CurrentLoadedMedia.Add(m);
+                }
             }
 
             else
             {
                 openManager.AlertUser();
             }
+        }
+
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged(nameof(CurrentLoadedMedia));
+            Play.RaiseCanExecuteChanged();
+            Pause.RaiseCanExecuteChanged();
         }
     }
 }
