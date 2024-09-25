@@ -1,0 +1,222 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MediaPlayerPL">
+
+    <local:PlayPauseConverter x:Key="PlayPauseConverter"/>
+
+    <!--#region TextBlock Styles -->
+    <Style x:Key="ButtonTextStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Right"/>
+        <Setter Property="Margin" Value="5,0,0,0"/>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Button Styles -->
+    <Style x:Key="PlayPauseButtonStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background" Value="#fe994b"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Width" Value="75"/>
+        <Setter Property="Height" Value="75"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Border x:Name="Border" CornerRadius="50" Background="{TemplateBinding Background}">
+                        <TextBlock Name="PlayPauseText"
+                               FontFamily="Segoe MDL2 Assets"
+                               FontSize="32"
+                               Text="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}, Converter={StaticResource PlayPauseConverter}}"
+                               Foreground="White"
+                               HorizontalAlignment="Center"
+                               VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="PlayPauseText" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="False">
+                            <Setter TargetName="PlayPauseText" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="PlayPauseText" Property="Opacity" Value="0.6"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="PlayPauseText" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="HamburgerButton" TargetType="{x:Type Button}">
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontWeight" Value="DemiBold"/>
+        <Setter Property="Content" Value="&#xE700;"/>
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+    </Style>
+
+
+    <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,5,0,5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="5" Background="#fe994b">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="FolderIcon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xED25;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Name="LoadMedia" Text="Load Media" Style="{StaticResource ButtonTextStyle}"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="FolderIcon" Property="Opacity" Value="0.8"/>
+                            <Setter TargetName="LoadMedia" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="False">
+                            <Setter TargetName="LoadMedia" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="FolderIcon" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,5,0,5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="5" Background="#fe994b">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="LoadIcon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE898;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Name="LoadPlaylist" Text="Load Playlist" Style="{StaticResource ButtonTextStyle}"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="LoadIcon" Property="Opacity" Value="0.8"/>
+                            <Setter TargetName="LoadPlaylist" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="False">
+                            <Setter TargetName="LoadIcon" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="LoadPlaylist" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,5,0,5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="5" Background="#fe994b">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="SaveIcon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE74E;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="SavePlaylist" Text="Save Playlist" Style="{StaticResource ButtonTextStyle}"/>
+                        </StackPanel>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="SaveIcon" Property="Opacity" Value="0.8"/>
+                            <Setter TargetName="SavePlaylist" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="False">
+                            <Setter TargetName="SaveIcon" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="SavePlaylist" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Slider Style -->
+    <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
+        <Setter Property="Background" Value="#fe994b"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <StackPanel Orientation="Vertical" VerticalAlignment="Center" HorizontalAlignment="Right" Margin="0,0,0,20">
+                        <Label Content="{Binding Path=Value, RelativeSource={RelativeSource AncestorType=Slider}}" FontSize="14" Foreground="White" FontWeight="DemiBold" Padding="0" HorizontalContentAlignment="Center"/>
+                        <Ellipse x:Name="EllipseThumb" Fill="{TemplateBinding Background}" StrokeThickness="0" Height="16" Width="16"/>
+                    </StackPanel>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsDragging" Value="True">
+                            <Setter TargetName="EllipseThumb" Property="Fill" Value="#FFFCA460"/>
+                        </Trigger>
+                        <Trigger Property="IsDragging" Value="False">
+                            <Setter TargetName="EllipseThumb" Property="Fill" Value="#fe994b"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SliderRepeatButtonStyle" TargetType="RepeatButton">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="RepeatButton">
+                    <Border Background="Transparent">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
+    <Style x:Key="SliderStyle" TargetType="{x:Type Slider}">
+        <Setter Property="Width" Value="150"/>
+        <Setter Property="Minimum" Value="1"/>
+        <Setter Property="Maximum" Value="10"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Slider}">
+                    <Grid>
+                        <Border Background="White" Height="4" VerticalAlignment="Center" CornerRadius="2"/>
+                        <Track x:Name="PART_Track" Grid.ZIndex="0">
+                            <Track.DecreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource SliderRepeatButtonStyle}" Command="Slider.DecreaseLarge"/>
+                            </Track.DecreaseRepeatButton>
+                            <Track.Thumb>
+                                <Thumb x:Name="Thumb" Style="{StaticResource SliderThumbStyle}" Grid.ZIndex="1"/>
+                            </Track.Thumb>
+                            <Track.IncreaseRepeatButton>
+                                <RepeatButton Style="{StaticResource SliderRepeatButtonStyle}" Command="Slider.IncreaseLarge"/>
+                            </Track.IncreaseRepeatButton>
+                        </Track>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!--#endregion-->
+</ResourceDictionary>

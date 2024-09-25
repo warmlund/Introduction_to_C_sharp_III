@@ -1,6 +1,5 @@
 ﻿using MediaDTO;
 using MediaPlayerBL;
-using Microsoft.Win32;
 using System.Collections.ObjectModel;
 using System.Windows;
 
@@ -13,6 +12,7 @@ namespace MediaPlayerPL
         private string[] _selectedFiles;
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
+        private bool _isPlaying = false;
 
         public Command Play { get; private set; }
         public Command Pause { get; private set; }
@@ -24,32 +24,52 @@ namespace MediaPlayerPL
         public int Interval { get { return _interval; } set { if (_interval != value) { _interval = value; OnPropertyChanged(nameof(Interval)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
-
+        public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); } } }
+        
         public MediaPLViewModel(IMediaBL mediaBL)
         {
             _mediaBl = mediaBL;
-
-            Play = new Command(PlayMedia, CanPlayMedia);
+            Play = new Command(TogglePlayPause, CanPlayMedia);
             Pause = new Command(PauseMedia, CanPauseMedia);
             LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadExistingPlaylist);
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
             LoadMedia = new Command(LoadNewMedia, CanLoadNewMedia);
-
             Interval = mediaBL.GetInterval();
 
         }
         private bool CanPlayMedia()
         {
-            if (CurrentLoadedMedia != null)
+            if (CurrentLoadedMedia == null) return false;
+            return true;
+        }
+
+        private bool CanPauseMedia()
+        {
+            if (IsPlaying)
                 return true;
             return false;
         }
 
-        private bool CanPauseMedia() => true;
+        private void PauseMedia()
+        {
+            IsPlaying = false;
+            _mediaBl.SetMediaPlayPause(IsPlaying);
+        }
 
-        private void PauseMedia() => _mediaBl.PauseMedia();
+        private void TogglePlayPause()
+        {
+            IsPlaying = !IsPlaying;
+            _mediaBl.SetMediaPlayPause(IsPlaying);
 
-        private void PlayMedia() => _mediaBl.PlayMedia(CurrentLoadedMedia.ToList());
+            if (IsPlaying)
+            {
+                _mediaBl.PlayMedia(CurrentLoadedMedia.ToList());
+            }
+            else
+            {
+                _mediaBl.PauseMedia();
+            }
+        }
 
         private bool CanLoadExistingPlaylist() => true;
 
@@ -73,9 +93,9 @@ namespace MediaPlayerPL
         private void SaveNewPlaylist()
         {
             var saveManager = new SaveManager();
-           if( saveManager.ShowDialog())
+            if (saveManager.ShowDialog())
                 _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList());
-           else
+            else
             {
                 saveManager.AlertUser();
             }
@@ -90,7 +110,7 @@ namespace MediaPlayerPL
             {
                 _mediaBl.LoadMedia(_selectedFiles);
             }
-            
+
             else
             {
                 openManager.AlertUser();

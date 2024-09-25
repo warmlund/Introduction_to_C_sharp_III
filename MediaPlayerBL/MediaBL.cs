@@ -38,6 +38,8 @@ namespace MediaPlayerBL
 
         public void PauseMedia() => mediaManager.PauseMedia();
 
-        public bool IsMediaPlaying => mediaManager.IsPlaying;
+        public bool GetIsMediaPlaying() => mediaManager.IsPlaying;
+
+        public void SetMediaPlayPause(bool value) => mediaManager.IsPlaying = value; 
     }
 }

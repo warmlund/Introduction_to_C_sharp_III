@@ -14,5 +14,7 @@ namespace MediaPlayerBL
         void PauseMedia();
         string GetPlaylistTitle();
         void SetPlaylistTitle(string title);
+        bool GetIsMediaPlaying();
+        void SetMediaPlayPause(bool value);
     }
 }

@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MediaPlayerFrontEnd
+namespace MediaPlayerPL
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
@@ -20,10 +20,10 @@ namespace MediaPlayerFrontEnd
     {
         public MainWindow()
         {
-            InitializeComponent();
             var mediaBl = new MediaBL();
             var viewModel = new MediaPLViewModel(mediaBl);
             this.DataContext = viewModel;
+            InitializeComponent();
         }
     }
 }
