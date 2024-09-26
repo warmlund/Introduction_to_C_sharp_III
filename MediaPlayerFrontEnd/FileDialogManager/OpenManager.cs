@@ -37,13 +37,7 @@ namespace MediaPlayerPL
                     FilePath = _openFile.FileName;
                 else
                 {
-                    string[] loadedFiles = _openFile.FileNames;
-                    string[] fileNames= new string[loadedFiles.Length];
-                    for(int i = 0; i < loadedFiles.Length; i++) 
-                    {
-                        fileNames[i] = Path.GetFileNameWithoutExtension(loadedFiles[i]);
-                    }
-                    SelectedFiles = fileNames;
+                    SelectedFiles = _openFile.FileNames;
                 }
             }
             return result;

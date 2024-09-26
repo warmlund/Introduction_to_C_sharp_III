@@ -2,6 +2,8 @@
 using MediaPlayerBL;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.Windows;
+using System.Windows.Media.Imaging;
 
 namespace MediaPlayerPL
 {
@@ -13,10 +15,8 @@ namespace MediaPlayerPL
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
         private bool _isPlaying = false;
-        private Media _currentPlayingMedia;
 
-        public Command Play { get; private set; }
-        public Command Pause { get; private set; }
+        public AsyncCommand Play { get; private set; }
         public Command LoadPlaylist { get; private set; }
         public Command SavePlaylist { get; private set; }
         public Command LoadMedia { get; private set; }
@@ -26,48 +26,53 @@ namespace MediaPlayerPL
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); } } }
-        public Media CurrentPlayingMedia { get { return _mediaBl.CurrentPlayingMedia; } set { if (_mediaBl.CurrentPlayingMedia != value) { _mediaBl.CurrentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); } } }
+        
+        public Media CurrentPlayingMedia
+        {
+            get => _mediaBl.CurrentPlayingMedia;
+            set
+            {
+                if (_mediaBl.CurrentPlayingMedia != value)
+                {
+                    _mediaBl.CurrentPlayingMedia = value;
+                    OnPropertyChanged(nameof(CurrentPlayingMedia));
+                    MessageBox.Show(value.FilePath);
+                }
+            }
+        }
 
         public MediaPLViewModel(IMediaBL mediaBL)
         {
             _mediaBl = mediaBL;
-            Play = new Command(TogglePlayPause, CanPlayMedia);
-            Pause = new Command(PauseMedia, CanPauseMedia);
+            Play = new AsyncCommand(TogglePlayPause, CanPlayMedia);
             LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadExistingPlaylist);
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
             LoadMedia = new Command(LoadNewMedia, CanLoadNewMedia);
-            Interval = mediaBL.GetInterval();
+            Interval = mediaBL.PlaySpeed;
             _currentLoadedMedia = new ObservableCollection<Media>();
+
             CurrentLoadedMedia.CollectionChanged += OnCollectionChanged;
+            mediaBL.MediaChanged += (media) => CurrentPlayingMedia = media;
+
         }
         private bool CanPlayMedia() => CurrentLoadedMedia.Count > 0;
-        private bool CanPauseMedia()
-        {
-            if (IsPlaying)
-                return true;
-            return false;
-        }
 
-        private void PauseMedia()
-        {
-            IsPlaying = false;
-            _mediaBl.SetMediaPlayPause(IsPlaying);
-        }
-
-        private void TogglePlayPause()
+        private async Task TogglePlayPause()
         {
             IsPlaying = !IsPlaying;
-            _mediaBl.SetMediaPlayPause(IsPlaying);
+            _mediaBl.IsPlaying = IsPlaying;
 
             if (IsPlaying)
             {
-                _mediaBl.PlayMedia(CurrentLoadedMedia.ToList());
+                _mediaBl.ResetIndex();
+                await _mediaBl.PlayMediaAsync(CurrentLoadedMedia.ToList());
             }
             else
             {
                 _mediaBl.PauseMedia();
             }
         }
+
 
         private bool CanLoadExistingPlaylist() => true;
 
@@ -83,6 +88,7 @@ namespace MediaPlayerPL
                 }
 
                 PlaylistTitle = _mediaBl.GetPlaylistTitle();
+                CurrentPlayingMedia = CurrentLoadedMedia[0];
             }
 
             else
@@ -116,6 +122,7 @@ namespace MediaPlayerPL
                 {
                     CurrentLoadedMedia.Add(m);
                 }
+                CurrentPlayingMedia = CurrentLoadedMedia[0];
             }
 
             else
@@ -128,7 +135,6 @@ namespace MediaPlayerPL
         {
             OnPropertyChanged(nameof(CurrentLoadedMedia));
             Play.RaiseCanExecuteChanged();
-            Pause.RaiseCanExecuteChanged();
         }
     }
 }

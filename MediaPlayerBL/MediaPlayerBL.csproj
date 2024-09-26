@@ -37,6 +37,7 @@
     <Reference Include="MediaStorage">
       <HintPath>..\MediaStorage\bin\Debug\MediaStorage.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -49,7 +50,6 @@
   <ItemGroup>
     <Compile Include="IMediaBL.cs" />
     <Compile Include="MediaBL.cs" />
-    <Compile Include="MediaManager.cs" />
     <Compile Include="PlaylistManager.cs" />
   </ItemGroup>
   <ItemGroup>

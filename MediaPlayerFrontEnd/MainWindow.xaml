@@ -33,7 +33,7 @@
         <TextBlock Text="Home Media Player" Foreground="White" VerticalAlignment="Center" Grid.Column="0" FontSize="32" FontWeight="SemiBold" Margin="20,0,0,0"/>
         <Label Content="Playlist" Foreground="White" VerticalAlignment="Center" Grid.Column="1" FontSize="24" FontWeight="SemiBold" Margin="0,0,20,0"/>
         <MediaElement Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" LoadedBehavior="Play" UnloadedBehavior="Stop" Margin="20,0,5,10" Visibility="Hidden"/>
-        <Image x:Name="ImageShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="20,0,5,10" Source="{Binding CurrentPlayingMedia.FilePath}"/>
+        <Image x:Name="ImageShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="0,0,5,10" Source="{Binding CurrentPlayingMedia.FilePath}" />
         <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="0" Margin="0,0,20,0"/>
         <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Background="#99506d" Margin="5,0,10,10" BorderThickness="0" d:ItemsSource="{d:SampleData ItemCount=5}">
             <ListView.View>
@@ -46,7 +46,7 @@
             <ToggleButton Command="{Binding Play}" HorizontalAlignment="Left" Style="{StaticResource PlayPauseButtonStyle}" Margin="0,0,75,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="75,0,0,0">
                 <TextBlock Text="&#xEC48;" FontSize="14" FontFamily="Segoe MDL2 Assets" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                <Slider x:Name="IntervalSlider" Style="{StaticResource SliderStyle}" VerticalAlignment="Center" Value="{Binding Interval}"/>
+                <Slider x:Name="IntervalSlider" Style="{StaticResource SliderStyle}" VerticalAlignment="Center" Value="{Binding Interval, Mode=TwoWay}"/>
                 <TextBlock Text="&#xEC4A;" FontSize="14" FontFamily="Segoe MDL2 Assets" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
         </StackPanel>
