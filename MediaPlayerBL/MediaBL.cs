@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Linq;
 
 namespace MediaPlayerBL
 {
@@ -38,7 +39,7 @@ namespace MediaPlayerBL
 
         public List<Media> LoadMedia(string[] filenames)
         {
-            currentIndex = 1;
+            currentIndex = 0;
             return _mediaDA.LoadMedia(filenames);
         }
 
@@ -65,16 +66,9 @@ namespace MediaPlayerBL
                     _currentPlayingMedia = loadedMedia[i];
                     _currentFormat = CurrentPlayingMedia.Format;
 
-                    if (MediaFormatManager.IsVideoFormat(CurrentPlayingMedia.Format))
+                    if (IsVideoFormat(CurrentPlayingMedia.Format))
                     {
-                        int duration = await MediaFormatManager.GetVideoDurationAsync(_currentPlayingMedia.FilePath);
-
-                        if (duration <= 0)
-                        {
-                            duration = PlaySpeed;  
-                        }
-
-                        await Task.Delay(duration * 1000, _tokenSource.Token);
+                        await Task.Delay(PlaySpeed * 1000, _tokenSource.Token);
                     }
                     else
                     {
@@ -105,28 +99,32 @@ namespace MediaPlayerBL
             currentIndex = 0;
         }
 
-        public bool IsImageFormat(string filepath)
+        public bool IsImageFormat(string format)
         {
-            if(MediaFormatManager.IsImageFormat(filepath))
-                return true;
-            return false;
+            List<string> imageFormats = new List<string> { ".jpg", ".jpeg", ".png", ".bmp", ".gif", ".tiff", ".ico" };
+            return imageFormats.Any(s => s.Equals(format, StringComparison.OrdinalIgnoreCase));
         }
 
-        public bool IsVideoFormat(string filepath)
+        public bool IsVideoFormat(string format)
         {
-            if( MediaFormatManager.IsVideoFormat(filepath))
-                return true;
-            return false;
+            List<string> videoFormats = new List<string> { ".mp4", ".wmv", ".avi", ".mpeg", ".mpg", ".asf" };
+            return videoFormats.Any(s => s.Equals(format, StringComparison.OrdinalIgnoreCase));
         }
 
         public BitmapImage CreateImage(string filePath)
         {
-            return MediaFormatManager.CreateBitmap(filePath);
+            var image = new BitmapImage();
+            image.BeginInit();
+            image.UriSource = new Uri(filePath, UriKind.Absolute);
+            image.CacheOption = BitmapCacheOption.OnLoad;
+            image.EndInit();
+            image.Freeze();
+            return image;
         }
 
         public Uri CreateVideo(string filePath)
         {
-            return MediaFormatManager.CreateVideoUri(filePath);
+            return new Uri(filePath, UriKind.RelativeOrAbsolute);
         }
     }
 }

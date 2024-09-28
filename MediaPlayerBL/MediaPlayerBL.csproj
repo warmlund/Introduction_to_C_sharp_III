@@ -52,14 +52,12 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ImageFormats.cs" />
     <Compile Include="IMediaBL.cs" />
     <Compile Include="MediaBL.cs" />
-    <Compile Include="MediaFormatManager.cs" />
     <Compile Include="PlaylistManager.cs" />
-    <Compile Include="VideoFormats.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
@@ -18,17 +13,18 @@ namespace MediaPlayerPL
                 return boolValue ? Visibility.Visible : Visibility.Collapsed;
             }
 
-            return Visibility.Collapsed;
+            return Visibility.Collapsed; // Default to Collapsed if the value is not a boolean.
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value is Visibility visibility)
             {
-                return visibility = Visibility.Visible;
+                return visibility == Visibility.Visible;
             }
 
-            return false;
+            return false; // Return false if the value is not a Visibility type.
         }
     }
 }
+
