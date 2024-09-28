@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,20 +16,22 @@ namespace MediaPlayerBL
     /// </summary>
     public class PlaylistManager
     {
-        public Playlist Playlist { get; set; }
+        public Playlist CurrentPlaylist { get; set; }
 
         public PlaylistManager()
         {
-            Playlist = new Playlist();
+            CurrentPlaylist = new Playlist();
         }
         public void SavePlaylist(IMediaDA mediaDA,string filepath, List<Media> currentMedia)
         {
-            mediaDA.SavePlaylist(filepath, Playlist.PlaylistName, currentMedia);
+            CurrentPlaylist.PlaylistName = Path.GetFileNameWithoutExtension(filepath);
+            mediaDA.SavePlaylist(filepath, CurrentPlaylist.PlaylistName, currentMedia);
         }
 
         public void LoadPlaylist(IMediaDA mediaDA, string filepath)
         {
-            Playlist = mediaDA.LoadPlaylist(filepath);
+            CurrentPlaylist = mediaDA.LoadPlaylist(filepath);
+            CurrentPlaylist.PlaylistName= Path.GetFileNameWithoutExtension(filepath);
         }
     }
 }
