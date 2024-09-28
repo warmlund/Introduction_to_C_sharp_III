@@ -9,37 +9,36 @@ namespace MediaPlayerPL
 {
     public class MediaPLViewModel : NotifyPropertyChanged
     {
+        #region instance variables
         private int _interval;
         private string _playlistTitle;
         private string[] _selectedFiles;
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
         private bool _isPlaying = false;
-
+        private bool _isVideo = false;
+        private bool _isImage = false;
+        private BitmapImage _image;
+        private Uri _video;
         public AsyncCommand Play { get; private set; }
         public Command LoadPlaylist { get; private set; }
         public Command SavePlaylist { get; private set; }
         public Command LoadMedia { get; private set; }
+        #endregion
 
+        #region Properties
         public ObservableCollection<Media> CurrentLoadedMedia { get { return _currentLoadedMedia; } set { if (_currentLoadedMedia != value) { _currentLoadedMedia = value; OnPropertyChanged(nameof(CurrentLoadedMedia)); } } }
         public int Interval { get { return _interval; } set { if (_interval != value) { _interval = value; OnPropertyChanged(nameof(Interval)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); } } }
-        
-        public Media CurrentPlayingMedia
-        {
-            get => _mediaBl.CurrentPlayingMedia;
-            set
-            {
-                if (_mediaBl.CurrentPlayingMedia != value)
-                {
-                    _mediaBl.CurrentPlayingMedia = value;
-                    OnPropertyChanged(nameof(CurrentPlayingMedia));
-                    MessageBox.Show(value.FilePath);
-                }
-            }
-        }
+        public bool IsImage { get { return _isImage; } set { if (_isImage != value) { _isImage = value; OnPropertyChanged(nameof(IsImage)); MessageBox.Show($"image is {value}"); } } }
+        public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); MessageBox.Show($"video is {value}"); } } }
+        public Media CurrentPlayingMedia { get => _mediaBl.CurrentPlayingMedia; set { if (_mediaBl.CurrentPlayingMedia != value) { _mediaBl.CurrentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); } } }
+        public string CurrentFormat { get => _mediaBl.CurrentFormat; set { if (_mediaBl.CurrentFormat != value) { _mediaBl.CurrentFormat = value; OnPropertyChanged(nameof(CurrentFormat)); MessageBox.Show("Property CurrentFormat changed"); } } }
+        public BitmapImage CurrentImage { get => _image; set { if (_image != value) { _image = value; OnPropertyChanged(nameof(_image)); } } }
+        public Uri CurrentVideo { get => _video; set { if (_video != value) { _video = value; OnPropertyChanged(nameof(_video)); } } }
+        #endregion
 
         public MediaPLViewModel(IMediaBL mediaBL)
         {
@@ -53,6 +52,7 @@ namespace MediaPlayerPL
 
             CurrentLoadedMedia.CollectionChanged += OnCollectionChanged;
             mediaBL.MediaChanged += (media) => CurrentPlayingMedia = media;
+            mediaBL.FormatChanged += (format) => CurrentFormat = format;
 
         }
         private bool CanPlayMedia() => CurrentLoadedMedia.Count > 0;
@@ -73,7 +73,6 @@ namespace MediaPlayerPL
             }
         }
 
-
         private bool CanLoadExistingPlaylist() => true;
 
         private void LoadExistingPlaylist()
@@ -88,7 +87,7 @@ namespace MediaPlayerPL
                 }
 
                 PlaylistTitle = _mediaBl.GetPlaylistTitle();
-                CurrentPlayingMedia = CurrentLoadedMedia[0];
+                SetUpFirstLoadedMedia();
             }
 
             else
@@ -122,12 +121,50 @@ namespace MediaPlayerPL
                 {
                     CurrentLoadedMedia.Add(m);
                 }
-                CurrentPlayingMedia = CurrentLoadedMedia[0];
+                SetUpFirstLoadedMedia();
             }
 
             else
             {
                 openManager.AlertUser();
+            }
+        }
+
+        private void SetUpFirstLoadedMedia()
+        {
+            CurrentPlayingMedia = CurrentLoadedMedia[0];
+            CurrentFormat = CurrentPlayingMedia.Format;
+            CheckFormat();
+        }
+
+        private void CheckFormat()
+        {
+            if (CurrentFormat != null)
+            {
+                if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.FilePath))
+                {
+                    IsVideo = true;
+                    IsImage = false;
+                    _video = _mediaBl.CreateVideo(CurrentPlayingMedia.FilePath);
+
+                }
+
+                else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.FilePath))
+                {
+                    IsVideo = false;
+                    IsImage = true;
+                    _image = _mediaBl.CreateImage(CurrentPlayingMedia.FilePath);
+                }
+
+                else
+                {
+                    return;
+                }
+            }
+
+            else
+            {
+                return;
             }
         }
 

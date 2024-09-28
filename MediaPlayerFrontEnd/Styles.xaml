@@ -54,17 +54,6 @@
         </Setter>
     </Style>
 
-    <Style x:Key="HamburgerButton" TargetType="{x:Type Button}">
-        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
-        <Setter Property="FontWeight" Value="DemiBold"/>
-        <Setter Property="Content" Value="&#xE700;"/>
-        <Setter Property="FontSize" Value="32"/>
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="BorderThickness" Value="0"/>
-    </Style>
-
-
     <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="100"/>
         <Setter Property="Height" Value="25"/>
@@ -224,7 +213,7 @@
     </Style>
 
     <Style x:Name="ListViewItemStyle" TargetType="{x:Type ListViewItem}">
-        <Setter Property="Background" Value="#d0605f"/>
+        <Setter Property="Background" Value="#a65676"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="FontWeight" Value="DemiBold"/>
@@ -234,7 +223,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
-                    <Border x:Name="ListItemBorder" Background="{TemplateBinding Background}" CornerRadius="10" Margin="0,5,5,5">
+                    <Border x:Name="ListItemBorder" Background="{TemplateBinding Background}" CornerRadius="10" Margin="0,10,0,5">
                         <Border.Effect>
                             <DropShadowEffect BlurRadius="2"
                                               ShadowDepth="1"
@@ -256,12 +245,6 @@
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter Property="Opacity" Value="1.0"/>
                         </Trigger>
-                        <Trigger Property="IsFocused" Value="True">
-                            <Setter Property="Background" Value="#FFEB6E6D"/>
-                        </Trigger>
-                        <Trigger Property="IsFocused" Value="False">
-                            <Setter Property="Background" Value="#d0605f"/>
-                        </Trigger>
 
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -275,7 +258,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListView}">
-                    <Border x:Name="ListViewBorder" BorderBrush="white" BorderThickness="1" CornerRadius="5">
+                    <Border x:Name="ListViewBorder" Background="#914c66"  CornerRadius="5">
                         <ScrollViewer>
                             <ItemsPresenter />
                         </ScrollViewer>

@@ -31,6 +31,7 @@ namespace MediaPlayerBL
         public void LoadPlaylist(IMediaDA mediaDA, string filepath)
         {
             CurrentPlaylist = mediaDA.LoadPlaylist(filepath);
+            CurrentPlaylist.PlaylistName= Path.GetFileNameWithoutExtension(filepath);
         }
     }
 }
