@@ -37,7 +37,7 @@
         <MediaElement x:Name="VideoShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" LoadedBehavior="Play" UnloadedBehavior="Stop" Margin="20,0,5,10" Source="{Binding CurrentVideo}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}"/>
         <Image x:Name="ImageShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="0,0,5,10" Source="{Binding CurrentImage}" Visibility="{Binding IsImage, Converter={StaticResource BoolVisibilityConverter}}" />
         <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="0" Margin="0,0,20,0"/>
-        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Row="1" Grid.Column="1" Margin="5,0,10,10" BorderThickness="0">
+        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia}" Grid.Row="1" Grid.Column="1" Margin="5,0,10,10" BorderThickness="0" SelectedIndex="{Binding CurrentIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
             <ListView.View>
                 <GridView x:Name="ListViewGrid" AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/>
