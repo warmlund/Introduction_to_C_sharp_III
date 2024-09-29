@@ -16,3 +16,7 @@
 /.gitignore
 /MediaPlayerBL/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
 /MediaStorage/obj/Debug/MediaDTO.csproj.AssemblyReference.cache
+/MediaStorage/bin/Debug/MediaStorage.dll
+/MediaStorage/bin/Debug/MediaStorage.pdb
+/MediaStorage/obj/Debug/MediaStorage.dll
+/MediaStorage/obj/Debug/MediaStorage.pdb
