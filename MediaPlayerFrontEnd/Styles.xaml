@@ -54,7 +54,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}">
+    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="100"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -65,18 +65,18 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border CornerRadius="5" Background="#fe994b">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="FolderIcon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xED25;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Name="LoadMedia" Text="Load Media" Style="{StaticResource ButtonTextStyle}"/>
+                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Name="ButtonText" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="FolderIcon" Property="Opacity" Value="0.8"/>
-                            <Setter TargetName="LoadMedia" Property="Opacity" Value="0.8"/>
+                            <Setter TargetName="Icon" Property="Opacity" Value="0.8"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.8"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="False">
-                            <Setter TargetName="LoadMedia" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="FolderIcon" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -84,65 +84,88 @@
         </Setter>
     </Style>
 
-    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
+    <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border CornerRadius="5" Background="#fe994b">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="LoadIcon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE898;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Name="LoadPlaylist" Text="Load Playlist" Style="{StaticResource ButtonTextStyle}"/>
+                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xED25;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Name="ButtonText" Text="Load Media" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="5" Background="#fe994b">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE898;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Name="ButtonText" Text="Load Playlist" Style="{StaticResource ButtonTextStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border CornerRadius="5" Background="#fe994b">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE74E;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock Name="ButtonText" Text="Save Playlist" Style="{StaticResource ButtonTextStyle}"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="UpDownButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="FontSize" Value="8"/>
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="5,0,0,0"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Content="{TemplateBinding Content}"/>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="LoadIcon" Property="Opacity" Value="0.8"/>
-                            <Setter TargetName="LoadPlaylist" Property="Opacity" Value="0.8"/>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Foreground" Value="#e677a3"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="False">
-                            <Setter TargetName="LoadIcon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="LoadPlaylist" Property="Opacity" Value="1.0"/>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Trigger.Setters>
+                                <Setter Property="Foreground" Value="Transparent"/>
+                            </Trigger.Setters>
                         </Trigger>
+                       
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#fe994b">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="SaveIcon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE74E;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="SavePlaylist" Text="Save Playlist" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="SaveIcon" Property="Opacity" Value="0.8"/>
-                            <Setter TargetName="SavePlaylist" Property="Opacity" Value="0.8"/>
-                        </Trigger>
-                        <Trigger Property="IsPressed" Value="False">
-                            <Setter TargetName="SaveIcon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="SavePlaylist" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="UpButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonStyle}">
+        <Setter Property="Content" Value="&#xE74A;"/>
     </Style>
+
+    <Style x:Key="DownButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonStyle}">
+        <Setter Property="Content" Value="&#xE74B;"/>
+    </Style>
+
     <!--#endregion-->
 
     <!--#region Slider Style -->
@@ -209,7 +232,6 @@
 
     <!--#endregion-->
 
-
     <!--#region Listview styles -->
     <Style x:Key="GridViewHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
         <Setter Property="Visibility" Value="Collapsed" />
@@ -227,28 +249,30 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListViewItem}">
                     <Border x:Name="ListItemBorder" Background="{TemplateBinding Background}" CornerRadius="10" Margin="0,10,0,5">
-                        <Border.Effect>
-                            <DropShadowEffect BlurRadius="2"
-                                              ShadowDepth="1"
-                                              Direction="270"
-                                              Color="Black"
-                                              Opacity="0.3" />
-                        </Border.Effect>
-                        <Label Content="{Binding Path=FileName}" 
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="2" ShadowDepth="1" Direction="270" Color="Black" Opacity="0.3" />
+                            </Border.Effect>
+                        <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
+                            <Button x:Name="MoveItemUpButton" Style="{DynamicResource UpButtonStyle}" Command="{Binding DataContext.MoveMediaUp, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"/>
+                            <Button x:Name="MoveItemDownButton" Style="{DynamicResource DownButtonStyle}" Command="{Binding DataContext.MoveMediaDown, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"/>
+                            <Label Content="{Binding Path=FileName}" 
                                HorizontalAlignment="Center" 
                                FontSize="{TemplateBinding FontSize}" 
                                FontWeight="{TemplateBinding FontWeight}" 
                                Foreground="{TemplateBinding Foreground}"
                                Width="Auto"/>
+                        </StackPanel>
                     </Border>
-                    <ControlTemplate.Triggers>
+                        <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Opacity" Value="0.9"/>
                         </Trigger>
                         <Trigger Property="IsMouseOver" Value="False">
                             <Setter Property="Opacity" Value="1.0"/>
                         </Trigger>
-
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="ListItemBorder" Property="Background" Value="#cc6a91" />
+                        </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -272,6 +296,7 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region Progressbar style -->
     <Style x:Key="ProgressbarStyle" TargetType="{x:Type ProgressBar}">
         <Setter Property="Width" Value="Auto"/>
         <Setter Property="Height" Value="5"/>
@@ -279,4 +304,5 @@
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="Foreground" Value="#fe994b"/>
     </Style>
+    <!--#endregion-->
 </ResourceDictionary>
