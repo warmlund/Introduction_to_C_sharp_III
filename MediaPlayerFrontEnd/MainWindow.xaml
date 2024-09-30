@@ -32,20 +32,20 @@
         </Border>
         <Rectangle Grid.RowSpan="2" Grid.ColumnSpan="2"  Fill="#99506d"/>
         <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="#d0605f"/>
-        <TextBlock Text="Home Media Player" Foreground="White" VerticalAlignment="Center" Grid.Column="0" FontSize="32" FontWeight="SemiBold" Margin="20,0,0,0"/>
-        <Label Content="Playlist" Foreground="White" VerticalAlignment="Center" Grid.Column="1" FontSize="24" FontWeight="SemiBold" Margin="0,0,20,0"/>
-        <MediaElement x:Name="VideoShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" LoadedBehavior="Play" UnloadedBehavior="Stop" Margin="20,0,5,10" Source="{Binding CurrentVideo}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}"/>
+        <TextBlock Text="Home Media Player" Foreground="White" VerticalAlignment="Center" Grid.Column="0" FontSize="32" FontWeight="SemiBold" Margin="10,0,0,0"/>
+        <Label Content="Playlist" Foreground="White" VerticalAlignment="Center" Grid.Column="1" FontSize="24" FontWeight="SemiBold" Margin="0,0,10,0"/>
+        <MediaElement x:Name="VideoShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="10,0,5,10" Source="{Binding CurrentVideo, UpdateSourceTrigger=PropertyChanged}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}" mp:EventManager.EnableVideoEvents="True"/>
         <Image x:Name="ImageShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="0,0,5,10" Source="{Binding CurrentImage}" Visibility="{Binding IsImage, Converter={StaticResource BoolVisibilityConverter}}" />
         <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="0" Margin="0,0,20,0"/>
-        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia}" Grid.Row="1" Grid.Column="1" Margin="5,0,10,10" BorderThickness="0" SelectedIndex="{Binding CurrentIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia, Mode=OneWay}" Grid.Row="1" Grid.Column="1" Margin="5,0,10,10" BorderThickness="0">
             <ListView.View>
                 <GridView x:Name="ListViewGrid" AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
                     <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/>
                 </GridView>
             </ListView.View>
         </ListView>
-        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Media or playlist" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
-        <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue}"/>
+        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Media or Playlist" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
+        <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
             <ToggleButton IsChecked="{Binding IsPlaying, Mode=TwoWay}" Command="{Binding Play}" HorizontalAlignment="Left" Style="{StaticResource PlayPauseButtonStyle}" Margin="0,0,75,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="75,0,0,0">

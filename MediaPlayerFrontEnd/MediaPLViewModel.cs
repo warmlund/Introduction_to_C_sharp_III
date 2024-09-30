@@ -3,6 +3,7 @@ using MediaPlayerBL;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace MediaPlayerPL
@@ -11,7 +12,9 @@ namespace MediaPlayerPL
     {
         #region instance variables
         private int _interval;
-        private int _currentIndex;
+        private double _videoProgress;
+        private double _duration;
+        private int _currentProgress;
         private double _progressValue;
         private string _playlistTitle;
         private string[] _selectedFiles;
@@ -19,6 +22,7 @@ namespace MediaPlayerPL
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
         private CancellationTokenSource _tokenSource;
+        private TaskCompletionSource<bool> _mediaOpenedTcs;
         private Media _currentPlayingMedia;
         private bool _isPlaying = false;
         private bool _isVideo = false;
@@ -26,6 +30,9 @@ namespace MediaPlayerPL
         private bool _isIndexChanged = false;
         private BitmapImage _image;
         private Uri _video;
+        public EventHandler PlayRequested;
+        public EventHandler PauseRequested;
+        public EventHandler StopRequested;
         #endregion
 
         #region commands
@@ -40,34 +47,35 @@ namespace MediaPlayerPL
         #region Properties
         public ObservableCollection<Media> CurrentLoadedMedia { get { return _currentLoadedMedia; } set { if (_currentLoadedMedia != value) { _currentLoadedMedia = value; OnPropertyChanged(nameof(CurrentLoadedMedia)); } } }
         public int Interval { get { return _interval; } set { if (_interval != value) { _interval = value; OnPropertyChanged(nameof(Interval)); } } }
-        public int CurrentIndex { get { return _currentIndex; } set { if (_currentIndex != value) { _currentIndex = value; OnPropertyChanged(nameof(CurrentIndex));} } }
+        public double VideoDuration { get { return _duration; } set { if (_duration != value) { _duration = value; OnPropertyChanged(nameof(VideoDuration)); } } }
+        public double VideoProgress { get { return _videoProgress; } set { if (_videoProgress != value) { _videoProgress = value; OnPropertyChanged(nameof(VideoProgress));} } }
         public double ProgressValue { get { return _progressValue; } set { if (_progressValue != value) { _progressValue = value; OnPropertyChanged(nameof(ProgressValue)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); } } }
-        public bool IsImage { get { return _isImage; } set { if (_isImage != value) { _isImage = value; OnPropertyChanged(nameof(IsImage));} } }
+        public bool IsImage { get { return _isImage; } set { if (_isImage != value) { _isImage = value; OnPropertyChanged(nameof(IsImage)); } } }
         public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); } } }
-        public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged));} } }
-        public Media CurrentPlayingMedia { get => _currentPlayingMedia; set { if (_currentPlayingMedia != value) { _currentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); CheckFormat(); } } }
+        public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged)); } } }
+        public Media CurrentPlayingMedia { get => _currentPlayingMedia; set { if (_currentPlayingMedia != value) { _currentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); CheckFormatAndSetCurrentMedia(); } } }
         public string CurrentFormat { get => _currentFormat; set { if (_currentFormat != value) { _currentFormat = value; OnPropertyChanged(nameof(CurrentFormat)); } } }
-        public BitmapImage CurrentImage { get => _image; set { if (_image != value) { _image = value; OnPropertyChanged(nameof(CurrentImage));  } } }
+        public BitmapImage CurrentImage { get => _image; set { if (_image != value) { _image = value; OnPropertyChanged(nameof(CurrentImage)); } } }
         public Uri CurrentVideo { get => _video; set { if (_video != value) { _video = value; OnPropertyChanged(nameof(CurrentVideo)); } } }
+        public TaskCompletionSource<bool> TaskComplete { get => _mediaOpenedTcs; set { if (_mediaOpenedTcs != value) { _mediaOpenedTcs = value; OnPropertyChanged(nameof(TaskComplete)); } } }
         #endregion
 
         public MediaPLViewModel(IMediaBL mediaBL)
         {
             _mediaBl = mediaBL;
             _interval = 5;
+            _currentProgress = 0;
             _currentLoadedMedia = new ObservableCollection<Media>();
-            _currentIndex = 0;
-            _tokenSource = new CancellationTokenSource();
             Play = new AsyncCommand(TogglePlayPause, CanPlayMedia);
             LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadExistingPlaylist);
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
             LoadMedia = new Command(LoadNewMedia, CanLoadNewMedia);
             MoveMediaUp = new CommandWithParameter<Media>(MoveUp, CanMoveUp);
             MoveMediaDown = new CommandWithParameter<Media>(MoveDown, CanMoveDown);
-            
+
             CurrentLoadedMedia.CollectionChanged += OnCollectionChanged;
         }
 
@@ -78,9 +86,9 @@ namespace MediaPlayerPL
         }
         private bool CanMoveUp(Media media)
         {
-            return CurrentLoadedMedia.IndexOf(media)>0;
+            return CurrentLoadedMedia.IndexOf(media) > 0;
         }
-        
+        private bool CanPlayMedia() => CurrentLoadedMedia.Count > 0;
         private bool CanLoadExistingPlaylist() => true;
         private bool CanSaveNewPlaylist() => CurrentLoadedMedia != null;
         private bool CanLoadNewMedia() => true;
@@ -90,73 +98,109 @@ namespace MediaPlayerPL
         {
             if (IsPlaying)
             {
+                _tokenSource = new CancellationTokenSource();
+
+                if (this.PlayRequested != null)
+                {
+                    this.PlayRequested(this, EventArgs.Empty);
+                }
                 await PlayMediaAsync(CurrentLoadedMedia.ToList());
             }
+
             else
             {
-               PauseMedia();
+                if (this.PauseRequested != null)
+                {
+                    this.PauseRequested(this, EventArgs.Empty);
+                }
+
+                IsPlaying = false;
+                _tokenSource?.Cancel();
             }
         }
         public async Task PlayMediaAsync(List<Media> loadedMedia)
         {
             try
             {
-                for (int i = _currentIndex; i < loadedMedia.Count; i++)
+                for (int i = CurrentLoadedMedia.IndexOf(CurrentPlayingMedia); i < loadedMedia.Count; i++)
                 {
                     if (_tokenSource.Token.IsCancellationRequested)
                     {
-                        if (i == loadedMedia.Count)
-                            _currentIndex = 0;
-                        else if (i == 0)
-                            _currentIndex = 0;
-                        _currentIndex = i - 1;
+                        ResetIndexWhenPaused(i);
                         break;
                     }
 
                     CurrentPlayingMedia = loadedMedia[i];
                     CurrentFormat = CurrentPlayingMedia.Format;
-                    CheckFormat();
                     ProgressValue = 0;
 
                     if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format))
                     {
-                        CurrentVideo = _mediaBl.CreateVideo(CurrentPlayingMedia.FilePath);
-                    }
-                    else
-                    {
-                        CurrentImage = _mediaBl.CreateImage(CurrentPlayingMedia.FilePath);
-                    }
+                        _mediaOpenedTcs = new TaskCompletionSource<bool>();
+                        await _mediaOpenedTcs.Task;
 
-                    for (int j = 0; j < Interval; j++)
-                    {
-                        if (_tokenSource.Token.IsCancellationRequested)
+                        for (int j = (int)VideoProgress; j < VideoDuration; j++)
                         {
-                            break;
+
+                            if (_tokenSource.Token.IsCancellationRequested)
+                            {
+                                VideoProgress = j;
+                                ResetIndexWhenPaused(i);
+                                break;
+                            }
+
+                            // Update progress for each second
+                            ProgressValue = (j + 1) * (100.0 / VideoDuration);
+                            await Task.Delay(1000); // Simulate each second passing
                         }
 
-                        ProgressValue = (j + 1) * (100.0 / Interval);
-                        await Task.Delay(1000);
+                    }
+
+                    else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.Format))
+                    {
+                        for (int j = _currentProgress; j < Interval; j++)
+                        {
+                            if (_tokenSource.Token.IsCancellationRequested)
+                            {
+                                if(j ==0)
+                                    _currentProgress = 0;
+                                else
+                                    _currentProgress = j-1;
+                                ResetIndexWhenPaused(i);
+                                break;
+                            }
+
+                            ProgressValue = (j + 1) * (100.0 / Interval);
+                            await Task.Delay(1000);
+                        }
+                    }
+
+                    if (i == CurrentLoadedMedia.IndexOf(CurrentLoadedMedia.Last()))
+                    {
+                        ResetPlayer();
                     }
                 }
             }
             catch (TaskCanceledException)
             {
-                CurrentPlayingMedia = null;
-                CurrentImage = null;
-                CurrentVideo = null;
                 IsPlaying = false;
             }
-            finally
-            {
-                IsPlaying = false;
-            }
-        }
-        public void PauseMedia()
-        {
-            _tokenSource.Cancel();
-            IsPlaying = false;
         }
 
+        private void ResetIndexWhenPaused(int i)
+        {
+            if (i == 0)
+                CurrentPlayingMedia = CurrentLoadedMedia.First();
+            else
+                CurrentPlayingMedia = CurrentLoadedMedia[i - 1];
+        }
+        private void ResetPlayer()
+        {
+            ProgressValue = 0;
+            CurrentPlayingMedia = CurrentLoadedMedia.First();
+            _currentProgress = 0;
+            IsPlaying = false;
+        }
         private void LoadExistingPlaylist()
         {
             var openManager = new OpenManager("Load Playlist");
@@ -228,9 +272,9 @@ namespace MediaPlayerPL
         {
             CurrentPlayingMedia = CurrentLoadedMedia[0];
             CurrentFormat = CurrentPlayingMedia.Format;
-            CheckFormat();
+            CheckFormatAndSetCurrentMedia();
         }
-        private void CheckFormat()
+        private void CheckFormatAndSetCurrentMedia()
         {
             if (CurrentPlayingMedia != null)
             {
@@ -240,8 +284,9 @@ namespace MediaPlayerPL
                     IsImage = false;
                     OnPropertyChanged(nameof(IsVideo));
                     OnPropertyChanged(nameof(IsImage));
-                    CurrentVideo = _mediaBl.CreateVideo(CurrentPlayingMedia.FilePath); 
+                    CurrentVideo = _mediaBl.CreateVideo(CurrentPlayingMedia.FilePath);
                 }
+
                 else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.Format))
                 {
                     IsVideo = false;
@@ -254,8 +299,6 @@ namespace MediaPlayerPL
                 {
                     IsVideo = false;
                     IsImage = false;
-                    CurrentImage = null;
-                    CurrentVideo = null;
                 }
             }
         }

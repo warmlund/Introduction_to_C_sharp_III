@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Linq;
+using System.Windows.Media;
 
 namespace MediaPlayerBL
 {
@@ -49,11 +50,18 @@ namespace MediaPlayerBL
         public BitmapImage CreateImage(string filePath)
         {
             var image = new BitmapImage();
-            image.BeginInit();
-            image.UriSource = new Uri(filePath, UriKind.Absolute);
-            image.CacheOption = BitmapCacheOption.OnLoad;
-            image.EndInit();
-            image.Freeze();
+            try
+            {
+                image.BeginInit();
+                image.UriSource = new Uri(filePath, UriKind.Absolute);
+                image.CacheOption = BitmapCacheOption.OnLoad;
+                image.EndInit();
+                image.Freeze();
+            }
+            catch 
+            { 
+                image = null;
+            }
             return image;
         }
 

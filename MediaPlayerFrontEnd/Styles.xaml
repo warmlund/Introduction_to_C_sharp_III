@@ -244,6 +244,7 @@
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="Width" Value="150"/>
         <Setter Property="Height" Value="45"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -271,7 +272,14 @@
                             <Setter Property="Opacity" Value="1.0"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="ListItemBorder" Property="Background" Value="#cc6a91" />
+                            <Trigger.Setters>
+                                <Setter Property="Background" Value="#e677a3"/>
+                            </Trigger.Setters>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Trigger.Setters>
+                                <Setter Property="Background" Value="#a65676"/>
+                            </Trigger.Setters>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
