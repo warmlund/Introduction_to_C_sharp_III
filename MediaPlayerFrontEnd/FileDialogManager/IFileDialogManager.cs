@@ -1,5 +1,9 @@
 ﻿namespace MediaPlayerPL
 {
+
+    /// <summary>
+    /// Interface for filedialog management
+    /// </summary>
     public interface IFileDialogManager
     {
         bool ShowDialog();
