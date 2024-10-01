@@ -1,22 +1,37 @@
 ﻿using MediaDTO;
-using MediaPlayerDA;
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
-using static MediaPlayerBL.MediaBL;
 
 namespace MediaPlayerBL
 {
+    /// <summary>
+    /// Interface representing the business logic
+    /// </summary>
     public interface IMediaBL
     {
+        //Loads media
         List<Media> LoadMedia(string[] filenames);
+
+        //Loads playlist
         List<Media> LoadPlaylist(string filepath);
+
+        //Creates image
         BitmapImage CreateImage(string filepath);
-        Uri CreateVideo(string filepath);   
+
+        //Creates video
+        Uri CreateVideo(string filepath);
+
+        //Saves playlist
         void SavePlaylist(string filepath, List<Media> loadedMedia);
+
+        //Gets playlist title
         string GetPlaylistTitle();
+
+        //Checks image format
         bool IsImageFormat(string filepath);
+
+        //Checks video format
         bool IsVideoFormat(string filepath);
     }
 }
