@@ -52,7 +52,7 @@ namespace MediaPlayerPL
         public double ProgressValue { get { return _progressValue; } set { if (_progressValue != value) { _progressValue = value; OnPropertyChanged(nameof(ProgressValue)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
-        public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); } } }
+        public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); } } }
         public bool IsImage { get { return _isImage; } set { if (_isImage != value) { _isImage = value; OnPropertyChanged(nameof(IsImage)); } } }
         public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); } } }
         public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged)); } } }
@@ -70,9 +70,9 @@ namespace MediaPlayerPL
             _currentProgress = 0;
             _currentLoadedMedia = new ObservableCollection<Media>();
             Play = new AsyncCommand(TogglePlayPause, CanPlayMedia);
-            LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadExistingPlaylist);
+            LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadOrSave);
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
-            LoadMedia = new Command(LoadNewMedia, CanLoadNewMedia);
+            LoadMedia = new Command(LoadNewMedia, CanLoadOrSave);
             MoveMediaUp = new CommandWithParameter<Media>(MoveUp, CanMoveUp);
             MoveMediaDown = new CommandWithParameter<Media>(MoveDown, CanMoveDown);
 
@@ -82,16 +82,31 @@ namespace MediaPlayerPL
         #region booleans
         private bool CanMoveDown(Media media)
         {
-            return CurrentLoadedMedia.IndexOf(media) != CurrentLoadedMedia.IndexOf(CurrentLoadedMedia.Last());
+            if (CurrentLoadedMedia.IndexOf(media) != CurrentLoadedMedia.IndexOf(CurrentLoadedMedia.Last()) && IsPlaying == false)
+                return true;
+            return false;
         }
         private bool CanMoveUp(Media media)
         {
-            return CurrentLoadedMedia.IndexOf(media) > 0;
+            if(CurrentLoadedMedia.IndexOf(media) > 0 && IsPlaying == false) 
+                return true;
+            return false;
         }
         private bool CanPlayMedia() => CurrentLoadedMedia.Count > 0;
-        private bool CanLoadExistingPlaylist() => true;
-        private bool CanSaveNewPlaylist() => CurrentLoadedMedia != null;
-        private bool CanLoadNewMedia() => true;
+        private bool CanSaveNewPlaylist()
+        {
+            if (_currentLoadedMedia.Count > 0 && IsPlaying == false)
+                return true;
+
+            return false;
+        }
+        private bool CanLoadOrSave()
+        {
+            if(IsPlaying == false) 
+                return true;
+            return false;
+        }
+
         #endregion
 
         private async Task TogglePlayPause()
@@ -132,50 +147,65 @@ namespace MediaPlayerPL
 
                     CurrentPlayingMedia = loadedMedia[i];
                     CurrentFormat = CurrentPlayingMedia.Format;
-                    ProgressValue = 0;
 
-                    if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format))
+                    // If the video was paused, use the existing VideoProgress value, else start from 0
+                    if (CurrentPlayingMedia.Format == "video" && VideoProgress == 0)
                     {
-                        _mediaOpenedTcs = new TaskCompletionSource<bool>();
-                        await _mediaOpenedTcs.Task;
-
-                        for (int j = (int)VideoProgress; j < VideoDuration; j++)
-                        {
-
-                            if (_tokenSource.Token.IsCancellationRequested)
-                            {
-                                VideoProgress = j;
-                                ResetIndexWhenPaused(i);
-                                break;
-                            }
-
-                            // Update progress for each second
-                            ProgressValue = (j + 1) * (100.0 / VideoDuration);
-                            await Task.Delay(1000); // Simulate each second passing
-                        }
-
+                        ProgressValue = 0;
                     }
 
+                    // Start playing the video
+                    if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format))
+                    {
+                        // Ensure the video is opened only once, avoiding re-awaiting the TaskCompletionSource
+                        if (!_mediaOpenedTcs?.Task.IsCompleted ?? true)
+                        {
+                            _mediaOpenedTcs = new TaskCompletionSource<bool>();
+                            await _mediaOpenedTcs.Task; // Wait for the video to be ready
+                        }
+
+                        // Resume from where the video left off
+                        for (int j = (int)VideoProgress; j < VideoDuration; j++)
+                        {
+                            if (_tokenSource.Token.IsCancellationRequested)
+                            {
+                                VideoProgress = j; // Save the current progress when paused
+                                ResetIndexWhenPaused(i);
+                                return; // Exit both loops
+                            }
+
+                            // Update progress bar value based on the video's duration
+                            ProgressValue = (j + 1) * (100.0 / VideoDuration);
+
+                            // Handle cancellation token within Task.Delay
+                            await Task.Delay(1000, _tokenSource.Token);
+                        }
+
+                        // After video finishes, reset VideoProgress
+                        VideoProgress = 0;
+                    }
+
+                    // Handle image formats if necessary
                     else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.Format))
                     {
                         for (int j = _currentProgress; j < Interval; j++)
                         {
                             if (_tokenSource.Token.IsCancellationRequested)
                             {
-                                if(j ==0)
-                                    _currentProgress = 0;
-                                else
-                                    _currentProgress = j-1;
+                                _currentProgress = j; // Save progress for image playback
                                 ResetIndexWhenPaused(i);
-                                break;
+                                return; // Exit both loops
                             }
 
                             ProgressValue = (j + 1) * (100.0 / Interval);
-                            await Task.Delay(1000);
+                            await Task.Delay(1000, _tokenSource.Token);
                         }
+
+                        _currentProgress = 0; // Reset progress after image finishes
                     }
 
-                    if (i == CurrentLoadedMedia.IndexOf(CurrentLoadedMedia.Last()))
+                    // If it's the last media, reset the player
+                    if (i == CurrentLoadedMedia.Count - 1)
                     {
                         ResetPlayer();
                     }
@@ -186,7 +216,6 @@ namespace MediaPlayerPL
                 IsPlaying = false;
             }
         }
-
         private void ResetIndexWhenPaused(int i)
         {
             if (i == 0)
@@ -267,6 +296,9 @@ namespace MediaPlayerPL
             var tempMedia = CurrentLoadedMedia[oldIndex];
             CurrentLoadedMedia[oldIndex] = CurrentLoadedMedia[newIndex];
             CurrentLoadedMedia[newIndex] = tempMedia;
+            CurrentPlayingMedia = CurrentLoadedMedia[0];
+            //OnPropertyChanged(nameof(CurrentLoadedMedia));
+            OnPropertyChanged(nameof(CurrentPlayingMedia));
         }
         private void SetUpFirstLoadedMedia()
         {
@@ -306,6 +338,7 @@ namespace MediaPlayerPL
         {
             OnPropertyChanged(nameof(CurrentLoadedMedia));
             Play.RaiseCanExecuteChanged();
+            SavePlaylist.RaiseCanExecuteChanged();
         }
     }
 }

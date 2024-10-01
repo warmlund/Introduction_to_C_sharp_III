@@ -45,7 +45,7 @@
             </ListView.View>
         </ListView>
         <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Media or Playlist" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
-        <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue, UpdateSourceTrigger=PropertyChanged}"/>
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
             <ToggleButton IsChecked="{Binding IsPlaying, Mode=TwoWay}" Command="{Binding Play}" HorizontalAlignment="Left" Style="{StaticResource PlayPauseButtonStyle}" Margin="0,0,75,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="75,0,0,0">
