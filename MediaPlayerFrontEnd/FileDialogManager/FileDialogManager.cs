@@ -1,5 +1,6 @@
 ﻿namespace MediaPlayerPL
 {
+
     public abstract class FileDialogManager : IFileDialogManager
     {
         public string Title { get; protected set; }

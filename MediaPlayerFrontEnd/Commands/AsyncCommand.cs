@@ -10,7 +10,7 @@ namespace MediaPlayerPL
     {
         private readonly Func<Task> _execute; //variable representing the async command that is being executed
         private readonly Func<bool> _canExecute; //variable that represents the boolean which checks if you can execute the command or not
-
+        public event EventHandler CanExecuteChanged; // An event that is triggered if the state of _canExecute changes
 
         /// <summary>
         /// Constructor and sets the variable with the arguments
@@ -35,12 +35,6 @@ namespace MediaPlayerPL
         {
             await _execute();
         }
-
-        /// <summary>
-        /// An event that is triggered if the state of _canExecute changes
-        /// </summary>
-        public event EventHandler CanExecuteChanged;
-
 
         /// <summary>
         /// Method that is called to raise the CanExecuteChanged

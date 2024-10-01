@@ -9,21 +9,25 @@ using System.Windows.Data;
 
 namespace MediaPlayerPL
 {
+
+    /// <summary>
+    /// This is a class that converts a integer value to a visibility enumeration
+    /// </summary>
     internal class CountVisibilityConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            if (value is int count)
+            if (value is int count) //checks if value is an integer
             {
-                return count<1 ? Visibility.Visible : Visibility.Collapsed;
+                return count<1 ? Visibility.Visible : Visibility.Collapsed; //returns visible if integer is less than 1
             }
 
-            return Visibility.Collapsed;
+            return Visibility.Collapsed; 
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return Visibility.Collapsed;
+            return Visibility.Collapsed; //converts back to collapsed
         }
     }
 }
