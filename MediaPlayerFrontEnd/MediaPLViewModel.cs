@@ -2,15 +2,14 @@
 using MediaPlayerBL;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 
 namespace MediaPlayerPL
 {
     public class MediaPLViewModel : NotifyPropertyChanged
     {
-        #region instance variables
+        #region instance variables 
+        // Private instance variables
         private int _interval;
         private double _videoProgress;
         private double _duration;
@@ -36,6 +35,7 @@ namespace MediaPlayerPL
         #endregion
 
         #region commands
+        //Commands for various commands called from the view
         public AsyncCommand Play { get; private set; }
         public Command LoadPlaylist { get; private set; }
         public Command SavePlaylist { get; private set; }
@@ -45,10 +45,11 @@ namespace MediaPlayerPL
         #endregion
 
         #region Properties
+        // Properties for data binding to the view
         public ObservableCollection<Media> CurrentLoadedMedia { get { return _currentLoadedMedia; } set { if (_currentLoadedMedia != value) { _currentLoadedMedia = value; OnPropertyChanged(nameof(CurrentLoadedMedia)); } } }
         public int Interval { get { return _interval; } set { if (_interval != value) { _interval = value; OnPropertyChanged(nameof(Interval)); } } }
         public double VideoDuration { get { return _duration; } set { if (_duration != value) { _duration = value; OnPropertyChanged(nameof(VideoDuration)); } } }
-        public double VideoProgress { get { return _videoProgress; } set { if (_videoProgress != value) { _videoProgress = value; OnPropertyChanged(nameof(VideoProgress));} } }
+        public double VideoProgress { get { return _videoProgress; } set { if (_videoProgress != value) { _videoProgress = value; OnPropertyChanged(nameof(VideoProgress)); } } }
         public double ProgressValue { get { return _progressValue; } set { if (_progressValue != value) { _progressValue = value; OnPropertyChanged(nameof(ProgressValue)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
@@ -57,12 +58,14 @@ namespace MediaPlayerPL
         public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); } } }
         public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged)); } } }
         public Media CurrentPlayingMedia { get => _currentPlayingMedia; set { if (_currentPlayingMedia != value) { _currentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); CheckFormatAndSetCurrentMedia(); } } }
-        public string CurrentFormat { get => _currentFormat; set { if (_currentFormat != value) { _currentFormat = value; OnPropertyChanged(nameof(CurrentFormat)); } } }
         public BitmapImage CurrentImage { get => _image; set { if (_image != value) { _image = value; OnPropertyChanged(nameof(CurrentImage)); } } }
         public Uri CurrentVideo { get => _video; set { if (_video != value) { _video = value; OnPropertyChanged(nameof(CurrentVideo)); } } }
         public TaskCompletionSource<bool> TaskComplete { get => _mediaOpenedTcs; set { if (_mediaOpenedTcs != value) { _mediaOpenedTcs = value; OnPropertyChanged(nameof(TaskComplete)); } } }
         #endregion
 
+        /// <summary>
+        /// Constructor that initializes the view model with a media business logic instance
+        /// </summary>
         public MediaPLViewModel(IMediaBL mediaBL)
         {
             _mediaBl = mediaBL;
@@ -80,6 +83,7 @@ namespace MediaPlayerPL
         }
 
         #region booleans
+        //Helper methods that checks if a command can be executed or not
         private bool CanMoveDown(Media media)
         {
             if (CurrentLoadedMedia.IndexOf(media) != CurrentLoadedMedia.IndexOf(CurrentLoadedMedia.Last()) && IsPlaying == false)
@@ -88,7 +92,7 @@ namespace MediaPlayerPL
         }
         private bool CanMoveUp(Media media)
         {
-            if(CurrentLoadedMedia.IndexOf(media) > 0 && IsPlaying == false) 
+            if (CurrentLoadedMedia.IndexOf(media) > 0 && IsPlaying == false)
                 return true;
             return false;
         }
@@ -102,112 +106,117 @@ namespace MediaPlayerPL
         }
         private bool CanLoadOrSave()
         {
-            if(IsPlaying == false) 
+            if (IsPlaying == false)
                 return true;
             return false;
         }
 
         #endregion
 
+        /// <summary>
+        /// Method for toggling the play pause functionality
+        /// </summary>
+        /// <returns></returns>
         private async Task TogglePlayPause()
         {
-            if (IsPlaying)
+            if (IsPlaying) //Checks if playing
             {
-                _tokenSource = new CancellationTokenSource();
+                _tokenSource = new CancellationTokenSource(); //Initialize cancellation token
 
                 if (this.PlayRequested != null)
                 {
-                    this.PlayRequested(this, EventArgs.Empty);
+                    this.PlayRequested(this, EventArgs.Empty); //Trigger playrequested event
                 }
-                await PlayMediaAsync(CurrentLoadedMedia.ToList());
+                await PlayMediaAsync(CurrentLoadedMedia.ToList()); //Calls the method for playing to start
             }
 
             else
             {
                 if (this.PauseRequested != null)
                 {
-                    this.PauseRequested(this, EventArgs.Empty);
+                    this.PauseRequested(this, EventArgs.Empty); //Trigger pauserequested
                 }
 
-                IsPlaying = false;
-                _tokenSource?.Cancel();
+                IsPlaying = false; //Sets Isplaying to false
+                _tokenSource?.Cancel(); //cancel the ongoing play
             }
         }
+
+        /// <summary>
+        /// Asynchronous method to play the loaded media
+        /// Making it async to not block the ui thread
+        /// </summary>
         public async Task PlayMediaAsync(List<Media> loadedMedia)
         {
             try
             {
-                for (int i = CurrentLoadedMedia.IndexOf(CurrentPlayingMedia); i < loadedMedia.Count; i++)
+                for (int i = CurrentLoadedMedia.IndexOf(CurrentPlayingMedia); i < loadedMedia.Count; i++) //loop through the media of loaded media
                 {
-                    if (_tokenSource.Token.IsCancellationRequested)
+                    if (_tokenSource.Token.IsCancellationRequested) //checks if cancel is requested
                     {
-                        ResetIndexWhenPaused(i);
+                        ResetIndexWhenPaused(i); //resets index so when playing again it starts from the correct position
                         break;
                     }
 
-                    CurrentPlayingMedia = loadedMedia[i];
-                    CurrentFormat = CurrentPlayingMedia.Format;
+                    CurrentPlayingMedia = loadedMedia[i]; //Sets currentlyplayingmedia
 
-                    // If the video was paused, use the existing VideoProgress value, else start from 0
-                    if (CurrentPlayingMedia.Format == "video" && VideoProgress == 0)
+                    if (CurrentPlayingMedia.Format == "video" && VideoProgress == 0) // If the video was paused, use the existing VideoProgress value, else start from 0
                     {
                         ProgressValue = 0;
                     }
 
-                    // Start playing the video
-                    if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format))
+
+                    if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format)) //Checks if the current media is a video
                     {
-                        // Ensure the video is opened only once, avoiding re-awaiting the TaskCompletionSource
-                        if (!_mediaOpenedTcs?.Task.IsCompleted ?? true)
+
+                        if (!_mediaOpenedTcs?.Task.IsCompleted ?? true) // Ensure the video is opened only once, avoiding re-awaiting the TaskCompletionSource
                         {
                             _mediaOpenedTcs = new TaskCompletionSource<bool>();
-                            await _mediaOpenedTcs.Task; // Wait for the video to be ready
+                            await _mediaOpenedTcs.Task; // Wait for the video to be ready and sets the video duration
                         }
 
-                        // Resume from where the video left off
-                        for (int j = (int)VideoProgress; j < VideoDuration; j++)
+                        for (int j = (int)VideoProgress; j < VideoDuration; j++) //Loop through the duration of the video
                         {
                             if (_tokenSource.Token.IsCancellationRequested)
                             {
                                 VideoProgress = j; // Save the current progress when paused
                                 ResetIndexWhenPaused(i);
-                                return; // Exit both loops
+                                return; // Exit 
                             }
 
-                            // Update progress bar value based on the video's duration
-                            ProgressValue = (j + 1) * (100.0 / VideoDuration);
+                            ProgressValue = (j + 1) * (100.0 / VideoDuration); // Update progress bar value based on the video's duration
 
-                            // Handle cancellation token within Task.Delay
-                            await Task.Delay(1000, _tokenSource.Token);
+                            await Task.Delay(1000, _tokenSource.Token); //Simulate one second
                         }
 
-                        // After video finishes, reset VideoProgress
-                        VideoProgress = 0;
+                        VideoProgress = 0; // After video finishes, reset VideoProgress
                     }
 
-                    // Handle image formats if necessary
-                    else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.Format))
+                    else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.Format)) //If it's an image
                     {
-                        for (int j = _currentProgress; j < Interval; j++)
+                        for (int j = _currentProgress; j < Interval; j++) //loop through the interval
                         {
                             if (_tokenSource.Token.IsCancellationRequested)
                             {
-                                _currentProgress = j; // Save progress for image playback
+                                _currentProgress = j; // Save progress
                                 ResetIndexWhenPaused(i);
-                                return; // Exit both loops
+                                return; // Exit
                             }
 
-                            ProgressValue = (j + 1) * (100.0 / Interval);
-                            await Task.Delay(1000, _tokenSource.Token);
+                            ProgressValue = (j + 1) * (100.0 / Interval); //Update progress
+                            await Task.Delay(1000, _tokenSource.Token); //wait one second
                         }
 
-                        _currentProgress = 0; // Reset progress after image finishes
+                        _currentProgress = 0; // Reset progress
                     }
 
                     // If it's the last media, reset the player
                     if (i == CurrentLoadedMedia.Count - 1)
                     {
-                        ResetPlayer();
+                        ProgressValue = 0;
+                        CurrentPlayingMedia = CurrentLoadedMedia.First();
+                        _currentProgress = 0;
+                        IsPlaying = false;
                     }
                 }
             }
@@ -216,6 +225,10 @@ namespace MediaPlayerPL
                 IsPlaying = false;
             }
         }
+
+        /// <summary>
+        /// Sets the index when paused, to prevent the play to start from the incorrect position
+        /// </summary>
         private void ResetIndexWhenPaused(int i)
         {
             if (i == 0)
@@ -223,26 +236,23 @@ namespace MediaPlayerPL
             else
                 CurrentPlayingMedia = CurrentLoadedMedia[i - 1];
         }
-        private void ResetPlayer()
-        {
-            ProgressValue = 0;
-            CurrentPlayingMedia = CurrentLoadedMedia.First();
-            _currentProgress = 0;
-            IsPlaying = false;
-        }
+
+        /// <summary>
+        /// A method for loading an existing playlsit
+        /// </summary>
         private void LoadExistingPlaylist()
         {
             var openManager = new OpenManager("Load Playlist");
             if (openManager.ShowDialog())
             {
-                CurrentLoadedMedia.Clear();
+                CurrentLoadedMedia.Clear(); //if successful clearing the collection of other media
                 foreach (Media media in _mediaBl.LoadPlaylist(openManager.FilePath))
                 {
-                    CurrentLoadedMedia.Add(media);
+                    CurrentLoadedMedia.Add(media); //adds media from the loaded playlist to the player
                 }
 
-                PlaylistTitle = _mediaBl.GetPlaylistTitle();
-                SetUpFirstLoadedMedia();
+                PlaylistTitle = _mediaBl.GetPlaylistTitle(); //Sets the title
+                SetUpFirstLoadedMedia(); //sets up first loaded media
             }
 
             else
@@ -250,26 +260,34 @@ namespace MediaPlayerPL
                 openManager.AlertUser();
             }
         }
+
+        /// <summary>
+        /// A method that saves a new playlist
+        /// </summary>
         private void SaveNewPlaylist()
         {
             var saveManager = new SaveManager();
             if (saveManager.ShowDialog())
-                _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList());
+                _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList()); // If successull calls the method in the bl layer to save the playlist
 
             else
             {
                 saveManager.AlertUser();
             }
         }
+
+        /// <summary>
+        /// A mehod that loads media 
+        /// </summary>
         private void LoadNewMedia()
         {
             var openManager = new OpenManager("Load Media");
-            if (openManager.ShowDialog())
+            if (openManager.ShowDialog()) //if the load is successful
             {
-                _selectedFiles = openManager.SelectedFiles;
+                _selectedFiles = openManager.SelectedFiles; //sets selected files
                 foreach (Media m in _mediaBl.LoadMedia(_selectedFiles))
                 {
-                    CurrentLoadedMedia.Add(m);
+                    CurrentLoadedMedia.Add(m); //adds files to the collection
                 }
                 SetUpFirstLoadedMedia();
             }
@@ -279,44 +297,65 @@ namespace MediaPlayerPL
                 openManager.AlertUser();
             }
         }
+
+        /// <summary>
+        /// Method that moves a media up
+        /// </summary>
         private void MoveUp(Media media)
         {
             int index = CurrentLoadedMedia.IndexOf(media);
             if (index > 0)
                 SwapMedia(index, index - 1);
         }
+
+        /// <summary>
+        /// method that moves a media down
+        /// </summary>
         private void MoveDown(Media media)
         {
             int index = CurrentLoadedMedia.IndexOf(media);
             if (index < CurrentLoadedMedia.Count - 1)
                 SwapMedia(index, index + 1);
         }
+
+        /// <summary>
+        /// Reorders the media or the playlist
+        /// </summary>
         private void SwapMedia(int oldIndex, int newIndex)
         {
+            //Does an index swap
             var tempMedia = CurrentLoadedMedia[oldIndex];
             CurrentLoadedMedia[oldIndex] = CurrentLoadedMedia[newIndex];
             CurrentLoadedMedia[newIndex] = tempMedia;
             CurrentPlayingMedia = CurrentLoadedMedia[0];
-            //OnPropertyChanged(nameof(CurrentLoadedMedia));
-            OnPropertyChanged(nameof(CurrentPlayingMedia));
+
+            OnPropertyChanged(nameof(CurrentPlayingMedia)); //Updates the property of the currentPlayingMedia
         }
+
+        /// <summary>
+        /// Method that sets the curentloadedmedia and checks the format and sets
+        /// curentvideo or image
+        /// </summary>
         private void SetUpFirstLoadedMedia()
         {
             CurrentPlayingMedia = CurrentLoadedMedia[0];
-            CurrentFormat = CurrentPlayingMedia.Format;
             CheckFormatAndSetCurrentMedia();
         }
+
+        /// <summary>
+        /// This method checks what type of media the currentloadedmedia is.
+        /// </summary>
         private void CheckFormatAndSetCurrentMedia()
         {
             if (CurrentPlayingMedia != null)
             {
-                if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format))
+                if (_mediaBl.IsVideoFormat(CurrentPlayingMedia.Format)) //If it is a video
                 {
                     IsVideo = true;
                     IsImage = false;
-                    OnPropertyChanged(nameof(IsVideo));
+                    OnPropertyChanged(nameof(IsVideo)); //Updated the properties
                     OnPropertyChanged(nameof(IsImage));
-                    CurrentVideo = _mediaBl.CreateVideo(CurrentPlayingMedia.FilePath);
+                    CurrentVideo = _mediaBl.CreateVideo(CurrentPlayingMedia.FilePath); //Sets the currentvideo
                 }
 
                 else if (_mediaBl.IsImageFormat(CurrentPlayingMedia.Format))
@@ -325,20 +364,26 @@ namespace MediaPlayerPL
                     IsImage = true;
                     OnPropertyChanged(nameof(IsVideo));
                     OnPropertyChanged(nameof(IsImage));
-                    CurrentImage = _mediaBl.CreateImage(CurrentPlayingMedia.FilePath);
+                    CurrentImage = _mediaBl.CreateImage(CurrentPlayingMedia.FilePath); //Sets the currentimage
                 }
                 else
                 {
-                    IsVideo = false;
+                    IsVideo = false; //If fail sets to false
                     IsImage = false;
                 }
             }
         }
+
+        /// <summary>
+        /// Method called if the collection of media has changed
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            OnPropertyChanged(nameof(CurrentLoadedMedia));
-            Play.RaiseCanExecuteChanged();
-            SavePlaylist.RaiseCanExecuteChanged();
+            OnPropertyChanged(nameof(CurrentLoadedMedia)); //Updates the currentLoadedMedia
+            Play.RaiseCanExecuteChanged(); //Checks if the the Play command can be played
+            SavePlaylist.RaiseCanExecuteChanged(); //Checks if a playlist can be saved
         }
     }
 }
