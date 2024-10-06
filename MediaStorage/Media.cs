@@ -1,22 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json; // Importing the Json.NET library for handling json files
 
 namespace MediaDTO
 {
+    /// <summary>
+    /// A class representing the media file
+    /// </summary>
     public class Media
     {
-        [JsonProperty("FileName")]
+        //Name property
+        [JsonProperty("FileName")] //JSON attribute
         public string FileName { get; set; }
 
-        [JsonProperty("FilePath")]
-        public string FilePath {  get; set; }
+        //Filepath property
+        [JsonProperty("FilePath")] //JSON attribute
+        public string FilePath { get; set; }
 
-        [JsonProperty("Format")]
+        //Format property
+        [JsonProperty("Format")] //JSON attribute
         public string Format { get; set; }
 
     }

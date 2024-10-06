@@ -11,8 +11,10 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <!-- Getting styles from the resource dictionary-->
                 <ResourceDictionary Source="Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
+            <!-- Defining value converters for visibility management-->
             <mp:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
             <mp:CountVisibilityConverter x:Key="CountVisibilityConverter"/>
         </ResourceDictionary>
@@ -20,33 +22,54 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <!-- Three rows for header, media display and controls -->
             <RowDefinition Height="75"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="150"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
+            <!-- two columns-->
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="200"/>
         </Grid.ColumnDefinitions>
-        <Border Grid.Column="0" Grid.ColumnSpan="2">
-        </Border>
+         
+        <!-- rectangles as backgrounds for the different parts of the player-->
         <Rectangle Grid.RowSpan="2" Grid.ColumnSpan="2"  Fill="#99506d"/>
         <Rectangle Grid.Row="2" Grid.ColumnSpan="2" Fill="#d0605f"/>
-        <TextBlock Text="Home Media Player" Foreground="White" VerticalAlignment="Center" Grid.Column="0" FontSize="32" FontWeight="SemiBold" Margin="20,0,0,0"/>
-        <Label Content="Playlist" Foreground="White" VerticalAlignment="Center" Grid.Column="1" FontSize="24" FontWeight="SemiBold" Margin="0,0,20,0"/>
-        <MediaElement x:Name="VideoShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" LoadedBehavior="Play" UnloadedBehavior="Stop" Margin="20,0,5,10" Source="{Binding CurrentVideo}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}"/>
-        <Image x:Name="ImageShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="0,0,5,10" Source="{Binding CurrentImage}" Visibility="{Binding IsImage, Converter={StaticResource BoolVisibilityConverter}}" />
+       
+        <!-- Title-->
+        <TextBlock Text="Home Media Player" Foreground="White" VerticalAlignment="Center" Grid.Column="0" FontSize="32" FontWeight="SemiBold" Margin="10,0,0,0"/>
+      
+        <!--Playlist header -->
+        <TextBlock Text="Playlist" Foreground="White" VerticalAlignment="Center" Grid.Column="1" FontSize="24" FontWeight="SemiBold" Margin="0,0,10,0"/>
+        
+        <!--Label showing the playlist title, bound to the property PlaylistTitle in the viewmodel-->
         <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="1" Grid.Row="0" Margin="0,0,20,0"/>
-        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia}" Grid.Row="1" Grid.Column="1" Margin="5,0,10,10" BorderThickness="0" SelectedIndex="{Binding CurrentIndex, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" >
+       
+        <!-- Media element for video has boolean visiblity converter if property isVideo is true, then visible-->
+        <MediaElement x:Name="VideoShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="10,0,5,10" Source="{Binding CurrentVideo, UpdateSourceTrigger=PropertyChanged}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}" mp:EventManager.EnableVideoEvents="True"/>
+        
+        <!--Image element for showing images, has boolean visibility converter as the media element-->
+        <Image x:Name="ImageShower" Grid.Column="0" Grid.Row="1" Width="Auto" Height="Auto" Margin="0,0,5,10" Source="{Binding CurrentImage}" Visibility="{Binding IsImage, Converter={StaticResource BoolVisibilityConverter}}" />
+        
+        <!--List view for storing the media, bound to the property CurrentLoadedMedia-->
+        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia, Mode=OneWay}" Grid.Row="1" Grid.Column="1" Margin="5,0,10,10" BorderThickness="0">
             <ListView.View>
                 <GridView x:Name="ListViewGrid" AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/> <!--Bound to the FileName property of the Media in the CurrentLoadedMedia collection-->
                 </GridView>
             </ListView.View>
         </ListView>
-        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Media or playlist" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
-        <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue}"/>
+        
+        <!--Textblock telling the user to load media or playlist, only visible if the count of the currentloadedmedia is 0-->
+        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Media or Playlist" Grid.Column="1" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
+        
+        <!--Progressbar Value bound to ProgressValue in the viewmodel-->
+        <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="0" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue, UpdateSourceTrigger=PropertyChanged}"/>
+        
+        <!-- Stackpanel storing The play/pause toggle button and the interval slider-->
         <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Center">
+            <!--Toggle button bound to the Play command-->
             <ToggleButton IsChecked="{Binding IsPlaying, Mode=TwoWay}" Command="{Binding Play}" HorizontalAlignment="Left" Style="{StaticResource PlayPauseButtonStyle}" Margin="0,0,75,0"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="75,0,0,0">
                 <TextBlock Text="&#xEC48;" FontSize="14" FontFamily="Segoe MDL2 Assets" Foreground="White" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="0,0,5,0"/>
@@ -54,6 +77,8 @@
                 <TextBlock Text="&#xEC4A;" FontSize="14" FontFamily="Segoe MDL2 Assets" Foreground="White" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="5,0,0,0"/>
             </StackPanel>
         </StackPanel>
+        
+        <!--Stack panel containing all the load and save buttons-->
         <StackPanel Grid.Row="2" Grid.Column="1" VerticalAlignment="Center">
             <Button x:Name="LoadMediaButton" Style="{StaticResource LoadMediaButton}" Command="{Binding LoadMedia}"/>
             <Button x:Name="LoadPlaylistButton" Style="{StaticResource LoadPlaylistButton}" Command="{Binding LoadPlaylist}"/>

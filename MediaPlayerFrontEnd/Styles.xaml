@@ -2,9 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MediaPlayerPL">
 
+    <!-- Defines the PlayPauseConverter to be able to toggle between play/pause text in the button style-->
     <local:PlayPauseConverter x:Key="PlayPauseConverter"/>
 
+    
     <!--#region TextBlock Styles -->
+    <!-- This style defines a text used for buttons-->
     <Style x:Key="ButtonTextStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontWeight" Value="SemiBold"/>
@@ -16,6 +19,7 @@
     <!--#endregion-->
 
     <!--#region Button Styles -->
+    <!-- These styles are for all buttons used in the view-->
     <Style x:Key="PlayPauseButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="#fe994b"/>
         <Setter Property="Foreground" Value="White"/>
@@ -54,7 +58,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="100"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -65,16 +69,22 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border CornerRadius="5" Background="#fe994b">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Name="ButtonText" Style="{StaticResource ButtonTextStyle}"/>
+                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xED25;" Foreground="White" VerticalAlignment="Center"/>
+                            <TextBlock x:Name="ButtonText" Text="Load Media" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
-                        <Trigger Property="IsPressed" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.8"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.8"/>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.9"/>
                         </Trigger>
-                        <Trigger Property="IsPressed" Value="False">
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
                             <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
                             <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
                         </Trigger>
@@ -83,23 +93,13 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-    <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#fe994b">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xED25;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Name="ButtonText" Text="Load Media" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
-    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    
+    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,5,0,5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -109,12 +109,33 @@
                             <TextBlock Name="ButtonText" Text="Load Playlist" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.9"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="100"/>
+        <Setter Property="Height" Value="25"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Margin" Value="0,5,0,5"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -124,6 +145,22 @@
                             <TextBlock Name="ButtonText" Text="Save Playlist" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Opacity" Value="0.9"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="True">
+                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -169,6 +206,7 @@
     <!--#endregion-->
 
     <!--#region Slider Style -->
+    <!--These are styles for all the parts of the slider that is used to control the interval of the slideshow-->
     <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
         <Setter Property="Background" Value="#fe994b"/>
         <Setter Property="Template">
@@ -233,6 +271,7 @@
     <!--#endregion-->
 
     <!--#region Listview styles -->
+    <!-- These styles are of all the parts used in the listview used for storing the playlist or loaded media-->
     <Style x:Key="GridViewHeaderStyle" TargetType="{x:Type GridViewColumnHeader}">
         <Setter Property="Visibility" Value="Collapsed" />
     </Style>
@@ -244,6 +283,7 @@
         <Setter Property="FontWeight" Value="DemiBold"/>
         <Setter Property="Width" Value="150"/>
         <Setter Property="Height" Value="45"/>
+        <Setter Property="Focusable" Value="False"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -255,12 +295,7 @@
                         <StackPanel Orientation="Horizontal" Margin="5,0,0,0">
                             <Button x:Name="MoveItemUpButton" Style="{DynamicResource UpButtonStyle}" Command="{Binding DataContext.MoveMediaUp, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"/>
                             <Button x:Name="MoveItemDownButton" Style="{DynamicResource DownButtonStyle}" Command="{Binding DataContext.MoveMediaDown, RelativeSource={RelativeSource AncestorType=Window}}" CommandParameter="{Binding}"/>
-                            <Label Content="{Binding Path=FileName}" 
-                               HorizontalAlignment="Center" 
-                               FontSize="{TemplateBinding FontSize}" 
-                               FontWeight="{TemplateBinding FontWeight}" 
-                               Foreground="{TemplateBinding Foreground}"
-                               Width="Auto"/>
+                            <Label Content="{Binding Path=FileName}" HorizontalAlignment="Center" FontSize="{TemplateBinding FontSize}" FontWeight="{TemplateBinding FontWeight}" Foreground="{TemplateBinding Foreground}" Width="Auto"/>
                         </StackPanel>
                     </Border>
                         <ControlTemplate.Triggers>
@@ -271,7 +306,14 @@
                             <Setter Property="Opacity" Value="1.0"/>
                         </Trigger>
                         <Trigger Property="IsSelected" Value="True">
-                            <Setter TargetName="ListItemBorder" Property="Background" Value="#cc6a91" />
+                            <Trigger.Setters>
+                                <Setter Property="Background" Value="#e677a3"/>
+                            </Trigger.Setters>
+                        </Trigger>
+                        <Trigger Property="IsSelected" Value="False">
+                            <Trigger.Setters>
+                                <Setter Property="Background" Value="#a65676"/>
+                            </Trigger.Setters>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -297,6 +339,7 @@
     <!--#endregion-->
 
     <!--#region Progressbar style -->
+    <!-- This style is for the progressbar-->
     <Style x:Key="ProgressbarStyle" TargetType="{x:Type ProgressBar}">
         <Setter Property="Width" Value="Auto"/>
         <Setter Property="Height" Value="5"/>
