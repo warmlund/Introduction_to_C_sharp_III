@@ -7,7 +7,10 @@ namespace MediaPlayerDA
 {
     public class MediaDA : IMediaDA
     {
-
+        public MediaDA()
+        {
+            
+        }
         /// <summary>
         /// Method for loading media from an array of filenames
         /// </summary>

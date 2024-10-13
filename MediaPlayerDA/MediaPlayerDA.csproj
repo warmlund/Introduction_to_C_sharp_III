@@ -9,6 +9,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+    <Folder Include="Sample_Data\Media\Images\" />
+    <Folder Include="Sample_Data\Media\Videos\" />
+    <Folder Include="Sample_Data\Playlists\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaStorage\MediaDTO.csproj" />

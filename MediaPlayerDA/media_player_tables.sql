@@ -1,3 +1,0 @@
-﻿ALTER TABLE [dbo].[Media]
-    ADD PRIMARY KEY CLUSTERED ([MediaId] ASC);
-
