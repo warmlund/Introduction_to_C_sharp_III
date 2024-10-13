@@ -12,3 +12,5 @@ C:\Users\EMWA\OneDrive - Bjerking AB\Dokument\Assignment_1_E_Warmlund\MediaStora
 C:\Users\EMWA\OneDrive - Bjerking AB\Dokument\Assignment_1_E_Warmlund\MediaStorage\obj\Debug\MediaDTO.csproj.Up2Date
 C:\Users\EMWA\OneDrive - Bjerking AB\Dokument\Assignment_1_E_Warmlund\MediaStorage\obj\Debug\MediaStorage.dll
 C:\Users\EMWA\OneDrive - Bjerking AB\Dokument\Assignment_1_E_Warmlund\MediaStorage\obj\Debug\MediaStorage.pdb
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\Newtonsoft.Json.dll
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\MediaDTO.csproj.Up2Date

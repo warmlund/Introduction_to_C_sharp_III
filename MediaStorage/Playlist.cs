@@ -8,9 +8,13 @@ namespace MediaDTO
     /// </summary>
     public class Playlist
     {
+        //Id Property
+        [JsonProperty("PlaylistId")]
+        public int PlaylistId { get; set; }
+
         //Media files property
         [JsonProperty("Media")] //JSON attribute
-        public List<Media> MediaFiles { get; set; }
+        public ICollection<Media> MediaFiles { get; set; }
 
         //Playlist name property
         [JsonProperty("Title")] //JSON attribute

@@ -32,3 +32,26 @@
 /MediaStorage/obj/Release/MediaStorage.pdb
 /MediaStorage/bin/Release/MediaStorage.dll
 /MediaStorage/bin/Release/MediaStorage.pdb
+/MediaPlayerDA/Sample_Data/Media/Images/Cherry.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Forest.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Lake.jpeg
+/MediaPlayerDA/Sample_Data/Media/Images/mars rover.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/nebula.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/purple sky.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Railroad.jpeg
+/MediaPlayerDA/Sample_Data/Media/Images/River.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/satellite.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/space flight.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/stars.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Urban.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Valley.jfif
+/MediaPlayerDA/Sample_Data/Media/Images/Waterfall.jpg
+/MediaPlayerDA/Sample_Data/Media/Videos/Snow Leopard.MP4
+/MediaPlayerDA/Sample_Data/Playlists/space list.json
+<<<<<<< Updated upstream
+=======
+/MediaStorage/obj/Debug/net8.0/MediaDTO.assets.cache
+/MediaPlayerDA/obj/project.assets.json
+/MediaStorage/obj/Debug/net8.0/MediaDTO.csproj.FileListAbsolute.txt
+>>>>>>> Stashed changes
+/allfiles.txt
