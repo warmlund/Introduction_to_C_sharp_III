@@ -14,13 +14,11 @@ namespace MediaPlayerDA.Migrations
                 name: "Playlist",
                 columns: table => new
                 {
-                    PlaylistId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    PlaylistName = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    PlaylistName = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Playlist", x => x.PlaylistId);
+                    table.PrimaryKey("PK_Playlist", x => x.PlaylistName);
                 });
 
             migrationBuilder.CreateTable(
@@ -32,22 +30,22 @@ namespace MediaPlayerDA.Migrations
                     FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     FilePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Format = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    PlaylistId = table.Column<int>(type: "int", nullable: true)
+                    PlaylistName = table.Column<string>(type: "nvarchar(450)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Media", x => x.MediaId);
                     table.ForeignKey(
-                        name: "FK_Media_Playlist_PlaylistId",
-                        column: x => x.PlaylistId,
+                        name: "FK_Media_Playlist_PlaylistName",
+                        column: x => x.PlaylistName,
                         principalTable: "Playlist",
-                        principalColumn: "PlaylistId");
+                        principalColumn: "PlaylistName");
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Media_PlaylistId",
+                name: "IX_Media_PlaylistName",
                 table: "Media",
-                column: "PlaylistId");
+                column: "PlaylistName");
         }
 
         /// <inheritdoc />

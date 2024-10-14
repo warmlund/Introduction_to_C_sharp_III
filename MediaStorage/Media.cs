@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json;
-using System.ComponentModel.DataAnnotations; // Importing the Json.NET library for handling json files
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; // Importing the Json.NET library for handling json files
 
 namespace MediaDTO
 {
@@ -8,30 +10,31 @@ namespace MediaDTO
     /// </summary>
     public class Media
     {
-        //Id Property
-        [Required]
+        // Id Property
+        [Key]
         [JsonProperty("MediaId")]
         public int MediaId { get; set; }
 
-        //Name property
+        // Name property
         [Required]
-        [JsonProperty("FileName")] //JSON attribute
+        [JsonProperty("FileName")] // JSON attribute
         public string FileName { get; set; } = null!;
 
-        //Filepath property
+        // Filepath property
         [Required]
-        [JsonProperty("FilePath")] //JSON attribute
+        [JsonProperty("FilePath")] // JSON attribute
         public string FilePath { get; set; } = null!;
 
-        //Format property
+        // Format property
         [Required]
-        [JsonProperty("Format")] //JSON attribute
+        [JsonProperty("Format")] // JSON attribute
         public string Format { get; set; } = null!;
 
-        //Playlist id. is null if the media is not in a playlist
-        [JsonProperty("ReferencingPlaylistId")]
-        public int? PlaylistId { get; set; }
+        // Foreign key to Playlist
+        [ForeignKey(nameof(Playlist))] // Reference Playlist entity
+        public string? PlaylistName { get; set; } // Foreign key, nullable if media is not part of any playlist
 
-        public Playlist? Playlist { get; set; }
+        // Navigation property
+        public Playlist? Playlist { get; set; } // Navigation property pointing to Playlist
     }
 }

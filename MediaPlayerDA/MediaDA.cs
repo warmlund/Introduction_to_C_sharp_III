@@ -1,17 +1,18 @@
 ﻿using MediaDTO;
+using MediaPlayerDA.Data;
+using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
-using Newtonsoft.Json;
-using MediaPlayerDA.Data;
 
 namespace MediaPlayerDA
 {
     public class MediaDA : IMediaDA
     {
-        MediaPlayerDbContext db;
+        DatabaseManager _databaseManager;
         public MediaDA()
         {
-            db = new MediaPlayerDbContext();
+           _databaseManager = new DatabaseManager();
         }
         /// <summary>
         /// Method for loading media from an array of filenames
@@ -33,7 +34,6 @@ namespace MediaPlayerDA
 
             return loadedMedia;
         }
-
 
         /// <summary>
         /// Method for loading a playlist
@@ -79,6 +79,26 @@ namespace MediaPlayerDA
             {
                 return false;
             }
+        }
+
+        public ICollection<Media> LoadMediaFromDatabase()
+        {
+            return _databaseManager.LoadMediaFromDb();
+        }
+
+        public Playlist LoadPlaylistFromDatabase(string name)
+        {
+            return _databaseManager.LoadPlaylistFormDb(name);
+        }
+
+        public bool SaveMediaToDatabase(ICollection<Media> currentMedia)
+        {
+            return _databaseManager.SaveMediaToDb(currentMedia);
+        }
+
+        public bool SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
+        {
+            return _databaseManager.SavePlaylistToDb(title, currentMedia);
         }
     }
 }

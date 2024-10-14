@@ -8,6 +8,7 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Folder Include="Migrations\" />
     <Folder Include="Properties\" />
     <Folder Include="Sample_Data\Media\Images\" />
     <Folder Include="Sample_Data\Media\Videos\" />

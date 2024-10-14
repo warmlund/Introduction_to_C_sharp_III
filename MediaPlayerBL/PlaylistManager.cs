@@ -15,7 +15,7 @@ namespace MediaPlayerBL
     /// </summary>
     public class PlaylistManager
     {
-        public Playlist CurrentPlaylist { get; set; } //Property storingthe current playlist
+        public Playlist CurrentPlaylist { get; set; } //Property storing the current playlist
 
 
         /// <summary>

@@ -10,19 +10,14 @@ namespace MediaDTO
     /// </summary>
     public class Playlist
     {
-        //Id Property
-        [JsonProperty("PlaylistId")]
+        //Playlist name property
         [Key]
-        public int PlaylistId { get; set; }
+        [JsonProperty("Title")] //JSON attribute
+        public string PlaylistName { get; set; }
 
-        //Media files property
+        //Media files property used for loading a playlist as a json file and not from database
         [JsonProperty("Media")] //JSON attribute
         [InverseProperty("Playlist")]
         public ICollection<Media> MediaFiles { get; set; } = null!;
-
-        //Playlist name property
-        [Required]
-        [JsonProperty("Title")] //JSON attribute
-        public string PlaylistName { get; set; } = null!;
     }
 }
