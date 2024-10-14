@@ -10,12 +10,12 @@ namespace MediaPlayerDA
     public interface IMediaDA
     {
         //Load media
-        List<Media> LoadMedia(string[] filenames);
+        ICollection<Media> LoadMedia(string[] filenames);
 
         //Load playlist
         Playlist LoadPlaylist(string path);
 
         //Save playlist
-        bool SavePlaylist(string path, string title, List<Media> currentMedia);
+        bool SavePlaylist(string path, string title, ICollection<Media> currentMedia);
     }
 }

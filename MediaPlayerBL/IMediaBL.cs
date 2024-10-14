@@ -11,10 +11,10 @@ namespace MediaPlayerBL
     public interface IMediaBL
     {
         //Loads media
-        List<Media> LoadMedia(string[] filenames);
+        ICollection<Media> LoadMedia(string[] filenames);
 
         //Loads playlist
-        List<Media> LoadPlaylist(string filepath);
+        ICollection<Media> LoadPlaylist(string filepath);
 
         //Creates image
         BitmapImage CreateImage(string filepath);
@@ -23,7 +23,7 @@ namespace MediaPlayerBL
         Uri CreateVideo(string filepath);
 
         //Saves playlist
-        void SavePlaylist(string filepath, List<Media> loadedMedia);
+        void SavePlaylist(string filepath, ICollection<Media> loadedMedia);
 
         //Gets playlist title
         string GetPlaylistTitle();

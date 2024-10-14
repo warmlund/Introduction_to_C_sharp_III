@@ -29,7 +29,7 @@ namespace MediaPlayerBL
         /// <summary>
         /// Method for saving a playlist
         /// </summary>
-        public void SavePlaylist(IMediaDA mediaDA,string filepath, List<Media> currentMedia)
+        public void SavePlaylist(IMediaDA mediaDA,string filepath, ICollection<Media> currentMedia)
         {
             CurrentPlaylist.PlaylistName = Path.GetFileNameWithoutExtension(filepath); //Stores the playlist title
             mediaDA.SavePlaylist(filepath, CurrentPlaylist.PlaylistName, currentMedia); //Saves the playlist

@@ -2,19 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
+using MediaPlayerDA.Data;
 
 namespace MediaPlayerDA
 {
     public class MediaDA : IMediaDA
     {
+        MediaPlayerDbContext db;
         public MediaDA()
         {
-            
+            db = new MediaPlayerDbContext();
         }
         /// <summary>
         /// Method for loading media from an array of filenames
         /// </summary>
-        public List<Media> LoadMedia(string[] filenames)
+        public ICollection<Media> LoadMedia(string[] filenames)
         {
             var loadedMedia = new List<Media>(); //creates new list of media
 
@@ -61,7 +63,7 @@ namespace MediaPlayerDA
         /// A method for saving a playlist
         /// From a playlist object to a JSON file
         /// </summary>
-        public bool SavePlaylist(string path, string title, List<Media> currentMedia)
+        public bool SavePlaylist(string path, string title, ICollection<Media> currentMedia)
         {
             var playlist = new Playlist(); //creates a playlist 
             playlist.PlaylistName = title; //sets the title

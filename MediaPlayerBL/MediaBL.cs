@@ -29,7 +29,7 @@ namespace MediaPlayerBL
         /// Loads the playlist from a filepath
         /// and returns a list of media
         /// </summary>
-        public List<Media> LoadPlaylist(string filepath)
+        public ICollection<Media> LoadPlaylist(string filepath)
         {
             _playlistManager.LoadPlaylist(_mediaDA, filepath);
             return _playlistManager.CurrentPlaylist.MediaFiles;
@@ -38,7 +38,7 @@ namespace MediaPlayerBL
         /// <summary>
         /// A method that loads media calling the method from the DA layer
         /// </summary>
-        public List<Media> LoadMedia(string[] filenames)
+        public ICollection<Media> LoadMedia(string[] filenames)
         {
             return _mediaDA.LoadMedia(filenames);
         }
@@ -46,7 +46,7 @@ namespace MediaPlayerBL
         /// <summary>
         /// A method saving the playlist
         /// </summary>
-        public void SavePlaylist(string filepath, List<Media> loadedMedia) => _playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia);
+        public void SavePlaylist(string filepath, ICollection<Media> loadedMedia) => _playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia);
 
         /// <summary>
         /// A method retrieving the playlist title
