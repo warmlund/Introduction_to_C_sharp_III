@@ -91,14 +91,24 @@ namespace MediaPlayerDA
             return _databaseManager.LoadPlaylistFormDb(name);
         }
 
-        public bool SaveMediaToDatabase(ICollection<Media> currentMedia)
+        public void SaveMediaToDatabase(ICollection<Media> currentMedia)
         {
-            return _databaseManager.SaveMediaToDb(currentMedia);
+            _databaseManager.SaveMediaToDb(currentMedia);
         }
 
-        public bool SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
+        public void SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
         {
-            return _databaseManager.SavePlaylistToDb(title, currentMedia);
+            _databaseManager.SavePlaylistToDb(title, currentMedia);
+        }
+
+        public void RemoveMediaFromDatabase(Media media)
+        {
+
+        }
+
+        public void RemovePlaylistFromDatabase(Playlist playlist)
+        {
+
         }
     }
 }

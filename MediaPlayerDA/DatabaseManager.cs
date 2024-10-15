@@ -133,5 +133,22 @@ namespace MediaPlayerDA
         {
             return db.Playlist.Where(p => p.PlaylistName.Equals(name)).FirstOrDefault();
         }
+
+        internal void RemoveMediaFromDb(Media media)
+        {
+            db.Media.Remove(media);
+            db.SaveChanges();
+        }
+
+        internal void RemovePlaylistFromDb(Playlist playlist)
+        {
+            db.Playlist.Remove(playlist); //Removes playlist
+            db.SaveChanges();      
+        }
+
+        internal void RenamePlaylist(string newName, Playlist playlist)
+        {
+            db.Playlist.Where(n => n.PlaylistName.Equals(newName)).FirstOrDefault().PlaylistName = newName;
+        }
     }
 }

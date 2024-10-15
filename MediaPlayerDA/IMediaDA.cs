@@ -22,8 +22,12 @@ namespace MediaPlayerDA
 
         Playlist LoadPlaylistFromDatabase(string name);
 
-        bool SaveMediaToDatabase(ICollection<Media> currentMedia);
+        void SaveMediaToDatabase(ICollection<Media> currentMedia);
 
-        bool SavePlaylistToDatabase(string title, ICollection<Media> currentMedia);
+        void SavePlaylistToDatabase(string title, ICollection<Media> currentMedia);
+
+        void RemoveMediaFromDatabase(Media media);
+
+        void RemovePlaylistFromDatabase(Playlist playlist);
     }
 }

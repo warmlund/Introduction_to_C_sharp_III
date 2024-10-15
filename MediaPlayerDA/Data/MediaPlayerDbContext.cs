@@ -28,13 +28,19 @@ public partial class MediaPlayerDbContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        // Define relationships, keys, etc.
+        // Define the relationship between Media and Playlist
         modelBuilder.Entity<Media>()
-            .HasOne(m => m.Playlist) 
+            .HasOne(m => m.Playlist)
             .WithMany(p => p.MediaFiles)
-            .HasForeignKey(m => m.PlaylistName) 
-            .HasPrincipalKey(p => p.PlaylistName);
-            
+            .HasForeignKey(m => m.PlaylistName)  // Media references PlaylistName in Playlist
+            .HasPrincipalKey(p => p.PlaylistName); // PlaylistName is the principal key
+
+        // Set Cascade Delete when a Playlist is deleted
+        modelBuilder.Entity<Playlist>()
+            .HasMany(p => p.MediaFiles)
+            .WithOne(m => m.Playlist)
+            .OnDelete(DeleteBehavior.SetNull); // Set foreign key to null on deletion
+
         base.OnModelCreating(modelBuilder);
     }
 
