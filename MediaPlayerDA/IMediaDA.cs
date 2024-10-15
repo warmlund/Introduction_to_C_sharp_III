@@ -29,5 +29,7 @@ namespace MediaPlayerDA
         void RemoveMediaFromDatabase(Media media);
 
         void RemovePlaylistFromDatabase(Playlist playlist);
+
+        void ChangePlaylistTitle(string newName, Playlist playlist);
     }
 }

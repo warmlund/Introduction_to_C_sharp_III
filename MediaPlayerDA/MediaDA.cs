@@ -1,6 +1,4 @@
 ﻿using MediaDTO;
-using MediaPlayerDA.Data;
-using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.IO;
@@ -12,7 +10,7 @@ namespace MediaPlayerDA
         DatabaseManager _databaseManager;
         public MediaDA()
         {
-           _databaseManager = new DatabaseManager();
+            _databaseManager = new DatabaseManager();
         }
         /// <summary>
         /// Method for loading media from an array of filenames
@@ -103,12 +101,17 @@ namespace MediaPlayerDA
 
         public void RemoveMediaFromDatabase(Media media)
         {
-
+            _databaseManager.RemoveMediaFromDb(media);
         }
 
         public void RemovePlaylistFromDatabase(Playlist playlist)
         {
+            _databaseManager.RemovePlaylistFromDb(playlist);
+        }
 
+        public void ChangePlaylistTitle(string newName, Playlist playlist)
+        {
+            _databaseManager.ChangePlaylistTitle(newName, playlist);
         }
     }
 }

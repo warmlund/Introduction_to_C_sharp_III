@@ -29,29 +29,42 @@ namespace MediaPlayerBL
         /// Loads the playlist from a filepath
         /// and returns a list of media
         /// </summary>
-        public ICollection<Media> LoadPlaylist(string filepath)
+        public ICollection<Media> LoadPlaylist(string filepath, bool loadFromDb)
         {
-            _playlistManager.LoadPlaylist(_mediaDA, filepath);
+            _playlistManager.LoadPlaylist(_mediaDA, filepath, loadFromDb);
+
             return _playlistManager.CurrentPlaylist.MediaFiles;
         }
 
         /// <summary>
         /// A method that loads media calling the method from the DA layer
         /// </summary>
-        public ICollection<Media> LoadMedia(string[] filenames)
+        public ICollection<Media> LoadMedia(string[] filenames, bool loadFromDb)
         {
-            return _mediaDA.LoadMedia(filenames);
+            if (loadFromDb)
+                return _mediaDA.LoadMediaFromDatabase();
+
+            else
+                return _mediaDA.LoadMedia(filenames);
         }
 
         /// <summary>
         /// A method saving the playlist
         /// </summary>
-        public void SavePlaylist(string filepath, ICollection<Media> loadedMedia) => _playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia);
+        public void SavePlaylist(string filepath, ICollection<Media> loadedMedia, bool saveToDb)
+        {
+            _playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia, saveToDb);
+        }
 
         /// <summary>
         /// A method retrieving the playlist title
         /// </summary>
         public string GetPlaylistTitle() => _playlistManager.CurrentPlaylist.PlaylistName;
+
+        public void ChangePlaylistTitle(string newName, Playlist playlist, bool fromDb)
+        {
+            _playlistManager.ChangePlaylistTitle(_mediaDA, newName, playlist, fromDb);
+        }
 
         /// <summary>
         /// Checks if the media is an image
@@ -98,11 +111,11 @@ namespace MediaPlayerBL
         public Uri CreateVideo(string filePath)
         {
             Uri path = null;
-            
-            if(System.IO.File.Exists(filePath))
+
+            if (System.IO.File.Exists(filePath))
                 path = new Uri(filePath, UriKind.RelativeOrAbsolute);
 
-            return path;    
+            return path;
         }
     }
 }

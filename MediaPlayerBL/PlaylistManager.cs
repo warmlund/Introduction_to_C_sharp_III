@@ -29,19 +29,46 @@ namespace MediaPlayerBL
         /// <summary>
         /// Method for saving a playlist
         /// </summary>
-        public void SavePlaylist(IMediaDA mediaDA,string filepath, ICollection<Media> currentMedia)
+        public void SavePlaylist(IMediaDA mediaDA,string filepath, ICollection<Media> currentMedia, bool saveToDb)
         {
-            CurrentPlaylist.PlaylistName = Path.GetFileNameWithoutExtension(filepath); //Stores the playlist title
-            mediaDA.SavePlaylist(filepath, CurrentPlaylist.PlaylistName, currentMedia); //Saves the playlist
+            if (saveToDb)
+            {
+                mediaDA.SavePlaylistToDatabase(filepath, currentMedia);
+            }
+
+            else
+            {
+                CurrentPlaylist.PlaylistName = Path.GetFileNameWithoutExtension(filepath); //Stores the playlist title
+                mediaDA.SavePlaylist(filepath, CurrentPlaylist.PlaylistName, currentMedia); //Saves the playlist
+            }
         }
 
         /// <summary>
         /// A method for loading an existing playlist
         /// </summary>
-        public void LoadPlaylist(IMediaDA mediaDA, string filepath)
+        public void LoadPlaylist(IMediaDA mediaDA, string filepath, bool loadToDb)
         {
-            CurrentPlaylist = mediaDA.LoadPlaylist(filepath); //Sets the playlist with the loaded one
-            CurrentPlaylist.PlaylistName= Path.GetFileNameWithoutExtension(filepath); //Sets the playlist title
+            if (loadToDb)
+            {
+                CurrentPlaylist = mediaDA.LoadPlaylistFromDatabase(filepath);
+            }
+
+            else
+            {
+                CurrentPlaylist = mediaDA.LoadPlaylist(filepath); //Sets the playlist with the loaded one
+                CurrentPlaylist.PlaylistName = Path.GetFileNameWithoutExtension(filepath); //Sets the playlist title
+            }
+        }
+
+        public void ChangePlaylistTitle(IMediaDA mediaDA, string title, Playlist playlist, bool storedInDatabase)
+        {
+            if (storedInDatabase)
+            {
+                mediaDA.ChangePlaylistTitle(title, playlist);
+            }
+
+            else
+                playlist.PlaylistName = title;
         }
     }
 }

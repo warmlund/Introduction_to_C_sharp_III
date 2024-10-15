@@ -146,9 +146,10 @@ namespace MediaPlayerDA
             db.SaveChanges();      
         }
 
-        internal void RenamePlaylist(string newName, Playlist playlist)
+        internal void ChangePlaylistTitle(string newName, Playlist playlist)
         {
             db.Playlist.Where(n => n.PlaylistName.Equals(newName)).FirstOrDefault().PlaylistName = newName;
+            db.SaveChanges();
         }
     }
 }
