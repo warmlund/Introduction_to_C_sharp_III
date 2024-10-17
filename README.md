@@ -3,6 +3,8 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About
+This is a repository for all assignments during the course Progamming in C# III.
+During the course the aim was to create a media player for videos and images that also handles media and playlists by quering a database, and from files.
 
 ### Assignments
 
