@@ -14,6 +14,10 @@ namespace MediaPlayerBL
         //Loads media
         ICollection<Media> LoadMedia(string[] filenames, bool loadFromDb);
 
+        void SaveMedia(ICollection<Media> media, string PlaylistTitle);
+
+        void RemoveMedia(ICollection<Media> media);
+
         //Loads playlist
         ICollection<Media> LoadPlaylist(string filepath, bool loadFromDb);
 
@@ -31,10 +35,18 @@ namespace MediaPlayerBL
 
         void ChangePlaylistTitle(string newName, Playlist playlist, bool fromDb);
 
+        void CreateNewPlaylist(string name);
+
+        void RemovePlaylist(string title);
+
         //Checks image format
         bool IsImageFormat(string filepath);
 
         //Checks video format
         bool IsVideoFormat(string filepath);
+
+        bool IsPlaylistInDatabase(string name);
+
+        Playlist GetCurrentPlaylist();
     }
 }

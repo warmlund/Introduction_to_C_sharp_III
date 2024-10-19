@@ -296,7 +296,6 @@
                                 <Setter Property="Foreground" Value="Transparent"/>
                             </Trigger.Setters>
                         </Trigger>
-                       
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
@@ -456,4 +455,5 @@
         <Setter Property="Foreground" Value="#fe994b"/>
     </Style>
     <!--#endregion-->
+
 </ResourceDictionary>

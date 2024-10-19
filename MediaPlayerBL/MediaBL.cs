@@ -48,6 +48,16 @@ namespace MediaPlayerBL
                 return _mediaDA.LoadMedia(filenames);
         }
 
+        public void SaveMedia(ICollection<Media> media, string PlaylistTitle)
+        {
+            _mediaDA.SaveMediaToDatabase(media, PlaylistTitle);
+        }
+
+        public void RemoveMedia(ICollection<Media> media)
+        {
+            _mediaDA.RemoveMediaFromDatabase(media);
+        }
+
         /// <summary>
         /// A method saving the playlist
         /// </summary>
@@ -65,6 +75,23 @@ namespace MediaPlayerBL
         {
             _playlistManager.ChangePlaylistTitle(_mediaDA, newName, playlist, fromDb);
         }
+
+        public void CreateNewPlaylist(string name)
+        {
+            _playlistManager.CreateNewPlaylist(_mediaDA, name);
+        }
+
+        public void RemovePlaylist(string title)
+        {
+            _playlistManager.RemoveCurrentPlaylist(_mediaDA, title);
+        }
+
+        public bool IsPlaylistInDatabase(string name)
+        {
+            return _playlistManager.IsPlaylistInDatabase(_mediaDA, name);
+        }
+
+        public Playlist GetCurrentPlaylist() => _playlistManager.CurrentPlaylist;
 
         /// <summary>
         /// Checks if the media is an image

@@ -40,31 +40,35 @@
        
         <!-- Title-->
         <TextBlock Text="Home Media Player" Foreground="White" VerticalAlignment="Center" Grid.ColumnSpan="2" FontSize="32" FontWeight="SemiBold" Margin="10,0,0,0"/>
-        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Width="Auto" Margin="10">
-            <Expander Header="Create">
+       
+        <!--Menu-->
+        <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Width="Auto">
+            <TextBlock Text="Menu" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" FontSize="18" Margin="10,0,0,10"/>
+            <Expander Header="Create" Margin="10,5,0,0">
                 <StackPanel Orientation="Vertical" Width="180">
-                    <Button x:Name="CreatePlaylistButton" Style="{StaticResource CreatePlaylistButton}" Command="{Binding LoadPlaylist}"/>
+                    <Button x:Name="CreatePlaylistButton" Style="{StaticResource CreatePlaylistButton}" Command="{Binding CreatePlaylist}"/>
                 </StackPanel>
             </Expander>
-            <Expander Header="Load">
+            <Expander Header="Load" Margin="10,5,0,0">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="LoadPlaylistButton" Style="{StaticResource LoadPlaylistButton}" Command="{Binding LoadPlaylist}"/>
-                    <Button x:Name="LoadPlaylistFromDbButton" Style="{StaticResource LoadPlaylistToDbButton}" Command="{Binding LoadPlaylist}"/>
+                    <Button x:Name="LoadPlaylistFromDbButton" Style="{StaticResource LoadPlaylistToDbButton}" Command="{Binding LoadPlaylistFromDb}"/>
                 </StackPanel>
             </Expander>
-            <Expander Header="Save">
+            <Expander Header="Save" Margin="10,5,0,0">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="SavePlaylistButton" Style="{StaticResource SavePlaylistButton}" Command="{Binding SavePlaylist}"/>
-                    <Button x:Name="SavePlaylisttoDbButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding SavePlaylist}"/>
+                    <Button x:Name="SavePlaylisttoDbButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding SavePlaylistToDb}"/>
+                </StackPanel>
+            </Expander>
+            <Expander Header="Remove" Margin="10,5,0,0">
+                <StackPanel Orientation="Vertical" Width="180">
+                    <Button x:Name="RemovePlaylistButton" Style="{StaticResource SavePlaylistButton}" Command="{Binding RemovePlaylistFromDb}"/>
+                    <Button x:Name="RemoveMediaButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding RemoveMediaFromDb}"/>
                 </StackPanel>
             </Expander>
         </StackPanel>
-        <!--Playlist header -->
-        <TextBlock Text="Playlist" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" FontSize="24" FontWeight="SemiBold" Margin="0,0,10,0"/>
-
-        <!--Menu header -->
-        <TextBlock Text="Menu" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" FontSize="24" FontWeight="SemiBold" Margin="10,0,10,0"/>
-
+      
         <!--Label showing the playlist title, bound to the property PlaylistTitle in the viewmodel-->
         <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="0" Margin="0,0,20,0"/>
        
@@ -73,18 +77,22 @@
         
         <!--Image element for showing images, has boolean visibility converter as the media element-->
         <Image x:Name="ImageShower" Grid.Column="1" Grid.Row="1" Width="Auto" Height="Auto" Margin="0,0,5,10" Source="{Binding CurrentImage}" Visibility="{Binding IsImage, Converter={StaticResource BoolVisibilityConverter}}" />
-        
-        <!--List view for storing the media, bound to the property CurrentLoadedMedia-->
-        <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia, Mode=OneWay}" Grid.Row="1" Grid.Column="2" Margin="5,0,10,10" BorderThickness="0">
-            <ListView.View>
-                <GridView x:Name="ListViewGrid" AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
-                    <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/> <!--Bound to the FileName property of the Media in the CurrentLoadedMedia collection-->
-                </GridView>
-            </ListView.View>
-        </ListView>
-        
+
+        <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
+            <!--Playlist header -->
+            <TextBlock Text="Playlist" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" FontSize="18" Margin="5,0,10,5"/>
+            <!--List view for storing the media, bound to the property CurrentLoadedMedia-->
+            <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia, Mode=OneWay}" Margin="5,0,10,10" BorderThickness="0" Height="480">
+                <ListView.View>
+                    <GridView x:Name="ListViewGrid" AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
+                        <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/>
+                        <!--Bound to the FileName property of the Media in the CurrentLoadedMedia collection-->
+                    </GridView>
+                </ListView.View>
+            </ListView>
+        </StackPanel>
         <!--Textblock telling the user to load media or playlist, only visible if the count of the currentloadedmedia is 0-->
-        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Media or Playlist" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
+        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Load Playlist" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
         
         <!--Progressbar Value bound to ProgressValue in the viewmodel-->
         <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue, UpdateSourceTrigger=PropertyChanged}"/>

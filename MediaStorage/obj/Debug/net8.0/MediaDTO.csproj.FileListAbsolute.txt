@@ -1,4 +1,5 @@
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\net8.0\MediaStorage.deps.json
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\net8.0\MediaStorage.runtimeconfig.json
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\net8.0\MediaStorage.dll
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\net8.0\MediaStorage.pdb
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\MediaDTO.csproj.AssemblyReference.cache
@@ -8,6 +9,5 @@ C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\MediaStorage.dll
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\refint\MediaStorage.dll
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\MediaStorage.pdb
-C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\ref\MediaStorage.dll
-C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\bin\Debug\net8.0\MediaStorage.runtimeconfig.json
 C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\MediaDTO.genruntimeconfig.cache
+C:\Users\EMWA\Source\Repos\warmlund\Introduction_to_C_sharp_III\MediaStorage\obj\Debug\net8.0\ref\MediaStorage.dll

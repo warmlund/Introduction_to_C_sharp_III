@@ -18,15 +18,18 @@ namespace MediaPlayerPL
         private string _playlistTitle;
         private string[] _selectedFiles;
         private string _currentFormat;
+        private string _selectedPlaylist;
         private IMediaBL _mediaBl;
         private ObservableCollection<Media> _currentLoadedMedia;
         private CancellationTokenSource _tokenSource;
         private TaskCompletionSource<bool> _mediaOpenedTcs;
         private Media _currentPlayingMedia;
+        private ICollection<Media> _selectedMedia;
         private bool _isPlaying = false;
         private bool _isVideo = false;
         private bool _isImage = false;
         private bool _isIndexChanged = false;
+        private bool _isEditingTitle = false;
         private BitmapImage _image;
         private Uri _video;
         public EventHandler PlayRequested;
@@ -37,9 +40,17 @@ namespace MediaPlayerPL
         #region commands
         //Commands for various commands called from the view
         public AsyncCommand Play { get; private set; }
+        public Command CreatePlaylist {  get; private set; }
         public Command LoadPlaylist { get; private set; }
+        public Command LoadPlaylistFromDb { get; private set; }
         public Command SavePlaylist { get; private set; }
+        public Command SavePlaylistToDb { get; private set; }
+        public Command RemovePlaylistFromDb { get; private set; }
+        public Command ChangePlaylistTitle {  get; private set; }
         public Command LoadMedia { get; private set; }
+        public Command LoadMediaFromDb { get; private set; }
+        public Command SaveMediaToDb { get; private set; }
+        public Command RemoveMediaFromDb { get; private set; }
         public CommandWithParameter<Media> MoveMediaUp { get; private set; }
         public CommandWithParameter<Media> MoveMediaDown { get; private set; }
         #endregion
@@ -52,12 +63,15 @@ namespace MediaPlayerPL
         public double VideoProgress { get { return _videoProgress; } set { if (_videoProgress != value) { _videoProgress = value; OnPropertyChanged(nameof(VideoProgress)); } } }
         public double ProgressValue { get { return _progressValue; } set { if (_progressValue != value) { _progressValue = value; OnPropertyChanged(nameof(ProgressValue)); } } }
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); } } }
+        public string SelectedPlaylist { get { return _selectedPlaylist; } set { if (_selectedPlaylist != value) { _selectedPlaylist = value; OnPropertyChanged(nameof(SelectedPlaylist)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); } } }
+        public bool IsEditingTitle { get { return _isEditingTitle; } set { if (_isEditingTitle != value) { _isEditingTitle = value; OnPropertyChanged(nameof(IsEditingTitle)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); } } }
         public bool IsImage { get { return _isImage; } set { if (_isImage != value) { _isImage = value; OnPropertyChanged(nameof(IsImage)); } } }
         public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); } } }
         public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged)); } } }
         public Media CurrentPlayingMedia { get => _currentPlayingMedia; set { if (_currentPlayingMedia != value) { _currentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); CheckFormatAndSetCurrentMedia(); } } }
+        public ICollection<Media> SelectedMedia { get => _selectedMedia; set { if (_selectedMedia != value) { _selectedMedia = value; OnPropertyChanged(nameof(SelectedMedia));} } }
         public BitmapImage CurrentImage { get => _image; set { if (_image != value) { _image = value; OnPropertyChanged(nameof(CurrentImage)); } } }
         public Uri CurrentVideo { get => _video; set { if (_video != value) { _video = value; OnPropertyChanged(nameof(CurrentVideo)); } } }
         public TaskCompletionSource<bool> TaskComplete { get => _mediaOpenedTcs; set { if (_mediaOpenedTcs != value) { _mediaOpenedTcs = value; OnPropertyChanged(nameof(TaskComplete)); } } }
@@ -73,9 +87,17 @@ namespace MediaPlayerPL
             _currentProgress = 0;
             _currentLoadedMedia = new ObservableCollection<Media>();
             Play = new AsyncCommand(TogglePlayPause, CanPlayMedia);
+            CreatePlaylist = new Command(CreateNewPlaylist, CanCreateNewPlaylist);
             LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadOrSave);
+            LoadPlaylistFromDb = new Command(LoadPlaylistFromDatabase, CanLoadPlaylistFromDatabase);
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
+            SavePlaylistToDb = new Command(SavePlaylistToDatabase, CanSavePlaylistToDatabase);
+            RemovePlaylistFromDb = new Command(RemovePlaylistFromDatabase, CanRemovePlaylistFromDatabase);
+            ChangePlaylistTitle = new Command(EditPlaylistTitleAsync, CanEditPlaylistTitle);
             LoadMedia = new Command(LoadNewMedia, CanLoadOrSave);
+            LoadMediaFromDb = new Command(LoadNewMediaFromDatabase, CanLoadNewMediaFromDatabase);
+            SaveMediaToDb = new Command(SaveMediaToDatabase, CanSaveOrRemoveMediaToDatabase);
+            RemoveMediaFromDb = new Command(RemoveMediaFromDatabase, CanSaveOrRemoveMediaToDatabase);
             MoveMediaUp = new CommandWithParameter<Media>(MoveUp, CanMoveUp);
             MoveMediaDown = new CommandWithParameter<Media>(MoveDown, CanMoveDown);
 
@@ -110,8 +132,87 @@ namespace MediaPlayerPL
                 return true;
             return false;
         }
-
+        private bool CanLoadPlaylistFromDatabase()
+        {
+            if(IsPlaying == false)
+                return true;
+            return false;
+        }
+        private bool CanCreateNewPlaylist()
+        {
+            return true;
+        }
+        private bool CanSavePlaylistToDatabase()
+        {
+            if(_currentLoadedMedia.Count > 0 && PlaylistTitle != null)
+                return true;
+            return false;
+        }
+        private bool CanRemovePlaylistFromDatabase()
+        {
+            if(PlaylistTitle != null && !_mediaBl.IsPlaylistInDatabase(PlaylistTitle))
+                return true;
+            return false;
+        }
+        private bool CanEditPlaylistTitle()
+        {
+            if(_mediaBl.GetCurrentPlaylist!=null)
+                return true;
+            return false;
+        }
+        private bool CanLoadNewMediaFromDatabase()
+        {
+            if(PlaylistTitle!=string.Empty)
+                return true;
+            return false;
+        }
+        private bool CanSaveOrRemoveMediaToDatabase()
+        {
+            if(SelectedMedia.Count > 0)
+                return true;
+            return false;
+        }
         #endregion
+
+        private void RemoveMediaFromDatabase()
+        {
+            _mediaBl.RemoveMedia(SelectedMedia);
+        }
+
+        private void SaveMediaToDatabase()
+        {
+            _mediaBl.SaveMedia(SelectedMedia,PlaylistTitle);
+        }
+
+        private void LoadNewMediaFromDatabase()
+        {
+            throw new NotImplementedException();
+        }
+
+        private void EditPlaylistTitleAsync()
+        {
+            
+        }
+
+        private void RemovePlaylistFromDatabase()
+        {
+            _mediaBl.RemovePlaylist(PlaylistTitle);
+        }
+
+        private void SavePlaylistToDatabase()
+        {
+            _mediaBl.SavePlaylist(PlaylistTitle, CurrentLoadedMedia, true);
+        }
+
+        private void LoadPlaylistFromDatabase()
+        {
+            _mediaBl.LoadPlaylist(SelectedPlaylist, true);
+        }
+
+        private void CreateNewPlaylist()
+        {
+            _mediaBl.CreateNewPlaylist(PlaylistTitle);
+        }
 
         /// <summary>
         /// Method for toggling the play pause functionality
@@ -246,7 +347,7 @@ namespace MediaPlayerPL
             if (openManager.ShowDialog())
             {
                 CurrentLoadedMedia.Clear(); //if successful clearing the collection of other media
-                foreach (Media media in _mediaBl.LoadPlaylist(openManager.FilePath))
+                foreach (Media media in _mediaBl.LoadPlaylist(openManager.FilePath,false))
                 {
                     CurrentLoadedMedia.Add(media); //adds media from the loaded playlist to the player
                 }
@@ -268,7 +369,7 @@ namespace MediaPlayerPL
         {
             var saveManager = new SaveManager();
             if (saveManager.ShowDialog())
-                _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList()); // If successull calls the method in the bl layer to save the playlist
+                _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList(),false); // If successull calls the method in the bl layer to save the playlist
 
             else
             {
@@ -285,7 +386,7 @@ namespace MediaPlayerPL
             if (openManager.ShowDialog()) //if the load is successful
             {
                 _selectedFiles = openManager.SelectedFiles; //sets selected files
-                foreach (Media m in _mediaBl.LoadMedia(_selectedFiles))
+                foreach (Media m in _mediaBl.LoadMedia(_selectedFiles,false))
                 {
                     CurrentLoadedMedia.Add(m); //adds files to the collection
                 }

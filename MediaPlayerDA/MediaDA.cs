@@ -89,9 +89,9 @@ namespace MediaPlayerDA
             return _databaseManager.LoadPlaylistFormDb(name);
         }
 
-        public void SaveMediaToDatabase(ICollection<Media> currentMedia)
+        public void SaveMediaToDatabase(ICollection<Media> currentMedia, string PlaylistTitle)
         {
-            _databaseManager.SaveMediaToDb(currentMedia);
+            _databaseManager.SaveMediaToDb(currentMedia, PlaylistTitle);
         }
 
         public void SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
@@ -99,19 +99,29 @@ namespace MediaPlayerDA
             _databaseManager.SavePlaylistToDb(title, currentMedia);
         }
 
-        public void RemoveMediaFromDatabase(Media media)
+        public void RemoveMediaFromDatabase(ICollection<Media> media)
         {
             _databaseManager.RemoveMediaFromDb(media);
         }
 
-        public void RemovePlaylistFromDatabase(Playlist playlist)
+        public void RemovePlaylistFromDatabase(string title)
         {
-            _databaseManager.RemovePlaylistFromDb(playlist);
+            _databaseManager.RemovePlaylistFromDb(title);
         }
 
         public void ChangePlaylistTitle(string newName, Playlist playlist)
         {
             _databaseManager.ChangePlaylistTitle(newName, playlist);
+        }
+
+        public void CreateNewPlaylist(string name)
+        {
+            _databaseManager.CreateNewPlaylist(name);
+        }
+
+        public bool IsPlaylistInDatabase(string name)
+        {
+           return _databaseManager.IsPlaylistInDatabase(name);
         }
     }
 }

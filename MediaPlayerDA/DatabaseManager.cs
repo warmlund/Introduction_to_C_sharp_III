@@ -1,6 +1,7 @@
 ﻿using MediaDTO;
 using MediaPlayerDA.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -81,12 +82,13 @@ namespace MediaPlayerDA
             return loadedMedia;
         }
 
-        public bool SaveMediaToDb(ICollection<Media> currentMedia)
+        public bool SaveMediaToDb(ICollection<Media> currentMedia, string PlaylistTitle)
         {
             try
             {
                 foreach (var media in currentMedia)
                 {
+                    media.PlaylistName = PlaylistTitle;
                     db.Media.Add(media);
                     db.SaveChanges();
                 }
@@ -134,22 +136,43 @@ namespace MediaPlayerDA
             return db.Playlist.Where(p => p.PlaylistName.Equals(name)).FirstOrDefault();
         }
 
-        internal void RemoveMediaFromDb(Media media)
+        internal void RemoveMediaFromDb(ICollection<Media> media)
         {
-            db.Media.Remove(media);
+            db.Media.ForEachAsync(m => media.Remove(m));
             db.SaveChanges();
         }
 
-        internal void RemovePlaylistFromDb(Playlist playlist)
+        internal void RemovePlaylistFromDb(string title)
         {
-            db.Playlist.Remove(playlist); //Removes playlist
-            db.SaveChanges();      
+            Playlist playlist = db.Playlist.Where(p => p.PlaylistName.Equals(title)).FirstOrDefault();
+            if (playlist != null)
+            {
+                db.Playlist.Remove(playlist); //Removes playlist
+                db.SaveChanges();
+            }
         }
 
         internal void ChangePlaylistTitle(string newName, Playlist playlist)
         {
             db.Playlist.Where(n => n.PlaylistName.Equals(newName)).FirstOrDefault().PlaylistName = newName;
             db.SaveChanges();
+        }
+
+        internal void CreateNewPlaylist(string name)
+        {
+            if (db.Playlist.Any(m => m.PlaylistName.Equals(name)))
+                return;
+            else
+            {
+                db.Playlist.Add(new Playlist { PlaylistName = name });
+            }
+        }
+
+        internal bool IsPlaylistInDatabase(string name)
+        {
+           if(!db.Playlist.Any(p=>p.PlaylistName.Equals(name))) 
+                return false;
+           return true;
         }
     }
 }
