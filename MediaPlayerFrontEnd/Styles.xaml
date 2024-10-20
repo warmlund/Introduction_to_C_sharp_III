@@ -2,11 +2,27 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MediaPlayerPL">
 
-    <!-- Defines the PlayPauseConverter to be able to toggle between play/pause text in the button style-->
+    <!-- Defines converters-->
     <local:PlayPauseConverter x:Key="PlayPauseConverter"/>
     <local:UpDownExpanderConverter x:Key="UpDownExpanderConverter"/>
-    <local:EditFinishConverter x:Key="EditFinishConverter"/>
 
+    <Style x:Key="ModalWindowStyle" TargetType="{x:Type Window}">
+        <Setter Property="Width" Value="500"/>
+        <Setter Property="Height" Value="250"/>
+        <Setter Property="ResizeMode" Value="NoResize"/>
+        <Setter Property="WindowStyle" Value="None"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Window}">
+                    <Border x:Name="WindowBorder"
+                            CornerRadius="5"
+                            BorderBrush="#99506d">
+                        <ContentPresenter/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
     <!--#region TextBlock Styles -->
     <!-- This style defines a text used for buttons-->
@@ -19,7 +35,8 @@
     </Style>
     <!--#endregion-->
 
-    <Style x:Key="RichTextBoxStyle" TargetType="{x:Type RichTextBox}">
+    <!--#region TextBox Styles -->
+    <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
         <Setter Property="Width" Value="140"/>
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="FontSize" Value="12"/>
@@ -31,7 +48,7 @@
         <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RichTextBox}">
+                <ControlTemplate TargetType="{x:Type TextBox}">
                     <Border x:Name="TextBoxBorder" Background="Transparent" BorderBrush="#914c66" BorderThickness="1" CornerRadius="2">
                         <ScrollViewer x:Name="PART_ContentHost"/>
                     </Border>
@@ -39,6 +56,8 @@
             </Setter.Value>
         </Setter>
     </Style>
+    <!--#endregion-->
+    
     <!--#region Button Styles -->
     <!-- These styles are for all buttons used in the view-->
     <Style x:Key="EditPlaylistNameStyle" TargetType="{x:Type Button}">
@@ -106,7 +125,7 @@
         </Setter>
     </Style>
 
-    <Style x:Key="AddMediaButton" TargetType="{x:Type Button}">
+    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
         <Setter Property="Width" Value="180"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
@@ -117,60 +136,17 @@
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border CornerRadius="5" Background="#914c66">
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xEA69;" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                            <TextBlock x:Name="ButtonText" Text="Add Media" Style="{StaticResource ButtonTextStyle}"/>
+                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="{TemplateBinding Tag}" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                            <TextBlock x:Name="ButtonText" Text="{TemplateBinding Content}" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
+                            <Setter Property="Opacity" Value="0.8"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
                             <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
-    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="180"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#914c66">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE8E5;" Foreground="White" VerticalAlignment="Center"  Margin="10,0,10,0"/>
-                            <TextBlock Name="ButtonText" Text="Playlist from file (.json)" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -178,151 +154,60 @@
         </Setter>
     </Style>
 
-    <Style x:Key="LoadPlaylistToDbButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="180"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#914c66">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="14" Text="&#xE965;" Foreground="White" VerticalAlignment="Center"  Margin="10,0,10,0"/>
-                            <TextBlock Name="ButtonText" Text="Playlist from Database" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="AddMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media"/>
+        <Setter Property="Tag" Value="&#xEA69;"/>
     </Style>
 
-    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="180"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#914c66">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE74E;" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                            <TextBlock Name="ButtonText" Text="Playlist to file (.json)" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="AddMediaFromDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media from Database"/>
+        <Setter Property="Tag" Value="&#xEA69;"/>
     </Style>
 
-    <Style x:Key="SavePlaylistToDbButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="180"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#914c66">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE965;" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                            <TextBlock Name="ButtonText" Text="Playlist to Database" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist from file (.json)"/>
+        <Setter Property="Tag" Value="&#xE8E5;"/>
     </Style>
 
-    <Style x:Key="CreatePlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="180"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#914c66">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE8F4;" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
-                            <TextBlock Name="ButtonText" Text="Playlist" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="LoadPlaylistToDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist from Database"/>
+        <Setter Property="Tag" Value="&#xE965;"/>
     </Style>
 
-    <Style x:Key="UpDownButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist to file (.json)"/>
+        <Setter Property="Tag" Value="&#xE74E;"/>
+    </Style>
+
+    <Style x:Key="SavePlaylistToDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist to Database"/>
+        <Setter Property="Tag" Value="&#xE965;"/>
+    </Style>
+
+    <Style x:Key="CreatePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="New Playlist"/>
+        <Setter Property="Tag" Value="&#xED0E;"/>
+    </Style>
+
+    <Style x:Key="RemovePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Remove Current Playlist"/>
+        <Setter Property="Tag" Value="&#xE74D;"/>
+    </Style>
+
+    <Style x:Key="RemoveMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Remove Selected Media"/>
+        <Setter Property="Tag" Value="&#xE74D;"/>
+    </Style>
+    <Style x:Key="OkButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="OK"/>
+    </Style>
+
+    <Style x:Key="CancelButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="IsCancel" Value="True"/>
+        <Setter Property="Content" Value="Cancel"/>
+    </Style>
+
+    <Style x:Key="UpDownButtonBaseStyle" TargetType="{x:Type Button}">
         <Setter Property="FontSize" Value="8"/>
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -350,11 +235,11 @@
         </Setter>
     </Style>
 
-    <Style x:Key="UpButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonStyle}">
+    <Style x:Key="UpButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonBaseStyle}">
         <Setter Property="Content" Value="&#xE74A;"/>
     </Style>
 
-    <Style x:Key="DownButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonStyle}">
+    <Style x:Key="DownButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonBaseStyle}">
         <Setter Property="Content" Value="&#xE74B;"/>
     </Style>
 

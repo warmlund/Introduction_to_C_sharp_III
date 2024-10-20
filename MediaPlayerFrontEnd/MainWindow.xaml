@@ -45,6 +45,7 @@
         <!--Menu-->
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Width="Auto">
             <TextBlock Text="Menu" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" FontSize="18" Margin="10,0,0,10"/>
+
             <Expander Header="Create" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="CreatePlaylistButton" Style="{StaticResource CreatePlaylistButton}" Command="{Binding CreatePlaylist}"/>
@@ -62,15 +63,20 @@
                     <Button x:Name="SavePlaylisttoDbButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding SavePlaylistToDb}"/>
                 </StackPanel>
             </Expander>
+            <Expander Header="Add" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
+                <StackPanel Orientation="Vertical" Width="180">
+                    <Button x:Name="AddMediaButton" Style="{StaticResource AddMediaButton}" Command="{Binding LoadMedia}"/>
+                    <Button x:Name="AddMediaFromDbButton" Style="{StaticResource AddMediaFromDbButton}" Command="{Binding LoadMediaFromDb}"/>
+                </StackPanel>
+            </Expander>
             <Expander Header="Remove" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
                 <StackPanel Orientation="Vertical" Width="180">
-                    <Button x:Name="RemovePlaylistButton" Style="{StaticResource SavePlaylistButton}" Command="{Binding RemovePlaylistFromDb}"/>
-                    <Button x:Name="RemoveMediaButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding RemoveMediaFromDb}"/>
+                    <Button x:Name="RemovePlaylistButton" Style="{StaticResource RemovePlaylistButton}" Command="{Binding RemovePlaylistFromDb}"/>
+                    <Button x:Name="RemoveMediaButton" Style="{StaticResource RemoveMediaButton}" Command="{Binding RemoveMediaFromDb}"/>
                 </StackPanel>
             </Expander>
         </StackPanel>
       
-       
         <!-- Media element for video has boolean visiblity converter if property isVideo is true, then visible-->
         <MediaElement x:Name="VideoShower" Grid.Column="1" Grid.Row="1" Width="Auto" Height="Auto" Margin="10,0,5,10" Source="{Binding CurrentVideo, UpdateSourceTrigger=PropertyChanged}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}" mp:EventManager.EnableVideoEvents="True"/>
         
