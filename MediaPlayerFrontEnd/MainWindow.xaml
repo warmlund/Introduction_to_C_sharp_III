@@ -17,6 +17,7 @@
             <!-- Defining value converters for visibility management-->
             <mp:BoolVisibilityConverter x:Key="BoolVisibilityConverter"/>
             <mp:CountVisibilityConverter x:Key="CountVisibilityConverter"/>
+            <mp:UpDownExpanderConverter x:Key="UpDownExpanderConverter"/>
         </ResourceDictionary>
     </Window.Resources>
 
@@ -44,24 +45,24 @@
         <!--Menu-->
         <StackPanel Grid.Row="1" Grid.Column="0" Orientation="Vertical" Width="Auto">
             <TextBlock Text="Menu" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="0" FontSize="18" Margin="10,0,0,10"/>
-            <Expander Header="Create" Margin="10,5,0,0">
+            <Expander Header="Create" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="CreatePlaylistButton" Style="{StaticResource CreatePlaylistButton}" Command="{Binding CreatePlaylist}"/>
                 </StackPanel>
             </Expander>
-            <Expander Header="Load" Margin="10,5,0,0">
+            <Expander Header="Load" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="LoadPlaylistButton" Style="{StaticResource LoadPlaylistButton}" Command="{Binding LoadPlaylist}"/>
                     <Button x:Name="LoadPlaylistFromDbButton" Style="{StaticResource LoadPlaylistToDbButton}" Command="{Binding LoadPlaylistFromDb}"/>
                 </StackPanel>
             </Expander>
-            <Expander Header="Save" Margin="10,5,0,0">
+            <Expander Header="Save" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="SavePlaylistButton" Style="{StaticResource SavePlaylistButton}" Command="{Binding SavePlaylist}"/>
                     <Button x:Name="SavePlaylisttoDbButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding SavePlaylistToDb}"/>
                 </StackPanel>
             </Expander>
-            <Expander Header="Remove" Margin="10,5,0,0">
+            <Expander Header="Remove" Margin="10,5,0,0" Style="{StaticResource ExpanderStyle}">
                 <StackPanel Orientation="Vertical" Width="180">
                     <Button x:Name="RemovePlaylistButton" Style="{StaticResource SavePlaylistButton}" Command="{Binding RemovePlaylistFromDb}"/>
                     <Button x:Name="RemoveMediaButton" Style="{StaticResource SavePlaylistToDbButton}" Command="{Binding RemoveMediaFromDb}"/>
@@ -69,8 +70,6 @@
             </Expander>
         </StackPanel>
       
-        <!--Label showing the playlist title, bound to the property PlaylistTitle in the viewmodel-->
-        <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left" VerticalAlignment="Bottom" Grid.Column="2" Grid.Row="0" Margin="0,0,20,0"/>
        
         <!-- Media element for video has boolean visiblity converter if property isVideo is true, then visible-->
         <MediaElement x:Name="VideoShower" Grid.Column="1" Grid.Row="1" Width="Auto" Height="Auto" Margin="10,0,5,10" Source="{Binding CurrentVideo, UpdateSourceTrigger=PropertyChanged}"  Visibility="{Binding IsVideo, Converter={StaticResource BoolVisibilityConverter}}" mp:EventManager.EnableVideoEvents="True"/>
@@ -81,8 +80,13 @@
         <StackPanel Orientation="Vertical" Grid.Row="1" Grid.Column="2">
             <!--Playlist header -->
             <TextBlock Text="Playlist" Foreground="White" VerticalAlignment="Top" Grid.Row="1" Grid.Column="2" FontSize="18" Margin="5,0,10,5"/>
+            <!--RichTextBox showing the playlist title, bound to the property PlaylistTitle in the viewmodel-->
+            <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="2" Margin="5,0,10,5">
+                <Label Content="{Binding PlaylistTitle}" ContentStringFormat="Title: {0}" Width="170" Foreground="White" FontSize="12" FontWeight="DemiBold" HorizontalAlignment="Left"  Margin="0,0,5,0"/>
+                <Button Style="{StaticResource EditPlaylistNameStyle}" Grid.Column="2" Grid.Row="1" Command="{Binding ChangePlaylistTitle}"/>
+            </StackPanel>
             <!--List view for storing the media, bound to the property CurrentLoadedMedia-->
-            <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia, Mode=OneWay}" Margin="5,0,10,10" BorderThickness="0" Height="480">
+            <ListView x:Name="PlaylistBox" ItemsSource="{Binding CurrentLoadedMedia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding CurrentPlayingMedia, Mode=OneWay}" Margin="5,0,10,10" BorderThickness="0" Height="475">
                 <ListView.View>
                     <GridView x:Name="ListViewGrid" AllowsColumnReorder="False" ColumnHeaderContainerStyle="{StaticResource GridViewHeaderStyle}">
                         <GridViewColumn DisplayMemberBinding="{Binding Path=FileName}"/>

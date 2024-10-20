@@ -1,7 +1,6 @@
 ﻿using MediaDTO;
 using MediaPlayerDA.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,14 +8,12 @@ namespace MediaPlayerDA
 {
     public class DatabaseManager
     {
-        MediaPlayerDbContext db;
+        private readonly MediaPlayerDbContext db;
         public DatabaseManager()
         {
-            using (db = new MediaPlayerDbContext())
-            {
-                db.Database.Migrate();
-                AddSampleDataToDb(db);
-            }
+            db = new MediaPlayerDbContext();
+            db.Database.Migrate();
+            AddSampleDataToDb(db);
         }
 
         private void AddSampleDataToDb(MediaPlayerDbContext db)
@@ -170,9 +167,9 @@ namespace MediaPlayerDA
 
         internal bool IsPlaylistInDatabase(string name)
         {
-           if(!db.Playlist.Any(p=>p.PlaylistName.Equals(name))) 
+            if (!db.Playlist.Any(p => p.PlaylistName.Equals(name)))
                 return false;
-           return true;
+            return true;
         }
     }
 }

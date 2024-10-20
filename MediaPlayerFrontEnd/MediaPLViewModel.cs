@@ -24,7 +24,7 @@ namespace MediaPlayerPL
         private CancellationTokenSource _tokenSource;
         private TaskCompletionSource<bool> _mediaOpenedTcs;
         private Media _currentPlayingMedia;
-        private ICollection<Media> _selectedMedia;
+        private ObservableCollection<Media> _selectedMedia;
         private bool _isPlaying = false;
         private bool _isVideo = false;
         private bool _isImage = false;
@@ -71,7 +71,7 @@ namespace MediaPlayerPL
         public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); } } }
         public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged)); } } }
         public Media CurrentPlayingMedia { get => _currentPlayingMedia; set { if (_currentPlayingMedia != value) { _currentPlayingMedia = value; OnPropertyChanged(nameof(CurrentPlayingMedia)); CheckFormatAndSetCurrentMedia(); } } }
-        public ICollection<Media> SelectedMedia { get => _selectedMedia; set { if (_selectedMedia != value) { _selectedMedia = value; OnPropertyChanged(nameof(SelectedMedia));} } }
+        public ObservableCollection<Media> SelectedMedia { get => _selectedMedia; set { if (_selectedMedia != value) { _selectedMedia = value; OnPropertyChanged(nameof(SelectedMedia));} } }
         public BitmapImage CurrentImage { get => _image; set { if (_image != value) { _image = value; OnPropertyChanged(nameof(CurrentImage)); } } }
         public Uri CurrentVideo { get => _video; set { if (_video != value) { _video = value; OnPropertyChanged(nameof(CurrentVideo)); } } }
         public TaskCompletionSource<bool> TaskComplete { get => _mediaOpenedTcs; set { if (_mediaOpenedTcs != value) { _mediaOpenedTcs = value; OnPropertyChanged(nameof(TaskComplete)); } } }
@@ -86,6 +86,7 @@ namespace MediaPlayerPL
             _interval = 5;
             _currentProgress = 0;
             _currentLoadedMedia = new ObservableCollection<Media>();
+            _selectedMedia = new ObservableCollection<Media>();
             Play = new AsyncCommand(TogglePlayPause, CanPlayMedia);
             CreatePlaylist = new Command(CreateNewPlaylist, CanCreateNewPlaylist);
             LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadOrSave);
