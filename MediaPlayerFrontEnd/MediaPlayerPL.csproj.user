@@ -10,18 +10,12 @@
     <Compile Update="Modal\EditPlaylistTitleModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="UserControls\LimitedInputControl.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Modal\EditPlaylistTitleModal.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Update="UserControls\LimitedInputControl.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles.xaml">

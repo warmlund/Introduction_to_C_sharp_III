@@ -89,8 +89,39 @@ namespace MediaPlayerPL
                 {
                     mediaPLViewModel.VideoDuration = mediaElement.NaturalDuration.TimeSpan.TotalSeconds; //Set the video duration
                 }
-                
+
                 mediaPLViewModel.TaskComplete?.TrySetResult(true); // Signals to the viewmodel that the videoduration property is set
+            }
+        }
+
+
+        public static bool GetEnableCloseModalEvents(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(EnableCloseModalEventsProperty);
+        }
+
+        public static void SetEnableCloseModalEvents(DependencyObject obj, bool value)
+        {
+            obj.SetValue(EnableCloseModalEventsProperty, value);
+        }
+
+        public static readonly DependencyProperty EnableCloseModalEventsProperty = DependencyProperty.RegisterAttached("EnableCloseModalEvents", typeof(bool), typeof(EventManager), new PropertyMetadata(false, EnableCloseModalChanged));
+
+        private static void EnableCloseModalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Window window)
+            {
+                window.DataContextChanged += (s, e) =>
+                {
+                    if (window.DataContext is EditPlaylistTitleViewModel vm)
+                    {
+                        vm.Close = () =>
+                        {
+                            window.DialogResult = vm.DialogResult;
+                            window.Close();
+                        };
+                    }
+                };
             }
         }
     }

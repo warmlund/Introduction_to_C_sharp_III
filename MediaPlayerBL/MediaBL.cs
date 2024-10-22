@@ -71,9 +71,9 @@ namespace MediaPlayerBL
         /// </summary>
         public string GetPlaylistTitle() => _playlistManager.CurrentPlaylist.PlaylistName;
 
-        public void ChangePlaylistTitle(string newName, Playlist playlist, bool fromDb)
+        public void ChangePlaylistTitle(string newName, Playlist playlist)
         {
-            _playlistManager.ChangePlaylistTitle(_mediaDA, newName, playlist, fromDb);
+            _playlistManager.ChangePlaylistTitle(_mediaDA, newName, playlist);
         }
 
         public void CreateNewPlaylist(string name)

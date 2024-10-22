@@ -114,9 +114,9 @@ namespace MediaPlayerDA
             _databaseManager.ChangePlaylistTitle(newName, playlist);
         }
 
-        public void CreateNewPlaylist(string name)
+        public void CreateNewPlaylist(Playlist playlist)
         {
-            _databaseManager.CreateNewPlaylist(name);
+            _databaseManager.CreateNewPlaylist(playlist.PlaylistName);
         }
 
         public bool IsPlaylistInDatabase(string name)

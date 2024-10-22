@@ -32,7 +32,7 @@ namespace MediaPlayerDA
 
         void ChangePlaylistTitle(string newName, Playlist playlist);
 
-        void CreateNewPlaylist(string newName);
+        void CreateNewPlaylist(Playlist playlist);
 
         bool IsPlaylistInDatabase(string name);
     }

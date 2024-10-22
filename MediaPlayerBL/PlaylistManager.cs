@@ -15,9 +15,12 @@ namespace MediaPlayerBL
     /// </summary>
     public class PlaylistManager
     {
-        public Playlist CurrentPlaylist { get; set; } = null; //Property storing the current playlist
+        public Playlist CurrentPlaylist { get; set; } //Property storing the current playlist
 
-
+        public PlaylistManager()
+        {
+            CurrentPlaylist = null;
+        }
         /// <summary>
         /// Method for saving a playlist
         /// </summary>
@@ -52,12 +55,11 @@ namespace MediaPlayerBL
             }
         }
 
-        public void ChangePlaylistTitle(IMediaDA mediaDA, string title, Playlist playlist, bool storedInDatabase)
+        public void ChangePlaylistTitle(IMediaDA mediaDA, string title, Playlist playlist)
         {
-            if (storedInDatabase)
-            {
+
+            if(mediaDA.IsPlaylistInDatabase(title))
                 mediaDA.ChangePlaylistTitle(title, playlist);
-            }
 
             else
                 playlist.PlaylistName = title;
@@ -65,7 +67,8 @@ namespace MediaPlayerBL
 
         public void CreateNewPlaylist(IMediaDA mediaDA,string title)
         {
-            mediaDA.CreateNewPlaylist(title);
+            CurrentPlaylist =new Playlist { PlaylistName = title };
+            mediaDA.CreateNewPlaylist(CurrentPlaylist);
         }
 
         public void RemoveCurrentPlaylist(IMediaDA mediaDA, string title)

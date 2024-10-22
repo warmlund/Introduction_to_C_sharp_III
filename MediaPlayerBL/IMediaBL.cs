@@ -33,7 +33,7 @@ namespace MediaPlayerBL
         //Gets playlist title
         string GetPlaylistTitle();
 
-        void ChangePlaylistTitle(string newName, Playlist playlist, bool fromDb);
+        void ChangePlaylistTitle(string newName, Playlist playlist);
 
         void CreateNewPlaylist(string name);
 

@@ -3,11 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:MediaPlayerPL" d:DataContext="{d:DesignInstance Type=local:MediaPLViewModel}"
+        xmlns:local="clr-namespace:MediaPlayerPL" 
+        d:DataContext="{d:DesignInstance Type=local:EditPlaylistTitleViewModel}"
         mc:Ignorable="d"
-        Title="EditPlaylistTitleModal" Style="{StaticResource ModalWindowStyle}">
+        Background="White" Width="260" Height="200" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" 
+        local:EventManager.EnableCloseModalEvents="True">
 
-    <Window.Resources>
+            <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Getting styles from the resource dictionary-->
@@ -16,18 +18,26 @@
         </ResourceDictionary>
     </Window.Resources>
     
-    <Grid>
+    <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="50"/>
+            <RowDefinition Height="25"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="50"/>
         </Grid.RowDefinitions>
 
-        <TextBlock Text="Edit Playlist Title" Style="{StaticResource ButtonTextStyle}" Grid.Row="0"/>
-        <local:LimitedInputControl Title="Title:" MaxLength="25" Height="30" Grid.Row="1" Content="{Binding PlaylistTitle, Mode=TwoWay}"/>
-        <StackPanel Orientation="Horizontal" Grid.Row="2" HorizontalAlignment="Right">
-            <Button x:Name="Ok" Style="{StaticResource OkButton}"/>
-            <Button x:Name="Cancel" Style="{StaticResource CancelButton}"/>
+        <TextBlock Text="Playlist Title" Style="{StaticResource ButtonTextStyle}" Grid.Row="0" HorizontalAlignment="Left" FontSize="18" FontWeight="SemiBold" Foreground="#99506d"/>
+        
+            <StackPanel Orientation="Horizontal" Grid.Row="1" HorizontalAlignment="Right">
+            <Label Content="{Binding ElementName=TitleLimitedInput, Path=Text.Length}" ContentStringFormat="{}{0} /25}" FontSize="8" Foreground="#914c66"/>
+            <Label Content="/ 25" FontSize="8" Foreground="#914c66"/>
+        </StackPanel>
+        
+            <TextBox Style="{StaticResource TextBoxStyle}" Grid.Row="2" MaxLength="25" Name="TitleLimitedInput" Text="{Binding Title, Mode=TwoWay}" ScrollViewer.VerticalScrollBarVisibility="Disabled" TextWrapping="NoWrap" HorizontalAlignment="Center" Width="220" />
+        
+        <StackPanel Orientation="Horizontal" Grid.Row="3">
+            <Button x:Name="Ok" Style="{StaticResource OkButton}" Command="{Binding AddPlaylist}" Width="100" HorizontalAlignment="Left"/>
+            <Button x:Name="Cancel" Style="{StaticResource CancelButton}" Command="{Binding CancelAddPlaylist}" Width="100" Margin="20,0,0,0"/>
         </StackPanel>
     </Grid>
 </Window>
