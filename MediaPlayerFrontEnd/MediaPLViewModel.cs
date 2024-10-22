@@ -27,6 +27,7 @@ namespace MediaPlayerPL
         private Media _currentPlayingMedia;
         private ObservableCollection<Media> _selectedMedia;
         private EditPlaylistTitleModal _editPlaylistTitleModal;
+        private AddMediaFromDbModal _addMediaFromDbView;
         private bool _isPlaying = false;
         private bool _isVideo = false;
         private bool _isImage = false;
@@ -65,7 +66,7 @@ namespace MediaPlayerPL
         public double VideoDuration { get { return _duration; } set { if (_duration != value) { _duration = value; OnPropertyChanged(nameof(VideoDuration)); } } }
         public double VideoProgress { get { return _videoProgress; } set { if (_videoProgress != value) { _videoProgress = value; OnPropertyChanged(nameof(VideoProgress)); } } }
         public double ProgressValue { get { return _progressValue; } set { if (_progressValue != value) { _progressValue = value; OnPropertyChanged(nameof(ProgressValue)); } } }
-        public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); RemovePlaylistFromDb.RaiseCanExecuteChanged(); } } }
+        public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); RemovePlaylistFromDb.RaiseCanExecuteChanged(); ChangePlaylistTitle.RaiseCanExecuteChanged(); } } }
         public string SelectedPlaylist { get { return _selectedPlaylist; } set { if (_selectedPlaylist != value) { _selectedPlaylist = value; OnPropertyChanged(nameof(SelectedPlaylist)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); } } }
@@ -93,10 +94,11 @@ namespace MediaPlayerPL
             _selectedMedia = new ObservableCollection<Media>();
             _isAdding = false;
             _isEditing = false;
+            _isPlaying = false;
             _playlistTitle = string.Empty;
             Play = new AsyncCommand(TogglePlayPause, CanPlayMedia);
             CreatePlaylist = new Command(CreateNewPlaylist, CanCreateNewPlaylist);
-            LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadOrSave);
+            LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadPlaylist);
             LoadPlaylistFromDb = new Command(LoadPlaylistFromDatabase, CanLoadPlaylistFromDatabase);
             SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
             SavePlaylistToDb = new Command(SavePlaylistToDatabase, CanSavePlaylistToDatabase);
@@ -136,6 +138,12 @@ namespace MediaPlayerPL
         }
         private bool CanLoadOrSave()
         {
+            if (IsPlaying == false && PlaylistTitle!=string.Empty)
+                return true;
+            return false;
+        }
+        private bool CanLoadPlaylist()
+        {
             if (IsPlaying == false)
                 return true;
             return false;
@@ -160,7 +168,7 @@ namespace MediaPlayerPL
         }
         private bool CanRemovePlaylistFromDatabase()
         {
-            if (PlaylistTitle != null && !_mediaBl.IsPlaylistInDatabase(PlaylistTitle))
+            if (_mediaBl.IsPlaylistInDatabase(PlaylistTitle))
                 return true;
             return false;
         }
@@ -193,7 +201,21 @@ namespace MediaPlayerPL
         }
         private void LoadNewMediaFromDatabase()
         {
-            throw new NotImplementedException();
+            var mediaInDb = _mediaBl.LoadMedia(null, true);
+            var addMediaFromDbViewModel = new AddMediaFromDbViewModel(mediaInDb);
+
+            _addMediaFromDbView = new AddMediaFromDbModal
+            {
+                DataContext = addMediaFromDbViewModel
+            };
+
+            var result = _addMediaFromDbView.ShowDialog();
+
+            if(result == true)
+            {
+                CurrentLoadedMedia = addMediaFromDbViewModel.SelectedMedia;
+                SetUpFirstLoadedMedia();
+            }
         }
 
         private void CreateNewPlaylist()
@@ -224,20 +246,17 @@ namespace MediaPlayerPL
                 {
                     PlaylistTitle = editPlaylistTitleViewModel.Title;
                     _mediaBl.CreateNewPlaylist(PlaylistTitle);
-                    MessageBox.Show("Playlist created: " + PlaylistTitle);
                 }
                 else
                 {
                     PlaylistTitle = editPlaylistTitleViewModel.Title;
                     OnPropertyChanged(nameof(PlaylistTitle));
-                    MessageBox.Show("Playlist renamed to: " + PlaylistTitle);
                     _mediaBl.ChangePlaylistTitle(PlaylistTitle, _mediaBl.GetCurrentPlaylist());
                 }
             }
             else
             {
                 PlaylistTitle = string.Empty;
-                MessageBox.Show("Operation canceled.");
             }
         }
 
@@ -527,6 +546,7 @@ namespace MediaPlayerPL
             OnPropertyChanged(nameof(CurrentLoadedMedia)); //Updates the currentLoadedMedia
             Play.RaiseCanExecuteChanged(); //Checks if the the Play command can be played
             SavePlaylist.RaiseCanExecuteChanged(); //Checks if a playlist can be saved
+            SavePlaylistToDb.RaiseCanExecuteChanged();    
         }
     }
 }

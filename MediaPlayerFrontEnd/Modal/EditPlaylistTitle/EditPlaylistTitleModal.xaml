@@ -13,7 +13,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <!-- Getting styles from the resource dictionary-->
-                <ResourceDictionary Source="..\Styles.xaml"/>
+                <ResourceDictionary Source="../../Styles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>

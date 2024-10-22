@@ -27,4 +27,9 @@
     <ProjectReference Include="..\MediaStorage\MediaDTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Modal\LoadPlaylistFromDb\" />
+    <Folder Include="Modal\RemovePlaylistFromDb\" />
+  </ItemGroup>
+
 </Project>

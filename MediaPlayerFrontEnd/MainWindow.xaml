@@ -103,7 +103,7 @@
             </ListView>
         </StackPanel>
         <!--Textblock telling the user to load media or playlist, only visible if the count of the currentloadedmedia is 0-->
-        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Please Load or Crea a Playlist" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
+        <TextBlock Style="{StaticResource ButtonTextStyle}" Text="Please Load or Create a Playlist" Grid.Column="2" Grid.Row="1" HorizontalAlignment="Center" Visibility="{Binding CurrentLoadedMedia.Count, Converter={StaticResource CountVisibilityConverter}}"/>
         
         <!--Progressbar Value bound to ProgressValue in the viewmodel-->
         <ProgressBar x:Name="Progresser" Style="{StaticResource ProgressbarStyle}" Grid.Column="1" Grid.Row="1" VerticalAlignment="Bottom" Minimum="0" Maximum="100" Value="{Binding ProgressValue, UpdateSourceTrigger=PropertyChanged}"/>

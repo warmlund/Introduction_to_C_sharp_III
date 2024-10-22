@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using MediaDTO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MediaPlayerPL
@@ -95,6 +96,7 @@ namespace MediaPlayerPL
         }
 
 
+        #region event for closing modal windows
         public static bool GetEnableCloseModalEvents(DependencyObject obj)
         {
             return (bool)obj.GetValue(EnableCloseModalEventsProperty);
@@ -121,8 +123,52 @@ namespace MediaPlayerPL
                             window.Close();
                         };
                     }
+
+                    else if (window.DataContext is AddMediaFromDbViewModel mediaVm)
+                    {
+                        mediaVm.Close = () =>
+                        {
+                            window.DialogResult = mediaVm.DialogResult;
+                            window.Close();
+                        };
+                    }
+                };
+            }
+        }
+        #endregion
+
+        #region event for closing modal windows
+        public static bool GetSelectedItemsDatagridEvents(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(EnableSelectedItemsDatagridProperty);
+        }
+
+        public static void SetSelectedItemsDatagridEvents(DependencyObject obj, bool value)
+        {
+            obj.SetValue(EnableSelectedItemsDatagridProperty, value);
+        }
+
+        public static readonly DependencyProperty EnableSelectedItemsDatagridProperty = DependencyProperty.RegisterAttached("EnableSelectedItemsDatagridEvents", typeof(bool), typeof(EventManager), new PropertyMetadata(false, EnableSelectedItemsDatagridChanged));
+
+        private static void EnableSelectedItemsDatagridChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is DataGrid dataGrid)
+            {
+                dataGrid.SelectionChanged += (s, e) =>
+                {
+                    if (dataGrid.DataContext is AddMediaFromDbViewModel mediaVm)
+                    {
+                        var selectedItems = dataGrid.SelectedItems.Cast<Media>().ToList();
+
+                        mediaVm.SelectedMedia.Clear();
+
+                        foreach (var item in selectedItems)
+                            mediaVm.SelectedMedia.Add(item);
+                    }
                 };
             }
         }
     }
+    #endregion
 }
+

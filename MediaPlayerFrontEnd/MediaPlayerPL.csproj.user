@@ -7,12 +7,18 @@
     </ApplicationDefinition>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Modal\EditPlaylistTitleModal.xaml.cs">
+    <Compile Update="Modal\AddMediaFromDb\AddMediaFromDbModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Modal\EditPlaylistTitle\EditPlaylistTitleModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Page Update="Modal\EditPlaylistTitleModal.xaml">
+    <Page Update="Modal\AddMediaFromDb\AddMediaFromDbModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Modal\EditPlaylistTitle\EditPlaylistTitleModal.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
