@@ -19,7 +19,7 @@ During the course the aim was to create a media player for videos and images tha
 
 Emelie Wärmlund - @emeliewarmlund@gmail.com
 <br>
-Project Link: [https://github.com/warmlund/Business_System_Laboration](https://github.com/warmlund/Introduction_to_C_sharp_III)
+Project Link: [https://github.com/warmlund/Introduction_to_C_Sharp_III](https://github.com/warmlund/Introduction_to_C_sharp_III)
 <br>
 [![LinkedIn][linkedin-shield]][linkedin-url]
 
