@@ -2,7 +2,9 @@
 using MediaPlayerDA;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace MediaPlayerBL
@@ -13,7 +15,7 @@ namespace MediaPlayerBL
     public class MediaBL : IMediaBL
     {
 
-        private PlaylistManager _playlistManager; //instanc for handling playlists
+        private PlaylistManager _playlistManager; //instance for handling playlists
         private MediaDA _mediaDA; // instance for data access layer
 
         /// <summary>
@@ -117,16 +119,25 @@ namespace MediaPlayerBL
         public BitmapImage CreateImage(string filePath)
         {
             var image = new BitmapImage();
+            bool db = true;
             try
             {
                 image.BeginInit(); // Begin initialization
-                image.UriSource = new Uri(filePath, UriKind.Absolute); //Gets source as uri
+
+                if (db)
+                    image.UriSource = new Uri(filePath, UriKind.Relative);
+
+                else
+                    image.UriSource = new Uri(filePath, UriKind.Absolute); //Gets source as uri
+
                 image.CacheOption = BitmapCacheOption.OnLoad; // Cache the image
                 image.EndInit(); // Ends initialization
                 image.Freeze(); // Freeze the image to make it cross-thread accessible
             }
-            catch
+
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 image = null;
             }
             return image;
@@ -139,8 +150,24 @@ namespace MediaPlayerBL
         {
             Uri path = null;
 
-            if (System.IO.File.Exists(filePath))
-                path = new Uri(filePath, UriKind.RelativeOrAbsolute);
+            try
+            {
+                if (!Path.IsPathRooted(filePath))
+                {
+                    path = new Uri(filePath, UriKind.Relative);
+                }
+
+                else
+                {
+                    path = new Uri(filePath, UriKind.Absolute);
+                }
+
+            }
+
+            catch
+            {
+                path = null;
+            }
 
             return path;
         }

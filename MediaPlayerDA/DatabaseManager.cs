@@ -38,18 +38,18 @@ namespace MediaPlayerDA
             db.SaveChanges(); // Save playlists
 
             // Sample media files
-            AddMediaIfNotExists(db, "Cherry.jpg", "/Sample_Data/Media/Images/Cherry.jpg", ".jpg", nature.PlaylistName);
-            AddMediaIfNotExists(db, "Forest.jpg", "/Sample_Data/Media/Images/Forest.jpg", ".jpg", nature.PlaylistName);
-            AddMediaIfNotExists(db, "Lake.jpeg", "/Sample_Data/Media/Images/Lake.jpeg", ".jpeg", nature.PlaylistName);
-            AddMediaIfNotExists(db, "Railroad.jpeg", "/Sample_Data/Media/Images/Railroad.jpeg", ".jpeg", nature.PlaylistName);
-            AddMediaIfNotExists(db, "River.jpg", "/Sample_Data/Media/Images/River.jpg", ".jpg", nature.PlaylistName);
+            AddMediaIfNotExists(db, "Cherry.jpg", @"Sample_Data/Media/Images/Cherry.jpg", ".jpg", nature.PlaylistName);
+            AddMediaIfNotExists(db, "Forest.jpg", @"Sample_Data/Media/Images/Forest.jpg", ".jpg", nature.PlaylistName);
+            AddMediaIfNotExists(db, "Lake.jpeg", @"Sample_Data/Media/Images/Lake.jpeg", ".jpeg", nature.PlaylistName);
+            AddMediaIfNotExists(db, "Railroad.jpeg", @"Sample_Data/Media/Images/Railroad.jpeg", ".jpeg", nature.PlaylistName);
+            AddMediaIfNotExists(db, "River.jpg", @"Sample_Data/Media/Images/River.jpg", ".jpg", nature.PlaylistName);
 
-            AddMediaIfNotExists(db, "Urban.jpg", "/Sample_Data/Media/Images/Urban.jpg", ".jpg", animalNature.PlaylistName);
-            AddMediaIfNotExists(db, "Valley.jfif", "/Sample_Data/Media/Images/Valley.jfif", ".jfif", animalNature.PlaylistName);
-            AddMediaIfNotExists(db, "Waterfall.jpg", "/Sample_Data/Media/Images/Waterfall.jpg", ".jpg", animalNature.PlaylistName);
-            AddMediaIfNotExists(db, "Fox.MP4", "/Sample_Data/Media/Videos/Fox.MP4", ".MP4", nature.PlaylistName);
-            AddMediaIfNotExists(db, "Owl.MP4", "/Sample_Data/Media/Videos/Owl.MP4", ".MP4", animalNature.PlaylistName);
-            AddMediaIfNotExists(db, "Snow Leopard.MP4", "/Sample_Data/Media/Videos/Snow Leopard.MP4", ".MP4", animalNature.PlaylistName);
+            AddMediaIfNotExists(db, "Urban.jpg", @"Sample_Data/Media/Images/Urban.jpg", ".jpg", animalNature.PlaylistName);
+            AddMediaIfNotExists(db, "Valley.jfif", @"Sample_Data/Media/Images/Valley.jfif", ".jfif", animalNature.PlaylistName);
+            AddMediaIfNotExists(db, "Waterfall.jpg", @"Sample_Data/Media/Images/Waterfall.jpg", ".jpg", animalNature.PlaylistName);
+            AddMediaIfNotExists(db, "Fox.MP4", @"Sample_Data/Media/Videos/Fox.MP4", ".MP4", nature.PlaylistName);
+            AddMediaIfNotExists(db, "Owl.MP4", @"Sample_Data/Media/Videos/Owl.MP4", ".MP4", animalNature.PlaylistName);
+            AddMediaIfNotExists(db, "Snow Leopard.MP4", @"Sample_Data/Media/Videos/Snow Leopard.MP4", ".MP4", animalNature.PlaylistName);
 
             db.SaveChanges(); // Save media files
         }

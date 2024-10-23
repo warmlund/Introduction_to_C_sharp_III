@@ -69,7 +69,7 @@ namespace MediaPlayerPL
         public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); RemovePlaylistFromDb.RaiseCanExecuteChanged(); ChangePlaylistTitle.RaiseCanExecuteChanged(); } } }
         public string SelectedPlaylist { get { return _selectedPlaylist; } set { if (_selectedPlaylist != value) { _selectedPlaylist = value; OnPropertyChanged(nameof(SelectedPlaylist)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
-        public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); } } }
+        public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); ChangePlaylistTitle.RaiseCanExecuteChanged(); } } }
         public bool IsImage { get { return _isImage; } set { if (_isImage != value) { _isImage = value; OnPropertyChanged(nameof(IsImage)); } } }
         public bool IsVideo { get { return _isVideo; } set { if (_isVideo != value) { _isVideo = value; OnPropertyChanged(nameof(IsVideo)); } } }
         public bool IsIndexChanged { get { return _isIndexChanged; } set { if (_isIndexChanged != value) { _isIndexChanged = value; OnPropertyChanged(nameof(IsIndexChanged)); } } }
@@ -213,7 +213,9 @@ namespace MediaPlayerPL
 
             if(result == true)
             {
-                CurrentLoadedMedia = addMediaFromDbViewModel.SelectedMedia;
+                foreach (Media media in addMediaFromDbViewModel.SelectedMedia)
+                    CurrentLoadedMedia.Add(media);
+
                 SetUpFirstLoadedMedia();
             }
         }
