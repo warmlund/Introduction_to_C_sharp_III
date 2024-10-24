@@ -8,9 +8,13 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Sample_Data\**" />
+    <EmbeddedResource Remove="Sample_Data\**" />
+    <None Remove="Sample_Data\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="Migrations\" />
     <Folder Include="Properties\" />
-    <Folder Include="Sample_Data\Playlists\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MediaStorage\MediaDTO.csproj" />
@@ -35,77 +39,5 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Sample_Data\Media\Images\Cherry.jpg" />
-    <None Remove="Sample_Data\Media\Images\Forest.jpg" />
-    <None Remove="Sample_Data\Media\Images\Lake.jpeg" />
-    <None Remove="Sample_Data\Media\Images\mars rover.jpg" />
-    <None Remove="Sample_Data\Media\Images\nebula.jpg" />
-    <None Remove="Sample_Data\Media\Images\purple sky.jpg" />
-    <None Remove="Sample_Data\Media\Images\Railroad.jpeg" />
-    <None Remove="Sample_Data\Media\Images\River.jpg" />
-    <None Remove="Sample_Data\Media\Images\satellite.jpg" />
-    <None Remove="Sample_Data\Media\Images\space flight.jpg" />
-    <None Remove="Sample_Data\Media\Images\stars.jpg" />
-    <None Remove="Sample_Data\Media\Images\Urban.jpg" />
-    <None Remove="Sample_Data\Media\Images\Valley.jfif" />
-    <None Remove="Sample_Data\Media\Images\Waterfall.jpg" />
-    <None Remove="Sample_Data\Media\Videos\Fox.MP4" />
-    <None Remove="Sample_Data\Media\Videos\Owl.MP4" />
-    <None Remove="Sample_Data\Media\Videos\Snow Leopard.MP4" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Sample_Data\Media\Images\Cherry.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\Forest.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\Lake.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\mars rover.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\nebula.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\purple sky.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\Railroad.jpeg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\River.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\satellite.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\space flight.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\stars.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\Urban.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\Valley.jfif">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Images\Waterfall.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Videos\Fox.MP4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Videos\Owl.MP4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Sample_Data\Media\Videos\Snow Leopard.MP4">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
 </Project>
