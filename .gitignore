@@ -49,10 +49,8 @@
 /MediaPlayerDA/Sample_Data/Media/Images/Waterfall.jpg
 /MediaPlayerDA/Sample_Data/Media/Videos/Snow Leopard.MP4
 /MediaPlayerDA/Sample_Data/Playlists/space list.json
-<<<<<<< Updated upstream
-=======
 /MediaStorage/obj/Debug/net8.0/MediaDTO.assets.cache
 /MediaPlayerDA/obj/project.assets.json
 /MediaStorage/obj/Debug/net8.0/MediaDTO.csproj.FileListAbsolute.txt
->>>>>>> Stashed changes
 /allfiles.txt
+/MediaPlayerDA/Sample_Data/Media/Videos/Fox.MP4
