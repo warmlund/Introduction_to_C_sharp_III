@@ -1,5 +1,6 @@
 ﻿using MediaDTO;
 using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -65,8 +66,7 @@ namespace MediaPlayerDA
         {
             var playlist = new Playlist(); //creates a playlist 
             playlist.PlaylistName = title; //sets the title
-            playlist.MediaFiles = currentMedia; //sets the media 
-
+            playlist.MediaFiles = currentMedia;
             try
             {
                 string jsonPlaylist = JsonConvert.SerializeObject(playlist, Formatting.Indented); //converts to json 
@@ -79,6 +79,11 @@ namespace MediaPlayerDA
             }
         }
 
+        public ICollection<Playlist> GetPLaylistsFromDatabase()
+        {
+            return _databaseManager.GetPLaylistsFromDb();
+        }
+
         public ICollection<Media> LoadMediaFromDatabase()
         {
             return _databaseManager.LoadMediaFromDb();
@@ -89,14 +94,19 @@ namespace MediaPlayerDA
             return _databaseManager.LoadPlaylistFormDb(name);
         }
 
+        public List<Media> GetMediaFromPlaylist(Playlist playlist)
+        {
+            return _databaseManager.GetMediaFromPLaylist(playlist);
+        }
+
         public void SaveMediaToDatabase(ICollection<Media> currentMedia, string PlaylistTitle)
         {
             _databaseManager.SaveMediaToDb(currentMedia, PlaylistTitle);
         }
 
-        public void SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
+        public bool SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
         {
-            _databaseManager.SavePlaylistToDb(title, currentMedia);
+           return _databaseManager.SavePlaylistToDb(title, currentMedia);
         }
 
         public void RemoveMediaFromDatabase(ICollection<Media> media)

@@ -11,20 +11,19 @@ namespace MediaPlayerDA
     {
         //Load media
         ICollection<Media> LoadMedia(string[] filenames);
+        ICollection<Playlist> GetPLaylistsFromDatabase();
+        List<Media> GetMediaFromPlaylist(Playlist playlist);
+        ICollection<Media> LoadMediaFromDatabase();
 
         //Load playlist
         Playlist LoadPlaylist(string path);
 
         //Save playlist
         bool SavePlaylist(string path, string title, ICollection<Media> currentMedia);
-
-        ICollection<Media> LoadMediaFromDatabase();
-
         Playlist LoadPlaylistFromDatabase(string name);
-
         void SaveMediaToDatabase(ICollection<Media> currentMedia, string PlaylistTitle);
 
-        void SavePlaylistToDatabase(string title, ICollection<Media> currentMedia);
+        bool SavePlaylistToDatabase(string title, ICollection<Media> currentMedia);
 
         void RemoveMediaFromDatabase(ICollection<Media> media);
 

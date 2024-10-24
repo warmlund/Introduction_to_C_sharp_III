@@ -1,5 +1,6 @@
 ﻿using MediaDTO;
 using MediaPlayerBL;
+using Microsoft.IdentityModel.Tokens;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Windows;
@@ -28,6 +29,9 @@ namespace MediaPlayerPL
         private ObservableCollection<Media> _selectedMedia;
         private EditPlaylistTitleModal _editPlaylistTitleModal;
         private AddMediaFromDbModal _addMediaFromDbView;
+        private LoadPlaylistFromDbModal _loadPlaylistFromDbModal;
+        private RemovePlaylistFromDbModal _removePlaylistFromDbModal;
+        private RemoveMediaFromDbModal _removeMediaFromDbModal;
         private bool _isPlaying = false;
         private bool _isVideo = false;
         private bool _isImage = false;
@@ -66,7 +70,7 @@ namespace MediaPlayerPL
         public double VideoDuration { get { return _duration; } set { if (_duration != value) { _duration = value; OnPropertyChanged(nameof(VideoDuration)); } } }
         public double VideoProgress { get { return _videoProgress; } set { if (_videoProgress != value) { _videoProgress = value; OnPropertyChanged(nameof(VideoProgress)); } } }
         public double ProgressValue { get { return _progressValue; } set { if (_progressValue != value) { _progressValue = value; OnPropertyChanged(nameof(ProgressValue)); } } }
-        public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); RemovePlaylistFromDb.RaiseCanExecuteChanged(); ChangePlaylistTitle.RaiseCanExecuteChanged(); } } }
+        public string PlaylistTitle { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(PlaylistTitle)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); ChangePlaylistTitle.RaiseCanExecuteChanged(); } } }
         public string SelectedPlaylist { get { return _selectedPlaylist; } set { if (_selectedPlaylist != value) { _selectedPlaylist = value; OnPropertyChanged(nameof(SelectedPlaylist)); } } }
         public string[] SelectedFiles { get { return _selectedFiles; } set { if (_selectedFiles != value) { _selectedFiles = value; OnPropertyChanged(nameof(SelectedFiles)); } } }
         public bool IsPlaying { get { return _isPlaying; } set { if (_isPlaying != value) { _isPlaying = value; OnPropertyChanged(nameof(IsPlaying)); SavePlaylist.RaiseCanExecuteChanged(); LoadMedia.RaiseCanExecuteChanged(); LoadMediaFromDb.RaiseCanExecuteChanged(); LoadPlaylist.RaiseCanExecuteChanged(); ChangePlaylistTitle.RaiseCanExecuteChanged(); } } }
@@ -100,14 +104,14 @@ namespace MediaPlayerPL
             CreatePlaylist = new Command(CreateNewPlaylist, CanCreateNewPlaylist);
             LoadPlaylist = new Command(LoadExistingPlaylist, CanLoadPlaylist);
             LoadPlaylistFromDb = new Command(LoadPlaylistFromDatabase, CanLoadPlaylistFromDatabase);
-            SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
-            SavePlaylistToDb = new Command(SavePlaylistToDatabase, CanSavePlaylistToDatabase);
-            RemovePlaylistFromDb = new Command(RemovePlaylistFromDatabase, CanRemovePlaylistFromDatabase);
-            ChangePlaylistTitle = new Command(EditPlaylistTitle, CanEditPlaylistTitle);
             LoadMedia = new Command(LoadNewMedia, CanLoadOrSave);
             LoadMediaFromDb = new Command(LoadNewMediaFromDatabase, CanLoadNewMediaFromDatabase);
-            SaveMediaToDb = new Command(SaveMediaToDatabase, CanSaveOrRemoveMediaToDatabase);
-            RemoveMediaFromDb = new Command(RemoveMediaFromDatabase, CanSaveOrRemoveMediaToDatabase);
+            SavePlaylist = new Command(SaveNewPlaylist, CanSaveNewPlaylist);
+            SavePlaylistToDb = new Command(SavePlaylistToDatabase, CanSavePlaylistToDatabase);
+            SaveMediaToDb = new Command(SaveMediaToDatabase, CanSaveMediaToDatabase);
+            ChangePlaylistTitle = new Command(EditPlaylistTitle, CanEditPlaylistTitle);
+            RemoveMediaFromDb = new Command(RemoveMediaFromDatabase, CanRemoveMediaFromDatabase);
+            RemovePlaylistFromDb = new Command(RemovePlaylistFromDatabase, CanRemovePlaylistFromDatabase);
             MoveMediaUp = new CommandWithParameter<Media>(MoveUp, CanMoveUp);
             MoveMediaDown = new CommandWithParameter<Media>(MoveDown, CanMoveDown);
             ChangePlaylistTitle.RaiseCanExecuteChanged();
@@ -138,7 +142,7 @@ namespace MediaPlayerPL
         }
         private bool CanLoadOrSave()
         {
-            if (IsPlaying == false && PlaylistTitle!=string.Empty)
+            if (IsPlaying == false && PlaylistTitle != string.Empty)
                 return true;
             return false;
         }
@@ -154,12 +158,7 @@ namespace MediaPlayerPL
                 return true;
             return false;
         }
-        private bool CanCreateNewPlaylist()
-        {
-            if (_mediaBl.GetCurrentPlaylist() == null)
-                return true;
-            return false;
-        }
+        private bool CanCreateNewPlaylist() => true;
         private bool CanSavePlaylistToDatabase()
         {
             if (_currentLoadedMedia.Count > 0 && PlaylistTitle != null)
@@ -168,9 +167,9 @@ namespace MediaPlayerPL
         }
         private bool CanRemovePlaylistFromDatabase()
         {
-            if (_mediaBl.IsPlaylistInDatabase(PlaylistTitle))
-                return true;
-            return false;
+            if (_mediaBl.GetPlaylistFromDb() == null)
+                return false;
+            return true;
         }
         private bool CanEditPlaylistTitle()
         {
@@ -184,20 +183,57 @@ namespace MediaPlayerPL
                 return true;
             return false;
         }
-        private bool CanSaveOrRemoveMediaToDatabase()
+        private bool CanSaveMediaToDatabase()
         {
-            if (SelectedMedia.Count > 0)
+            if (CurrentLoadedMedia.IsNullOrEmpty())
+                return false;
+            return true;
+        }
+        private bool CanRemoveMediaFromDatabase()
+        {
+            if (_mediaBl.LoadMedia(null, true).Count > 0)
                 return true;
             return false;
         }
         #endregion
+
         private void RemoveMediaFromDatabase()
         {
-            _mediaBl.RemoveMedia(SelectedMedia);
+            var mediaInDb = _mediaBl.LoadMedia(null, true);
+            var removeMediaFromDb = new RemoveMediaFromDbViewModel(mediaInDb);
+
+            _removeMediaFromDbModal = new RemoveMediaFromDbModal { DataContext = removeMediaFromDb };
+
+            var result = _removeMediaFromDbModal.ShowDialog();
+
+            if (result == true)
+            {
+                try
+                {
+                    _mediaBl.RemoveMedia(removeMediaFromDb.SelectedMedia);
+                    MessageBox.Show($"Successfully removed {removeMediaFromDb.SelectedMedia.Count} media files");
+                }
+
+                catch
+                {
+                    MessageBox.Show("Failed to remove media");
+                }
+            }
+
         }
         private void SaveMediaToDatabase()
         {
-            _mediaBl.SaveMedia(SelectedMedia, PlaylistTitle);
+            try
+            {
+                _mediaBl.SaveMedia(CurrentLoadedMedia, PlaylistTitle);
+                MessageBox.Show($"Successfully saved media files to database");
+            }
+
+            catch
+            {
+                MessageBox.Show("Failed to save media");
+            }
+
         }
         private void LoadNewMediaFromDatabase()
         {
@@ -211,7 +247,7 @@ namespace MediaPlayerPL
 
             var result = _addMediaFromDbView.ShowDialog();
 
-            if(result == true)
+            if (result == true)
             {
                 foreach (Media media in addMediaFromDbViewModel.SelectedMedia)
                     CurrentLoadedMedia.Add(media);
@@ -219,19 +255,24 @@ namespace MediaPlayerPL
                 SetUpFirstLoadedMedia();
             }
         }
-
         private void CreateNewPlaylist()
         {
             _isAdding = true;
+
+            if (PlaylistTitle != null)
+            {
+                PlaylistTitle = string.Empty;
+                CurrentLoadedMedia.Clear();
+                CurrentPlayingMedia = null;
+            }
+
             ShowModalEditPlaylist();
         }
-
         private void EditPlaylistTitle()
         {
             _isAdding = false;
             ShowModalEditPlaylist();
         }
-
         private void ShowModalEditPlaylist()
         {
             var editPlaylistTitleViewModel = new EditPlaylistTitleViewModel();
@@ -261,20 +302,63 @@ namespace MediaPlayerPL
                 PlaylistTitle = string.Empty;
             }
         }
-
         private void RemovePlaylistFromDatabase()
         {
-            _mediaBl.RemovePlaylist(PlaylistTitle);
-        }
+            var playlistInDb = _mediaBl.GetPlaylistFromDb();
+            var removePlaylistFromDb = new RemovePlaylistFromDbViewModel(playlistInDb);
 
+            _removePlaylistFromDbModal = new RemovePlaylistFromDbModal { DataContext = removePlaylistFromDb };
+
+            var result = _removePlaylistFromDbModal.ShowDialog();
+
+            if (result == true)
+            {
+                string playlistToRemove = removePlaylistFromDb.SelectedPlaylist.PlaylistName;
+                try
+                {
+                    if (PlaylistTitle == playlistToRemove)
+                    {
+                        PlaylistTitle = string.Empty;
+                        CurrentLoadedMedia.Clear();
+                        CurrentPlayingMedia = null;
+                    }
+
+                    _mediaBl.RemovePlaylist(playlistToRemove);
+
+                    MessageBox.Show($"Playlist {playlistToRemove} successfully removed");
+                }
+
+                catch
+                {
+                    MessageBox.Show($"Failed to remove playlist {playlistToRemove}");
+                }
+
+            }
+
+            RemovePlaylistFromDb.RaiseCanExecuteChanged();
+        }
         private void SavePlaylistToDatabase()
         {
-            _mediaBl.SavePlaylist(PlaylistTitle, CurrentLoadedMedia, true);
+            _mediaBl.SavePlaylistToDatabase(PlaylistTitle, CurrentLoadedMedia);
         }
-
         private void LoadPlaylistFromDatabase()
         {
-            _mediaBl.LoadPlaylist(SelectedPlaylist, true);
+            var playlistInDb = _mediaBl.GetPlaylistFromDb();
+            var loadPlaylistFromDb = new LoadPlaylistFromDbViewModel(playlistInDb);
+
+            _loadPlaylistFromDbModal = new LoadPlaylistFromDbModal { DataContext = loadPlaylistFromDb };
+
+            var result = _loadPlaylistFromDbModal.ShowDialog();
+
+            if (result == true)
+            {
+                PlaylistTitle = loadPlaylistFromDb.SelectedPlaylist.PlaylistName;
+                CurrentLoadedMedia.Clear();
+
+                foreach (Media media in _mediaBl.LoadPlaylist(PlaylistTitle, true))
+                    CurrentLoadedMedia.Add(media);
+                SetUpFirstLoadedMedia();
+            }
         }
 
         /// <summary>
@@ -432,7 +516,7 @@ namespace MediaPlayerPL
         {
             var saveManager = new SaveManager();
             if (saveManager.ShowDialog())
-                _mediaBl.SavePlaylist(saveManager.FilePath, CurrentLoadedMedia.ToList(), false); // If successull calls the method in the bl layer to save the playlist
+                _mediaBl.SavePlaylist(PlaylistTitle, saveManager.FilePath, CurrentLoadedMedia.ToList()); // If successull calls the method in the bl layer to save the playlist
 
             else
             {
@@ -548,7 +632,8 @@ namespace MediaPlayerPL
             OnPropertyChanged(nameof(CurrentLoadedMedia)); //Updates the currentLoadedMedia
             Play.RaiseCanExecuteChanged(); //Checks if the the Play command can be played
             SavePlaylist.RaiseCanExecuteChanged(); //Checks if a playlist can be saved
-            SavePlaylistToDb.RaiseCanExecuteChanged();    
+            SavePlaylistToDb.RaiseCanExecuteChanged();
+            SaveMediaToDb.RaiseCanExecuteChanged();
         }
     }
 }

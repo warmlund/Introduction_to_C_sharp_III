@@ -176,18 +176,23 @@
         <Setter Property="Tag" Value="&#xE965;"/>
     </Style>
 
+    <Style x:Key="SaveMediaToDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media to Database"/>
+        <Setter Property="Tag" Value="&#xE965;"/>
+    </Style>
+
     <Style x:Key="CreatePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
         <Setter Property="Content" Value="New Playlist"/>
         <Setter Property="Tag" Value="&#xED0E;"/>
     </Style>
 
     <Style x:Key="RemovePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Content" Value="Remove Current Playlist"/>
+        <Setter Property="Content" Value="Playlist from Database"/>
         <Setter Property="Tag" Value="&#xE74D;"/>
     </Style>
 
     <Style x:Key="RemoveMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
-        <Setter Property="Content" Value="Remove Media"/>
+        <Setter Property="Content" Value="Media from Database"/>
         <Setter Property="Tag" Value="&#xE74D;"/>
     </Style>
 
@@ -467,6 +472,7 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region Datagrid styles -->
     <Style x:Key="DatagridStyle" TargetType="{x:Type DataGrid}">
         <Setter Property="AutoGenerateColumns" Value="False"/>
         <Setter Property="SelectionMode" Value="Extended"/>
@@ -480,7 +486,7 @@
         <Setter Property="Foreground" Value="#99506d"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="Width" Value="460"/>
+        <Setter Property="Width" Value="Auto"/>
         <Setter Property="IsReadOnly" Value="True"/>
         <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
         <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
@@ -493,7 +499,7 @@
         <Setter Property="MinWidth" Value="100"/>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="#99506d"/>
+                <Setter Property="Background" Value="#CC99506D"/>
                 <Setter Property="Foreground" Value="White"/>
                 <Setter Property="BorderBrush" Value="White"/>
             </Trigger>
@@ -519,5 +525,6 @@
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="BorderBrush" Value="White"/>
     </Style>
-    
+    <!--#endregion-->
+
 </ResourceDictionary>

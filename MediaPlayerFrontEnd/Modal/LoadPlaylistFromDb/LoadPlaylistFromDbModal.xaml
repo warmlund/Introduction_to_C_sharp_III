@@ -1,0 +1,39 @@
+﻿<Window x:Class="MediaPlayerPL.LoadPlaylistFromDbModal"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MediaPlayerPL" 
+        d:DataContext="{d:DesignInstance Type=local:LoadPlaylistFromDbViewModel}"
+        mc:Ignorable="d"
+        Height="400" Width="300" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" 
+        local:EventManager.EnableCloseModalEvents="True">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Getting styles from the resource dictionary-->
+                <ResourceDictionary Source="../../Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    
+    <Grid>
+        <local:ModalWindowUserControl Title="Load Playlist from database"
+                                      OkCommand="{Binding LoadPlaylist}"
+                                      CancelCommand="{Binding CancelLoadPlaylist}">
+            <local:ModalWindowUserControl.Content>
+                <DataGrid ItemsSource="{Binding PlaylistFromDatabase}" 
+                          Style="{StaticResource DatagridStyle}" 
+                          RowStyle="{StaticResource DatagridRowStyle}" 
+                          CellStyle="{StaticResource DatagridCellStyle}" 
+                          ColumnHeaderStyle="{StaticResource DatagridHeaderStyle}" 
+                          SelectionMode="Single" SelectedItem="{Binding SelectedPlaylist}">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding PlaylistName}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </local:ModalWindowUserControl.Content>
+        </local:ModalWindowUserControl>
+    </Grid>
+</Window>

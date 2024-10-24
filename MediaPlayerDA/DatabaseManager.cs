@@ -1,6 +1,7 @@
 ﻿using MediaDTO;
 using MediaPlayerDA.Data;
 using Microsoft.EntityFrameworkCore;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,7 +58,7 @@ namespace MediaPlayerDA
         private void AddMediaIfNotExists(MediaPlayerDbContext db, string fileName, string filePath, string format, string playlistName)
         {
             // Check if the media file already exists
-            var existingMedia = db.Media.FirstOrDefault(m => m.FileName == fileName && m.PlaylistName == playlistName);
+            var existingMedia = db.Media.FirstOrDefault(m => m.FileName == fileName || m.PlaylistName == playlistName);
 
             if (existingMedia == null) // If not found, add it
             {
@@ -77,6 +78,13 @@ namespace MediaPlayerDA
             ICollection<Media> loadedMedia = db.Media.OrderBy(m => m.FileName).ToList();
 
             return loadedMedia;
+        }
+
+        public ICollection<Playlist> GetPLaylistsFromDb()
+        {
+            ICollection<Playlist> playlists =db.Playlist.OrderBy(p => p.PlaylistName).ToList();
+
+            return playlists;
         }
 
         public bool SaveMediaToDb(ICollection<Media> currentMedia, string PlaylistTitle)
@@ -101,7 +109,6 @@ namespace MediaPlayerDA
 
         public bool SavePlaylistToDb(string title, ICollection<Media> currentMedia)
         {
-
             try
             {
                 Playlist playlist = new Playlist
@@ -135,8 +142,22 @@ namespace MediaPlayerDA
 
         internal void RemoveMediaFromDb(ICollection<Media> media)
         {
-            db.Media.ForEachAsync(m => media.Remove(m));
-            db.SaveChanges();
+            foreach(Media m in media)
+            {
+                if(db.Media.Contains(m))
+                {
+                    try
+                    {
+                        db.Media.Remove(m);
+                        db.SaveChanges();
+                    }
+
+                    catch
+                    {
+                        continue;
+                    }
+                }
+            } 
         }
 
         internal void RemovePlaylistFromDb(string title)
@@ -170,6 +191,11 @@ namespace MediaPlayerDA
             if (!db.Playlist.Any(p => p.PlaylistName.Equals(name)))
                 return false;
             return true;
+        }
+
+        internal List<Media> GetMediaFromPLaylist(Playlist playlist)
+        {
+           return db.Media.Where(m => m.PlaylistName == playlist.PlaylistName).ToList();
         }
     }
 }

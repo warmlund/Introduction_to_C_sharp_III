@@ -39,5 +39,6 @@
             <Button x:Name="Ok" Style="{StaticResource OkButton}" Command="{Binding AddPlaylist}" Width="100" HorizontalAlignment="Left"/>
             <Button x:Name="Cancel" Style="{StaticResource CancelButton}" Command="{Binding CancelAddPlaylist}" Width="100" Margin="20,0,0,0"/>
         </StackPanel>
+        
     </Grid>
 </Window>

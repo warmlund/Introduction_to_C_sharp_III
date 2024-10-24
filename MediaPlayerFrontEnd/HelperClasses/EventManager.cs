@@ -124,11 +124,29 @@ namespace MediaPlayerPL
                         };
                     }
 
-                    else if (window.DataContext is AddMediaFromDbViewModel mediaVm)
+                    else if (window.DataContext is RemoveMediaFromDbViewModel mediaVm)
                     {
                         mediaVm.Close = () =>
                         {
                             window.DialogResult = mediaVm.DialogResult;
+                            window.Close();
+                        };
+                    }
+
+                    else if (window.DataContext is LoadPlaylistFromDbViewModel playlistVm)
+                    {
+                        playlistVm.Close = () =>
+                        {
+                            window.DialogResult = playlistVm.DialogResult;
+                            window.Close();
+                        };
+                    }
+
+                    else if (window.DataContext is RemovePlaylistFromDbViewModel removePlVm)
+                    {
+                        removePlVm.Close = () =>
+                        {
+                            window.DialogResult = removePlVm.DialogResult;
                             window.Close();
                         };
                     }
@@ -137,7 +155,7 @@ namespace MediaPlayerPL
         }
         #endregion
 
-        #region event for closing modal windows
+        #region event for getting selected items from datagrid
         public static bool GetSelectedItemsDatagridEvents(DependencyObject obj)
         {
             return (bool)obj.GetValue(EnableSelectedItemsDatagridProperty);
@@ -156,7 +174,7 @@ namespace MediaPlayerPL
             {
                 dataGrid.SelectionChanged += (s, e) =>
                 {
-                    if (dataGrid.DataContext is AddMediaFromDbViewModel mediaVm)
+                    if (dataGrid.DataContext is RemoveMediaFromDbViewModel mediaVm)
                     {
                         var selectedItems = dataGrid.SelectedItems.Cast<Media>().ToList();
 

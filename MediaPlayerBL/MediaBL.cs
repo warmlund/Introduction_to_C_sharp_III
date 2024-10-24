@@ -38,6 +38,11 @@ namespace MediaPlayerBL
             return _playlistManager.CurrentPlaylist.MediaFiles;
         }
 
+        public ICollection<Playlist> GetPlaylistFromDb()
+        {
+           return _playlistManager.GetPlaylistsFromDatabase(_mediaDA);
+        }
+
         /// <summary>
         /// A method that loads media calling the method from the DA layer
         /// </summary>
@@ -63,11 +68,15 @@ namespace MediaPlayerBL
         /// <summary>
         /// A method saving the playlist
         /// </summary>
-        public void SavePlaylist(string filepath, ICollection<Media> loadedMedia, bool saveToDb)
+        public void SavePlaylist(string title, string filepath, ICollection<Media> loadedMedia)
         {
-            _playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia, saveToDb);
+            _playlistManager.SavePlaylist(title, _mediaDA, filepath, loadedMedia);
         }
 
+        public void SavePlaylistToDatabase(string title, ICollection<Media> loadedMedia)
+        {
+            _playlistManager.SavePlaylistToDb(title, _mediaDA, loadedMedia);
+        }
         /// <summary>
         /// A method retrieving the playlist title
         /// </summary>

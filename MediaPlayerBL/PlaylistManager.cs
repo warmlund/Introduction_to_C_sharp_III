@@ -1,11 +1,8 @@
-﻿using System;
+﻿using MediaDTO;
+using MediaPlayerDA;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediaDTO;
-using MediaPlayerDA;
+using System.Windows;
 
 
 namespace MediaPlayerBL
@@ -24,17 +21,37 @@ namespace MediaPlayerBL
         /// <summary>
         /// Method for saving a playlist
         /// </summary>
-        public void SavePlaylist(IMediaDA mediaDA,string filepath, ICollection<Media> currentMedia, bool saveToDb)
+        public void SavePlaylist(string title, IMediaDA mediaDA, string filepath, ICollection<Media> currentMedia)
         {
-            if (saveToDb)
+            foreach (var item in currentMedia)
             {
-                mediaDA.SavePlaylistToDatabase(filepath, currentMedia);
+                item.PlaylistName = title;
+            }
+            bool result = mediaDA.SavePlaylist(filepath, title, currentMedia); //Saves the playlist
+
+            if (result)
+            {
+                MessageBox.Show("Successfully saved playlist to desktop");
             }
 
             else
             {
-                CurrentPlaylist.PlaylistName = Path.GetFileNameWithoutExtension(filepath); //Stores the playlist title
-                mediaDA.SavePlaylist(filepath, CurrentPlaylist.PlaylistName, currentMedia); //Saves the playlist
+                MessageBox.Show("Failed to save playlist to desktop");
+            }
+        }
+
+        public void SavePlaylistToDb(string title, IMediaDA mediaDA, ICollection<Media> currentMedia)
+        {
+            bool result = mediaDA.SavePlaylistToDatabase(title, currentMedia);
+
+            if (result)
+            {
+                MessageBox.Show("Successfully saved playlist to database");
+            }
+
+            else
+            {
+                MessageBox.Show("Failed to save playlist to database");
             }
         }
 
@@ -58,16 +75,16 @@ namespace MediaPlayerBL
         public void ChangePlaylistTitle(IMediaDA mediaDA, string title, Playlist playlist)
         {
 
-            if(mediaDA.IsPlaylistInDatabase(title))
+            if (mediaDA.IsPlaylistInDatabase(title))
                 mediaDA.ChangePlaylistTitle(title, playlist);
 
             else
                 playlist.PlaylistName = title;
         }
 
-        public void CreateNewPlaylist(IMediaDA mediaDA,string title)
+        public void CreateNewPlaylist(IMediaDA mediaDA, string title)
         {
-            CurrentPlaylist =new Playlist { PlaylistName = title };
+            CurrentPlaylist = new Playlist { PlaylistName = title };
             mediaDA.CreateNewPlaylist(CurrentPlaylist);
         }
 
@@ -79,6 +96,11 @@ namespace MediaPlayerBL
         internal bool IsPlaylistInDatabase(MediaDA mediaDA, string name)
         {
             return mediaDA.IsPlaylistInDatabase(name);
+        }
+
+        public ICollection<Playlist> GetPlaylistsFromDatabase(MediaDA mediaDA)
+        {
+            return mediaDA.GetPLaylistsFromDatabase();
         }
     }
 }

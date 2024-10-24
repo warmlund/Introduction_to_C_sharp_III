@@ -13,6 +13,15 @@
     <Compile Update="Modal\EditPlaylistTitle\EditPlaylistTitleModal.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Modal\LoadPlaylistFromDb\LoadPlaylistFromDbModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Modal\ModalWindowUserControl.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="Modal\RemovePlaylistFromDb\RemovePlaylistFromDbModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Modal\AddMediaFromDb\AddMediaFromDbModal.xaml">
@@ -22,6 +31,18 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Modal\LoadPlaylistFromDb\LoadPlaylistFromDbModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Modal\ModalWindowUserControl.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Modal\RemoveMediaFromDb\RemoveMediaFromDbModal.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="Modal\RemovePlaylistFromDb\RemovePlaylistFromDbModal.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="Styles.xaml">

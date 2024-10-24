@@ -1,10 +1,10 @@
-﻿<Window x:Class="MediaPlayerPL.AddMediaFromDbModal"
+﻿<Window x:Class="MediaPlayerPL.RemoveMediaFromDbModal"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MediaPlayerPL"
-        d:DataContext="{d:DesignInstance Type=local:AddMediaFromDbViewModel}"
+        d:DataContext="{d:DesignInstance Type=local:RemoveMediaFromDbViewModel}"
         mc:Ignorable="d"
         Height="400" Width="500" ResizeMode="NoResize" WindowStyle="None" WindowStartupLocation="CenterScreen" 
         local:EventManager.EnableCloseModalEvents="True">
@@ -19,9 +19,9 @@
     </Window.Resources>
 
     <Grid>
-        <local:ModalWindowUserControl Title="Add Media"
-                                      OkCommand="{Binding AddMedia}"
-                                      CancelCommand="{Binding CancelAddMedia}">
+        <local:ModalWindowUserControl Title="Remove Media"
+                                      OkCommand="{Binding RemoveMedia}"
+                                      CancelCommand="{Binding CancelRemoveMedia}">
             <local:ModalWindowUserControl.Content>
                 
                 <DataGrid Grid.Row="1" Style="{StaticResource DatagridStyle}" RowStyle="{StaticResource DatagridRowStyle}" CellStyle="{StaticResource DatagridCellStyle}" ColumnHeaderStyle="{StaticResource DatagridHeaderStyle}" ItemsSource="{Binding MediaFromDatabase, Mode=TwoWay}" local:EventManager.SelectedItemsDatagridEvents="True">

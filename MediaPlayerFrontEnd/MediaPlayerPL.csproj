@@ -28,8 +28,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Modal\LoadPlaylistFromDb\" />
-    <Folder Include="Modal\RemovePlaylistFromDb\" />
+    <Compile Update="Modal\RemoveMediaFromDb\RemoveMediaFromDbModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
 </Project>

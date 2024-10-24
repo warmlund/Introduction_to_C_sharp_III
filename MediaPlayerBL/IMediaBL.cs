@@ -21,6 +21,8 @@ namespace MediaPlayerBL
         //Loads playlist
         ICollection<Media> LoadPlaylist(string filepath, bool loadFromDb);
 
+        ICollection<Playlist> GetPlaylistFromDb();
+
         //Creates image
         BitmapImage CreateImage(string filepath);
 
@@ -28,7 +30,9 @@ namespace MediaPlayerBL
         Uri CreateVideo(string filepath);
 
         //Saves playlist
-        void SavePlaylist(string filepath, ICollection<Media> loadedMedia, bool saveToDb);
+        void SavePlaylist(string title,string filepath, ICollection<Media> loadedMedia);
+
+        void SavePlaylistToDatabase(string title, ICollection<Media> loadedMedia);
 
         //Gets playlist title
         string GetPlaylistTitle();
