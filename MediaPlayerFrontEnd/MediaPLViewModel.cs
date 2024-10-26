@@ -352,12 +352,20 @@ namespace MediaPlayerPL
 
             if (result == true)
             {
-                PlaylistTitle = loadPlaylistFromDb.SelectedPlaylist.PlaylistName;
-                CurrentLoadedMedia.Clear();
+                try
+                {
+                    PlaylistTitle = loadPlaylistFromDb.SelectedPlaylist.PlaylistName;
+                    CurrentLoadedMedia.Clear();
 
-                foreach (Media media in _mediaBl.LoadPlaylist(PlaylistTitle, true))
-                    CurrentLoadedMedia.Add(media);
-                SetUpFirstLoadedMedia();
+                    foreach (Media media in _mediaBl.LoadPlaylist(PlaylistTitle, true))
+                        CurrentLoadedMedia.Add(media);
+                    SetUpFirstLoadedMedia();
+                }
+                
+                catch 
+                { 
+                MessageBox.Show($"Failed to load {loadPlaylistFromDb.SelectedPlaylist.PlaylistName} from database.");
+                }
             }
         }
 
