@@ -57,3 +57,5 @@
 /MediaPlayerDA/Sample_Data/Media/Videos/Fox.MP4
 =======
 >>>>>>> 3bea5a8 (gitginore)
+/MediaPlayerDA/obj/project.nuget.cache
+/MediaStorage/obj/project.nuget.cache
