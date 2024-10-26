@@ -5,6 +5,7 @@
 /MediaPlayerBL/.vs
 /MediaPlayerBL/obj
 /MediaPlayerDA/.vs
+/MediaPlayerDA/Sample_Data
 /MediaPlayerDA/obj/Debug
 /MediaPlayerDA/bin/Debug
 /MediaPlayerBL/bin/Debug
@@ -24,3 +25,40 @@
 /MediaStorage/obj
 /MediaPlayerDA/obj
 /allfiles.txt
+/MediaPlayerDA/bin/Release/MediaPlayerDA.dll
+/MediaPlayerDA/bin/Release/MediaPlayerDA.pdb
+/MediaPlayerDA/bin/Release/MediaStorage.dll
+/MediaPlayerDA/bin/Release/MediaStorage.pdb
+/MediaPlayerDA/bin/Release/Newtonsoft.Json.dll
+/MediaStorage/obj/Release/MediaDTO.csproj.AssemblyReference.cache
+/MediaStorage/obj/Release/MediaDTO.csproj.CoreCompileInputs.cache
+/MediaStorage/obj/Release/MediaDTO.csproj.FileListAbsolute.txt
+/MediaStorage/obj/Release/MediaStorage.dll
+/MediaStorage/obj/Release/MediaStorage.pdb
+/MediaStorage/bin/Release/MediaStorage.dll
+/MediaStorage/bin/Release/MediaStorage.pdb
+/MediaPlayerDA/Sample_Data
+/MediaPlayerDA/Sample_Data/Media/Images/Cherry.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Forest.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Lake.jpeg
+/MediaPlayerDA/Sample_Data/Media/Images/mars rover.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/nebula.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/purple sky.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Railroad.jpeg
+/MediaPlayerDA/Sample_Data/Media/Images/River.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/satellite.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/space flight.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/stars.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Urban.jpg
+/MediaPlayerDA/Sample_Data/Media/Images/Valley.jfif
+/MediaPlayerDA/Sample_Data/Media/Images/Waterfall.jpg
+/MediaPlayerDA/Sample_Data/Media/Videos/Snow Leopard.MP4
+/MediaPlayerDA/Sample_Data/Media/Videos/Fox.MP4
+/MediaPlayerDA/Sample_Data/Playlists/space list.json
+/MediaStorage/obj/Debug/net8.0/MediaDTO.assets.cache
+/MediaPlayerDA/obj/project.assets.json
+/MediaStorage/obj/Debug/net8.0/MediaDTO.csproj.FileListAbsolute.txt
+/allfiles.txt
+/MediaPlayerDA/obj/project.nuget.cache
+/MediaStorage/obj/project.nuget.cache
+

@@ -1,18 +1,21 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MediaDTO
 {
+    /// <summary>
+    /// A class representing the playlist object
+    /// </summary>
     public class Playlist
     {
-        [JsonProperty("Media")]
-        public List<Media> MediaFiles { get; set; }
+        [Key]
+        [JsonProperty("Title")] // JSON attribute
+        public string PlaylistName { get; set; } = null!; // Set to non-nullable to ensure consistency
 
-        [JsonProperty("Title")]
-        public string PlaylistName { get; set; }
+        [JsonProperty("Media")] // JSON attribute
+        [InverseProperty("Playlist")]
+        public ICollection<Media> MediaFiles { get; set; } = new List<Media>(); // Initialize to avoid null references
     }
 }
