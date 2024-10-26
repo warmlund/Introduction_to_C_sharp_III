@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using MediaDTO;
+using System.Windows;
 using System.Windows.Controls;
 
 namespace MediaPlayerPL
@@ -89,9 +90,103 @@ namespace MediaPlayerPL
                 {
                     mediaPLViewModel.VideoDuration = mediaElement.NaturalDuration.TimeSpan.TotalSeconds; //Set the video duration
                 }
-                
+
                 mediaPLViewModel.TaskComplete?.TrySetResult(true); // Signals to the viewmodel that the videoduration property is set
             }
         }
+
+
+        #region event for closing modal windows
+        public static bool GetEnableCloseModalEvents(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(EnableCloseModalEventsProperty);
+        }
+
+        public static void SetEnableCloseModalEvents(DependencyObject obj, bool value)
+        {
+            obj.SetValue(EnableCloseModalEventsProperty, value);
+        }
+
+        public static readonly DependencyProperty EnableCloseModalEventsProperty = DependencyProperty.RegisterAttached("EnableCloseModalEvents", typeof(bool), typeof(EventManager), new PropertyMetadata(false, EnableCloseModalChanged));
+
+        private static void EnableCloseModalChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is Window window)
+            {
+                window.DataContextChanged += (s, e) =>
+                {
+                    if (window.DataContext is EditPlaylistTitleViewModel vm)
+                    {
+                        vm.Close = () =>
+                        {
+                            window.DialogResult = vm.DialogResult;
+                            window.Close();
+                        };
+                    }
+
+                    else if (window.DataContext is RemoveMediaFromDbViewModel mediaVm)
+                    {
+                        mediaVm.Close = () =>
+                        {
+                            window.DialogResult = mediaVm.DialogResult;
+                            window.Close();
+                        };
+                    }
+
+                    else if (window.DataContext is LoadPlaylistFromDbViewModel playlistVm)
+                    {
+                        playlistVm.Close = () =>
+                        {
+                            window.DialogResult = playlistVm.DialogResult;
+                            window.Close();
+                        };
+                    }
+
+                    else if (window.DataContext is RemovePlaylistFromDbViewModel removePlVm)
+                    {
+                        removePlVm.Close = () =>
+                        {
+                            window.DialogResult = removePlVm.DialogResult;
+                            window.Close();
+                        };
+                    }
+                };
+            }
+        }
+        #endregion
+
+        #region event for getting selected items from datagrid
+        public static bool GetSelectedItemsDatagridEvents(DependencyObject obj)
+        {
+            return (bool)obj.GetValue(EnableSelectedItemsDatagridProperty);
+        }
+
+        public static void SetSelectedItemsDatagridEvents(DependencyObject obj, bool value)
+        {
+            obj.SetValue(EnableSelectedItemsDatagridProperty, value);
+        }
+
+        public static readonly DependencyProperty EnableSelectedItemsDatagridProperty = DependencyProperty.RegisterAttached("EnableSelectedItemsDatagridEvents", typeof(bool), typeof(EventManager), new PropertyMetadata(false, EnableSelectedItemsDatagridChanged));
+
+        private static void EnableSelectedItemsDatagridChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            if (d is DataGrid dataGrid)
+            {
+                dataGrid.SelectionChanged += (s, e) =>
+                {
+                    if (dataGrid.DataContext is RemoveMediaFromDbViewModel mediaVm)
+                    {
+                        var selectedItems = dataGrid.SelectedItems.Cast<Media>().ToList();
+
+                        mediaVm.SelectedMedia.Clear();
+
+                        foreach (var item in selectedItems)
+                            mediaVm.SelectedMedia.Add(item);
+                    }
+                };
+            }
+        }
     }
+    #endregion
 }
+

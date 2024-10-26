@@ -2,7 +2,9 @@
 using MediaPlayerDA;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Windows;
 using System.Windows.Media.Imaging;
 
 namespace MediaPlayerBL
@@ -13,7 +15,7 @@ namespace MediaPlayerBL
     public class MediaBL : IMediaBL
     {
 
-        private PlaylistManager _playlistManager; //instanc for handling playlists
+        private PlaylistManager _playlistManager; //instance for handling playlists
         private MediaDA _mediaDA; // instance for data access layer
 
         /// <summary>
@@ -29,29 +31,78 @@ namespace MediaPlayerBL
         /// Loads the playlist from a filepath
         /// and returns a list of media
         /// </summary>
-        public List<Media> LoadPlaylist(string filepath)
+        public ICollection<Media> LoadPlaylist(string filepath, bool loadFromDb)
         {
-            _playlistManager.LoadPlaylist(_mediaDA, filepath);
+            _playlistManager.LoadPlaylist(_mediaDA, filepath, loadFromDb);
+
             return _playlistManager.CurrentPlaylist.MediaFiles;
+        }
+
+        public ICollection<Playlist> GetPlaylistFromDb()
+        {
+           return _playlistManager.GetPlaylistsFromDatabase(_mediaDA);
         }
 
         /// <summary>
         /// A method that loads media calling the method from the DA layer
         /// </summary>
-        public List<Media> LoadMedia(string[] filenames)
+        public ICollection<Media> LoadMedia(string[] filenames, bool loadFromDb)
         {
-            return _mediaDA.LoadMedia(filenames);
+            if (loadFromDb)
+                return _mediaDA.LoadMediaFromDatabase();
+
+            else
+                return _mediaDA.LoadMedia(filenames);
+        }
+
+        public void SaveMedia(ICollection<Media> media, string PlaylistTitle)
+        {
+            _mediaDA.SaveMediaToDatabase(media, PlaylistTitle);
+        }
+
+        public void RemoveMedia(ICollection<Media> media)
+        {
+            _mediaDA.RemoveMediaFromDatabase(media);
         }
 
         /// <summary>
         /// A method saving the playlist
         /// </summary>
-        public void SavePlaylist(string filepath, List<Media> loadedMedia) => _playlistManager.SavePlaylist(_mediaDA, filepath, loadedMedia);
+        public void SavePlaylist(string title, string filepath, ICollection<Media> loadedMedia)
+        {
+            _playlistManager.SavePlaylist(title, _mediaDA, filepath, loadedMedia);
+        }
 
+        public void SavePlaylistToDatabase(string title, ICollection<Media> loadedMedia)
+        {
+            _playlistManager.SavePlaylistToDb(title, _mediaDA, loadedMedia);
+        }
         /// <summary>
         /// A method retrieving the playlist title
         /// </summary>
         public string GetPlaylistTitle() => _playlistManager.CurrentPlaylist.PlaylistName;
+
+        public void ChangePlaylistTitle(string newName, Playlist playlist)
+        {
+            _playlistManager.ChangePlaylistTitle(_mediaDA, newName, playlist);
+        }
+
+        public void CreateNewPlaylist(string name)
+        {
+            _playlistManager.CreateNewPlaylist(_mediaDA, name);
+        }
+
+        public void RemovePlaylist(string title)
+        {
+            _playlistManager.RemoveCurrentPlaylist(_mediaDA, title);
+        }
+
+        public bool IsPlaylistInDatabase(string name)
+        {
+            return _playlistManager.IsPlaylistInDatabase(_mediaDA, name);
+        }
+
+        public Playlist GetCurrentPlaylist() => _playlistManager.CurrentPlaylist;
 
         /// <summary>
         /// Checks if the media is an image
@@ -77,16 +128,25 @@ namespace MediaPlayerBL
         public BitmapImage CreateImage(string filePath)
         {
             var image = new BitmapImage();
+            bool db = true;
             try
             {
                 image.BeginInit(); // Begin initialization
-                image.UriSource = new Uri(filePath, UriKind.Absolute); //Gets source as uri
+
+                if (db)
+                    image.UriSource = new Uri(filePath, UriKind.Relative);
+
+                else
+                    image.UriSource = new Uri(filePath, UriKind.Absolute); //Gets source as uri
+
                 image.CacheOption = BitmapCacheOption.OnLoad; // Cache the image
                 image.EndInit(); // Ends initialization
                 image.Freeze(); // Freeze the image to make it cross-thread accessible
             }
-            catch
+
+            catch (Exception ex)
             {
+                MessageBox.Show(ex.Message);
                 image = null;
             }
             return image;
@@ -98,11 +158,27 @@ namespace MediaPlayerBL
         public Uri CreateVideo(string filePath)
         {
             Uri path = null;
-            
-            if(System.IO.File.Exists(filePath))
-                path = new Uri(filePath, UriKind.RelativeOrAbsolute);
 
-            return path;    
+            try
+            {
+                if (!Path.IsPathRooted(filePath))
+                {
+                    path = new Uri(filePath, UriKind.Relative);
+                }
+
+                else
+                {
+                    path = new Uri(filePath, UriKind.Absolute);
+                }
+
+            }
+
+            catch
+            {
+                path = null;
+            }
+
+            return path;
         }
     }
 }

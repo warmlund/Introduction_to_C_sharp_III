@@ -2,15 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MediaPlayerPL">
 
-    <!-- Defines the PlayPauseConverter to be able to toggle between play/pause text in the button style-->
+    <!-- Defines converters-->
     <local:PlayPauseConverter x:Key="PlayPauseConverter"/>
+    <local:UpDownExpanderConverter x:Key="UpDownExpanderConverter"/>
 
-    
     <!--#region TextBlock Styles -->
     <!-- This style defines a text used for buttons-->
     <Style x:Key="ButtonTextStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontWeight" Value="SemiBold"/>
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
         <Setter Property="HorizontalAlignment" Value="Right"/>
@@ -18,8 +17,62 @@
     </Style>
     <!--#endregion-->
 
+    <!--#region TextBox Styles -->
+    <Style x:Key="TextBoxStyle" TargetType="{x:Type TextBox}">
+        <Setter Property="Width" Value="140"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Foreground" Value="#914c66"/>
+        <Setter Property="AcceptsReturn" Value="False"/>
+        <Setter Property="AcceptsTab" Value="False"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="HorizontalScrollBarVisibility" Value="Hidden"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Border x:Name="TextBoxBorder" Background="Transparent" BorderBrush="#914c66" BorderThickness="1" CornerRadius="2">
+                        <ScrollViewer x:Name="PART_ContentHost"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+    
     <!--#region Button Styles -->
     <!-- These styles are for all buttons used in the view-->
+    <Style x:Key="EditPlaylistNameStyle" TargetType="{x:Type Button}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <TextBlock Name="EditFinishText"
+                    FontFamily="Segoe MDL2 Assets"
+                    FontSize="10"
+                    Text="&#xE8AC;"
+                    Foreground="White"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"/>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="EditFinishText" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                        <Trigger Property="IsEnabled" Value="False">
+                            <Setter TargetName="EditFinishText" Property="Opacity" Value="0.6"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    
     <Style x:Key="PlayPauseButtonStyle" TargetType="{x:Type ToggleButton}">
         <Setter Property="Background" Value="#fe994b"/>
         <Setter Property="Foreground" Value="White"/>
@@ -58,8 +111,8 @@
         </Setter>
     </Style>
 
-    <Style x:Key="LoadMediaButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="100"/>
+    <Style x:Key="BaseButtonStyle" TargetType="{x:Type Button}">
+        <Setter Property="Width" Value="180"/>
         <Setter Property="Height" Value="25"/>
         <Setter Property="HorizontalAlignment" Value="Center"/>
         <Setter Property="VerticalAlignment" Value="Center"/>
@@ -67,62 +120,25 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#fe994b">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xED25;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock x:Name="ButtonText" Text="Load Media" Style="{StaticResource ButtonTextStyle}"/>
+                    <Border Name="Border" CornerRadius="5" Background="#914c66">
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                            <TextBlock x:Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="{TemplateBinding Tag}" Foreground="White" VerticalAlignment="Center" Margin="10,0,10,0"/>
+                            <TextBlock x:Name="ButtonText" Text="{TemplateBinding Content}" Style="{StaticResource ButtonTextStyle}"/>
                         </StackPanel>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
+                            <Setter Property="Opacity" Value="0.8"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="False">
                             <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
                             <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="0.6"/>
                         </Trigger>
                         <Trigger Property="IsEnabled" Value="True">
                             <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
                             <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
-    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#fe994b">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE898;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Name="ButtonText" Text="Load Playlist" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
+                            <Setter TargetName="Border" Property="Opacity" Value="1.0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -130,43 +146,65 @@
         </Setter>
     </Style>
 
-    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}">
-        <Setter Property="Width" Value="100"/>
-        <Setter Property="Height" Value="25"/>
-        <Setter Property="HorizontalAlignment" Value="Center"/>
-        <Setter Property="VerticalAlignment" Value="Center"/>
-        <Setter Property="Margin" Value="0,5,0,5"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type Button}">
-                    <Border CornerRadius="5" Background="#fe994b">
-                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <TextBlock Name="Icon" FontFamily="Segoe MDL2 Assets" FontSize="16" Text="&#xE74E;" Foreground="White" VerticalAlignment="Center"/>
-                            <TextBlock Name="ButtonText" Text="Save Playlist" Style="{StaticResource ButtonTextStyle}"/>
-                        </StackPanel>
-                    </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Opacity" Value="0.9"/>
-                        </Trigger>
-                        <Trigger Property="IsMouseOver" Value="False">
-                            <Setter Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="False">
-                            <Setter TargetName="Icon" Property="Opacity" Value="0.6"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="0.6"/>
-                        </Trigger>
-                        <Trigger Property="IsEnabled" Value="True">
-                            <Setter TargetName="Icon" Property="Opacity" Value="1.0"/>
-                            <Setter TargetName="ButtonText" Property="Opacity" Value="1.0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
+    <Style x:Key="AddMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media"/>
+        <Setter Property="Tag" Value="&#xEA69;"/>
     </Style>
 
-    <Style x:Key="UpDownButtonStyle" TargetType="{x:Type Button}">
+    <Style x:Key="AddMediaFromDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media from Database"/>
+        <Setter Property="Tag" Value="&#xEA69;"/>
+    </Style>
+
+    <Style x:Key="LoadPlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist from file (.json)"/>
+        <Setter Property="Tag" Value="&#xE8E5;"/>
+    </Style>
+
+    <Style x:Key="LoadPlaylistToDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist from Database"/>
+        <Setter Property="Tag" Value="&#xE965;"/>
+    </Style>
+
+    <Style x:Key="SavePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist to file (.json)"/>
+        <Setter Property="Tag" Value="&#xE74E;"/>
+    </Style>
+
+    <Style x:Key="SavePlaylistToDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist to Database"/>
+        <Setter Property="Tag" Value="&#xE965;"/>
+    </Style>
+
+    <Style x:Key="SaveMediaToDbButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media to Database"/>
+        <Setter Property="Tag" Value="&#xE965;"/>
+    </Style>
+
+    <Style x:Key="CreatePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="New Playlist"/>
+        <Setter Property="Tag" Value="&#xED0E;"/>
+    </Style>
+
+    <Style x:Key="RemovePlaylistButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Playlist from Database"/>
+        <Setter Property="Tag" Value="&#xE74D;"/>
+    </Style>
+
+    <Style x:Key="RemoveMediaButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Media from Database"/>
+        <Setter Property="Tag" Value="&#xE74D;"/>
+    </Style>
+
+    <Style x:Key="OkButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="OK"/>
+    </Style>
+
+    <Style x:Key="CancelButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButtonStyle}">
+        <Setter Property="Content" Value="Cancel"/>
+    </Style>
+
+    <Style x:Key="UpDownButtonBaseStyle" TargetType="{x:Type Button}">
         <Setter Property="FontSize" Value="8"/>
         <Setter Property="FontFamily" Value="Segoe MDL2 Assets"/>
         <Setter Property="Background" Value="Transparent"/>
@@ -188,23 +226,22 @@
                                 <Setter Property="Foreground" Value="Transparent"/>
                             </Trigger.Setters>
                         </Trigger>
-                       
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
 
-    <Style x:Key="UpButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonStyle}">
+    <Style x:Key="UpButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonBaseStyle}">
         <Setter Property="Content" Value="&#xE74A;"/>
     </Style>
 
-    <Style x:Key="DownButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonStyle}">
+    <Style x:Key="DownButtonStyle" TargetType="{x:Type Button}" BasedOn="{StaticResource UpDownButtonBaseStyle}">
         <Setter Property="Content" Value="&#xE74B;"/>
     </Style>
 
     <!--#endregion-->
-
+ 
     <!--#region Slider Style -->
     <!--These are styles for all the parts of the slider that is used to control the interval of the slideshow-->
     <Style x:Key="SliderThumbStyle" TargetType="{x:Type Thumb}">
@@ -348,4 +385,146 @@
         <Setter Property="Foreground" Value="#fe994b"/>
     </Style>
     <!--#endregion-->
+
+    <!--#region Expander Styles-->
+    <Style x:Key="ExpanderHeaderStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="Background" Value="#914c66"/>
+        <Setter Property="Margin" Value="5"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <TextBlock Name="UpDownText"
+                   FontFamily="Segoe MDL2 Assets"
+                   FontSize="12"
+                   Text="{Binding IsChecked, RelativeSource={RelativeSource AncestorType=ToggleButton}, Converter={StaticResource UpDownExpanderConverter}}"
+                   Foreground="White"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="UpDownText" Property="Opacity" Value="0.8"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="ExpanderStyle" TargetType="{x:Type Expander}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Width" Value="180"/>
+        <Setter Property="FontSize" Value="12"/>
+        <Setter Property="Background" Value="#914c66"/>
+        <Setter Property="HorizontalAlignment" Value="Left"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Expander}">
+                    <Border x:Name="Border" CornerRadius="5" Background="{TemplateBinding Background}">
+                        <DockPanel>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <!-- ToggleButton for Arrow -->
+                                <ToggleButton x:Name="HeaderToggle"
+                            Grid.Column="0" Grid.Row="0"
+                            IsChecked="{Binding IsExpanded, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"
+                            Style="{StaticResource ExpanderHeaderStyle}"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            DockPanel.Dock="Left"/>
+
+                                <!-- ContentPresenter for the Expander's Header -->
+                                <ContentPresenter
+                            ContentSource="Header"
+                            Grid.Column="1" Grid.Row="0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Center"
+                            Margin="5,0,0,0"
+                            DockPanel.Dock="Right"/>
+
+                                <!-- Content to be expanded/collapsed -->
+                                <ContentPresenter x:Name="ExpandSite"
+                            Grid.ColumnSpan="2" Grid.Row="1"
+                            HorizontalAlignment="{TemplateBinding HorizontalAlignment}"
+                            VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
+                            Visibility="Collapsed"
+                            Focusable="false"/>
+                            </Grid>
+                        </DockPanel>
+                    </Border>
+
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsExpanded" Value="true">
+                            <Setter Property="Visibility" TargetName="ExpandSite" Value="Visible"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!--#endregion-->
+
+    <!--#region Datagrid styles -->
+    <Style x:Key="DatagridStyle" TargetType="{x:Type DataGrid}">
+        <Setter Property="AutoGenerateColumns" Value="False"/>
+        <Setter Property="SelectionMode" Value="Extended"/>
+        <Setter Property="CanUserAddRows" Value="False"/>
+        <Setter Property="CanUserDeleteRows" Value="False"/>
+        <Setter Property="CanUserReorderColumns" Value="False"/>
+        <Setter Property="CanUserResizeColumns" Value="False"/>
+        <Setter Property="CanUserResizeRows" Value="False"/>
+        <Setter Property="CanUserSortColumns" Value="False"/>
+        <Setter Property="Background" Value="White"/>
+        <Setter Property="Foreground" Value="#99506d"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="HorizontalAlignment" Value="Center"/>
+        <Setter Property="Width" Value="Auto"/>
+        <Setter Property="IsReadOnly" Value="True"/>
+        <Setter Property="HorizontalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="VerticalGridLinesBrush" Value="LightGray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="LightGray"/>
+        <Setter Property="HeadersVisibility" Value="Column"/>
+    </Style>
+
+    <Style x:Key="DatagridRowStyle" TargetType="{x:Type DataGridRow}">
+        <Setter Property="MinWidth" Value="100"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="#CC99506D"/>
+                <Setter Property="Foreground" Value="White"/>
+                <Setter Property="BorderBrush" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DatagridCellStyle" TargetType="{x:Type DataGridCell}">
+        <Style.Triggers>
+            <Trigger Property="IsSelected" Value="True">
+                <Setter Property="Foreground" Value="White" />
+                <Setter Property="Background" Value="#99506d"/>
+                <Setter Property="BorderBrush" Value="White"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <Style x:Key="DatagridHeaderStyle" TargetType="{x:Type DataGridColumnHeader}">
+        <Setter Property="MinWidth" Value="100"/>
+        <Setter Property="Height" Value="30"/>
+        <Setter Property="Padding" Value="5"/>
+        <Setter Property="Background"  Value="#99506d"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="BorderBrush" Value="White"/>
+    </Style>
+    <!--#endregion-->
+
 </ResourceDictionary>

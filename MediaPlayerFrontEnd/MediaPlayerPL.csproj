@@ -27,4 +27,10 @@
     <ProjectReference Include="..\MediaStorage\MediaDTO.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Modal\RemoveMediaFromDb\RemoveMediaFromDbModal.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

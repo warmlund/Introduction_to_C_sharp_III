@@ -1,5 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MediaDTO
 {
@@ -8,12 +10,12 @@ namespace MediaDTO
     /// </summary>
     public class Playlist
     {
-        //Media files property
-        [JsonProperty("Media")] //JSON attribute
-        public List<Media> MediaFiles { get; set; }
+        [Key]
+        [JsonProperty("Title")] // JSON attribute
+        public string PlaylistName { get; set; } = null!; // Set to non-nullable to ensure consistency
 
-        //Playlist name property
-        [JsonProperty("Title")] //JSON attribute
-        public string PlaylistName { get; set; }
+        [JsonProperty("Media")] // JSON attribute
+        [InverseProperty("Playlist")]
+        public ICollection<Media> MediaFiles { get; set; } = new List<Media>(); // Initialize to avoid null references
     }
 }

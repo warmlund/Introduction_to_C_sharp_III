@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json; // Importing the Json.NET library for handling json files
+﻿using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema; // Importing the Json.NET library for handling json files
 
 namespace MediaDTO
 {
@@ -7,17 +10,25 @@ namespace MediaDTO
     /// </summary>
     public class Media
     {
-        //Name property
-        [JsonProperty("FileName")] //JSON attribute
-        public string FileName { get; set; }
+        [Key]
+        [JsonProperty("MediaId")]
+        public int MediaId { get; set; }
 
-        //Filepath property
-        [JsonProperty("FilePath")] //JSON attribute
-        public string FilePath { get; set; }
+        [Required]
+        [JsonProperty("FileName")] // JSON attribute
+        public string FileName { get; set; } = null!;
 
-        //Format property
-        [JsonProperty("Format")] //JSON attribute
-        public string Format { get; set; }
+        [Required]
+        [JsonProperty("FilePath")] // JSON attribute
+        public string FilePath { get; set; } = null!;
 
+        [Required]
+        [JsonProperty("Format")] // JSON attribute
+        public string Format { get; set; } = null!;
+
+        [ForeignKey(nameof(Playlist))] // Reference Playlist entity
+        public string? PlaylistName { get; set; } // Nullable foreign key
+
+        public Playlist? Playlist { get; set; } // Nullable navigation property
     }
 }
