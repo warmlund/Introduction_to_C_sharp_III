@@ -150,6 +150,15 @@ namespace MediaPlayerPL
                             window.Close();
                         };
                     }
+
+                    else if (window.DataContext is AddMediaFromDbViewModel addMediaVm)
+                    {
+                        addMediaVm.Close = () =>
+                        {
+                            window.DialogResult = addMediaVm.DialogResult;
+                            window.Close();
+                        };
+                    }
                 };
             }
         }
@@ -182,6 +191,16 @@ namespace MediaPlayerPL
 
                         foreach (var item in selectedItems)
                             mediaVm.SelectedMedia.Add(item);
+                    }
+
+                    else if(dataGrid.DataContext is AddMediaFromDbViewModel addMediaVm)
+                    {
+                        var selectedItems = dataGrid.SelectedItems.Cast<Media>().ToList();
+
+                        addMediaVm.SelectedMedia.Clear();
+
+                        foreach (var item in selectedItems)
+                            addMediaVm.SelectedMedia.Add(item);
                     }
                 };
             }

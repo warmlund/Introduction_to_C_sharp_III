@@ -1,64 +1,54 @@
+# Ignore Visual Studio specific folders
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
 
-/.vs/Assignment_One/FileContentIndex
-/.vs/Assignment_One/v17
-/.vs
-/MediaPlayerBL/.vs
-/MediaPlayerBL/obj
-/MediaPlayerDA/.vs
-/MediaPlayerDA/Sample_Data
-/MediaPlayerDA/obj/Debug
-/MediaPlayerDA/bin/Debug
-/MediaPlayerBL/bin/Debug
-/MediaPlayerFrontEnd/obj/Debug/net8.0-windows
-/MediaPlayerFrontEnd/obj/Release/net8.0-windows
-/MediaPlayerFrontEnd/bin/Debug/net8.0-windows
-/MediaPlayerDA/obj/Release
-/MediaPlayerFrontEnd/obj
-/.gitignore
-/MediaPlayerBL/obj/Debug/DesignTimeResolveAssemblyReferencesInput.cache
-/MediaStorage/obj/Debug/MediaDTO.csproj.AssemblyReference.cache
-/MediaStorage/bin/Debug/MediaStorage.dll
-/MediaStorage/bin/Debug/MediaStorage.pdb
-/MediaStorage/obj/Debug/MediaStorage.dll
-/MediaStorage/obj/Debug/MediaStorage.pdb
-/MediaPlayerDA/Sample_Data/Media
-/MediaStorage/obj
-/MediaPlayerDA/obj
-/allfiles.txt
-/MediaPlayerDA/bin/Release/MediaPlayerDA.dll
-/MediaPlayerDA/bin/Release/MediaPlayerDA.pdb
-/MediaPlayerDA/bin/Release/MediaStorage.dll
-/MediaPlayerDA/bin/Release/MediaStorage.pdb
-/MediaPlayerDA/bin/Release/Newtonsoft.Json.dll
-/MediaStorage/obj/Release/MediaDTO.csproj.AssemblyReference.cache
-/MediaStorage/obj/Release/MediaDTO.csproj.CoreCompileInputs.cache
-/MediaStorage/obj/Release/MediaDTO.csproj.FileListAbsolute.txt
-/MediaStorage/obj/Release/MediaStorage.dll
-/MediaStorage/obj/Release/MediaStorage.pdb
-/MediaStorage/bin/Release/MediaStorage.dll
-/MediaStorage/bin/Release/MediaStorage.pdb
-/MediaPlayerDA/Sample_Data
-/MediaPlayerDA/Sample_Data/Media/Images/Cherry.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/Forest.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/Lake.jpeg
-/MediaPlayerDA/Sample_Data/Media/Images/mars rover.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/nebula.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/purple sky.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/Railroad.jpeg
-/MediaPlayerDA/Sample_Data/Media/Images/River.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/satellite.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/space flight.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/stars.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/Urban.jpg
-/MediaPlayerDA/Sample_Data/Media/Images/Valley.jfif
-/MediaPlayerDA/Sample_Data/Media/Images/Waterfall.jpg
-/MediaPlayerDA/Sample_Data/Media/Videos/Snow Leopard.MP4
-/MediaPlayerDA/Sample_Data/Media/Videos/Fox.MP4
-/MediaPlayerDA/Sample_Data/Playlists/space list.json
-/MediaStorage/obj/Debug/net8.0/MediaDTO.assets.cache
-/MediaPlayerDA/obj/project.assets.json
-/MediaStorage/obj/Debug/net8.0/MediaDTO.csproj.FileListAbsolute.txt
-/allfiles.txt
-/MediaPlayerDA/obj/project.nuget.cache
-/MediaStorage/obj/project.nuget.cache
+# Ignore build results
+**/bin/
+**/obj/
 
+# Ignore Debug and Release folders in all projects
+**/bin/Debug/
+**/bin/Release/
+**/obj/Debug/
+**/obj/Release/
+
+# Ignore cache files and other project build artifacts
+*.cache
+*.pdb
+*.ilk
+*.log
+*.sbr
+*.Cache
+*.exe
+*.dll
+
+# Ignore NuGet Packages and cache
+*.nupkg
+project.lock.json
+project.fragment.lock.json
+.nuget/
+packages/
+**/project.nuget.cache
+
+# Ignore generated files and dependency caches
+*.csproj.AssemblyReference.cache
+*.csproj.FileListAbsolute.txt
+*.csproj.CoreCompileInputs.cache
+*.csproj.GenerateResource.cache
+*.csprojAssemblyReference.cache
+
+# Ignore media, data, and other sample or temporary files
+/MediaPlayerDA/Sample_Data/
+/MediaPlayerDA/Sample_Data/Media/
+*.jpg
+*.jpeg
+*.png
+*.mp4
+*.json
+
+# Ignore custom files
+allfiles.txt
+.gitignore
