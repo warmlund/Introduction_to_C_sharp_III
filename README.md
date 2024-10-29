@@ -1,4 +1,4 @@
-<h3 align="center">Programming in C# III</h3>
+<h3 align="center">Home Media Player</h3>
 
 
 <!-- ABOUT THE PROJECT -->
