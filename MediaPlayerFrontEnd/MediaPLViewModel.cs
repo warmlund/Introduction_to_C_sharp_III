@@ -296,6 +296,9 @@ namespace MediaPlayerPL
                     OnPropertyChanged(nameof(PlaylistTitle));
                     _mediaBl.ChangePlaylistTitle(PlaylistTitle, _mediaBl.GetCurrentPlaylist());
                 }
+                CurrentPlayingMedia = null;
+                CurrentImage = null;
+                CurrentVideo = null;
             }
             else
             {
