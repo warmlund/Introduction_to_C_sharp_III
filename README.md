@@ -3,8 +3,10 @@
 
 <!-- ABOUT THE PROJECT -->
 ## About
-This is a repository for all assignments during the course Progamming in C# III.
-During the course the aim was to create a media player for videos and images that also handles media and playlists by quering a database, and from files.
+A media player with the purpose of playing a slideshow of both images and videos. Media and playlists is either loaded as playlists from a local database using Entity Framework or from the desktop as .json files.
+Playlists can be edited, created, removed and saved to the database or as json files. 
+
+The project in WPF usan an MVVM pattern in an three layered architecture.
 
 ### Assignments
 
