@@ -27,7 +27,12 @@ namespace MediaPlayerPL
                 PlaylistFromDatabase.Add(playlist);
         }
 
-        private bool CanDeletePlaylist() => _playlistFromDatabase != null;
+        private bool CanDeletePlaylist()
+        {
+            if (SelectedPlaylist != null)
+                return true;
+            return false;
+        }
         private bool CanCancelPlaylist() => true;
 
         private void DeletePlaylistFromDb()

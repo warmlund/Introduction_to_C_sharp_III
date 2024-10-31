@@ -28,7 +28,12 @@ namespace MediaPlayerPL
                 MediaFromDatabase.Add(media);
         }
 
-        private bool CanAddMedia() => true;
+        private bool CanAddMedia()
+        {
+            if (SelectedMedia.Count>0)
+                return true;
+            return false;
+        }
 
         private bool CanCancelAddMedia() => true;
 

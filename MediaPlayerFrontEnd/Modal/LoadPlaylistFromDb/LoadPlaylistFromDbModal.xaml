@@ -28,7 +28,8 @@
                           RowStyle="{StaticResource DatagridRowStyle}" 
                           CellStyle="{StaticResource DatagridCellStyle}" 
                           ColumnHeaderStyle="{StaticResource DatagridHeaderStyle}" 
-                          SelectionMode="Single" SelectedItem="{Binding SelectedPlaylist}">
+                          SelectionMode="Single" SelectedItem="{Binding SelectedPlaylist, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          local:EventManager.SelectedItemsDatagridEvents="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Name" Binding="{Binding PlaylistName}" Width="*"/>
                     </DataGrid.Columns>
