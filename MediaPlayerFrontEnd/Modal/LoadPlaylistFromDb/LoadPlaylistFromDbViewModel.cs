@@ -32,7 +32,12 @@ namespace MediaPlayerPL
                 PlaylistFromDatabase.Add(playlist);
         }
 
-        private bool CanLoadPlaylist() => _playlistFromDatabase != null;
+        private bool CanLoadPlaylist()
+        {
+            if (_playlistFromDatabase != null && SelectedPlaylist != null)
+                return true;
+            return false;
+        }
         private bool CanCancelPlaylist() => true;
 
         private void LoadPlaylistFromDb()

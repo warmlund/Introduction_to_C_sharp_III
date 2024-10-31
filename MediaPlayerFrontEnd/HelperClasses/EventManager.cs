@@ -191,6 +191,8 @@ namespace MediaPlayerPL
 
                         foreach (var item in selectedItems)
                             mediaVm.SelectedMedia.Add(item);
+
+                        mediaVm.RemoveMedia.RaiseCanExecuteChanged();
                     }
 
                     else if(dataGrid.DataContext is AddMediaFromDbViewModel addMediaVm)
@@ -201,6 +203,21 @@ namespace MediaPlayerPL
 
                         foreach (var item in selectedItems)
                             addMediaVm.SelectedMedia.Add(item);
+
+                        addMediaVm.AddMedia.RaiseCanExecuteChanged();
+                    }
+
+                    else if(dataGrid.DataContext is LoadPlaylistFromDbViewModel loadPlaylistVm)
+                    {
+                        loadPlaylistVm.SelectedPlaylist = dataGrid.SelectedItem as Playlist;
+                        loadPlaylistVm.LoadPlaylist.RaiseCanExecuteChanged();
+                       
+                    }
+
+                    else if(dataGrid.DataContext is RemovePlaylistFromDbViewModel removePlaylistVm)
+                    {
+                        removePlaylistVm.SelectedPlaylist = dataGrid.SelectedItem as Playlist;
+                        removePlaylistVm.DeletePlaylist.RaiseCanExecuteChanged();
                     }
                 };
             }
