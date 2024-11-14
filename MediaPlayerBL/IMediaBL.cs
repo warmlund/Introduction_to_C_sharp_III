@@ -1,5 +1,4 @@
 ﻿using MediaDTO;
-using MediaPlayerDA;
 using System;
 using System.Collections.Generic;
 using System.Windows.Media.Imaging;
@@ -30,9 +29,9 @@ namespace MediaPlayerBL
         Uri CreateVideo(string filepath);
 
         //Saves playlist
-        void SavePlaylist(string title,string filepath, ICollection<Media> loadedMedia);
+        bool SavePlaylist(string title, string filepath, ICollection<Media> loadedMedia);
 
-        void SavePlaylistToDatabase(string title, ICollection<Media> loadedMedia);
+        bool SavePlaylistToDatabase(string title, ICollection<Media> loadedMedia);
 
         //Gets playlist title
         string GetPlaylistTitle();

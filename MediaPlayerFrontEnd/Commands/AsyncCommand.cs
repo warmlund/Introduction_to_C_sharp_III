@@ -2,10 +2,10 @@
 
 namespace MediaPlayerPL
 {
-     /// <summary>
-     /// This is a  class for handling asynchronous commands between
-     /// the view and the view model
-     /// </summary>
+    /// <summary>
+    /// This is a  class for handling asynchronous commands between
+    /// the view and the view model
+    /// </summary>
     public class AsyncCommand : ICommand //Inherits the interface ICommand
     {
         private readonly Func<Task> _execute; //variable representing the async command that is being executed

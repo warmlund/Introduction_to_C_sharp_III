@@ -82,7 +82,7 @@ namespace MediaPlayerDA
 
         public ICollection<Playlist> GetPLaylistsFromDb()
         {
-            ICollection<Playlist> playlists =db.Playlist.OrderBy(p => p.PlaylistName).ToList();
+            ICollection<Playlist> playlists = db.Playlist.OrderBy(p => p.PlaylistName).ToList();
 
             return playlists;
         }
@@ -142,9 +142,9 @@ namespace MediaPlayerDA
 
         internal void RemoveMediaFromDb(ICollection<Media> media)
         {
-            foreach(Media m in media)
+            foreach (Media m in media)
             {
-                if(db.Media.Contains(m))
+                if (db.Media.Contains(m))
                 {
                     try
                     {
@@ -157,7 +157,7 @@ namespace MediaPlayerDA
                         continue;
                     }
                 }
-            } 
+            }
         }
 
         internal void RemovePlaylistFromDb(string title)
@@ -195,7 +195,7 @@ namespace MediaPlayerDA
 
         internal List<Media> GetMediaFromPLaylist(Playlist playlist)
         {
-           return db.Media.Where(m => m.PlaylistName == playlist.PlaylistName).ToList();
+            return db.Media.Where(m => m.PlaylistName == playlist.PlaylistName).ToList();
         }
     }
 }

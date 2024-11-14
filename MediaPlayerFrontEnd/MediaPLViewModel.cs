@@ -342,7 +342,17 @@ namespace MediaPlayerPL
         }
         private void SavePlaylistToDatabase()
         {
-            _mediaBl.SavePlaylistToDatabase(PlaylistTitle, CurrentLoadedMedia);
+            bool result = _mediaBl.SavePlaylistToDatabase(PlaylistTitle, CurrentLoadedMedia);
+
+            if (result)
+            {
+                MessageBox.Show("Successfully saved playlist to database");
+            }
+
+            else
+            {
+                MessageBox.Show("Failed to save playlist to database");
+            }
         }
         private void LoadPlaylistFromDatabase()
         {
@@ -364,10 +374,10 @@ namespace MediaPlayerPL
                         CurrentLoadedMedia.Add(media);
                     SetUpFirstLoadedMedia();
                 }
-                
-                catch 
-                { 
-                MessageBox.Show($"Failed to load {loadPlaylistFromDb.SelectedPlaylist.PlaylistName} from database.");
+
+                catch
+                {
+                    MessageBox.Show($"Failed to load {loadPlaylistFromDb.SelectedPlaylist.PlaylistName} from database.");
                 }
             }
         }
@@ -527,8 +537,19 @@ namespace MediaPlayerPL
         {
             var saveManager = new SaveManager();
             if (saveManager.ShowDialog())
-                _mediaBl.SavePlaylist(PlaylistTitle, saveManager.FilePath, CurrentLoadedMedia.ToList()); // If successull calls the method in the bl layer to save the playlist
+            {
+                bool result = _mediaBl.SavePlaylist(PlaylistTitle, saveManager.FilePath, CurrentLoadedMedia.ToList()); // If successull calls the method in the bl layer to save the playlist
 
+                if (result)
+                {
+                    MessageBox.Show("Successfully saved playlist to desktop");
+                }
+
+                else
+                {
+                    MessageBox.Show("Failed to save playlist to desktop");
+                }
+            }
             else
             {
                 saveManager.AlertUser();

@@ -1,8 +1,4 @@
-﻿using MediaPlayerBL;
-using MediaPlayerPL.HelperClasses;
-using System.Windows;
-
-namespace MediaPlayerPL
+﻿namespace MediaPlayerPL
 {
     public class EditPlaylistTitleViewModel : NotifyPropertyChanged
     {
@@ -12,7 +8,7 @@ namespace MediaPlayerPL
         public Command AddPlaylist { get; private set; }
         public Command CancelAddPlaylist { get; }
         public string Title { get { return _playlistTitle; } set { if (_playlistTitle != value) { _playlistTitle = value; OnPropertyChanged(nameof(Title)); AddPlaylist.RaiseCanExecuteChanged(); } } }
-        public bool DialogResult{ get { return _dialogResult; } set { if (_dialogResult != value) { _dialogResult = value; OnPropertyChanged(nameof(DialogResult));} } }
+        public bool DialogResult { get { return _dialogResult; } set { if (_dialogResult != value) { _dialogResult = value; OnPropertyChanged(nameof(DialogResult)); } } }
 
         public Action Close { get; set; }
 

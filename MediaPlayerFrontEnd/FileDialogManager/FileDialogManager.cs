@@ -17,7 +17,7 @@
         public string MediaFilter { get; protected set; } = "Media Files (*.mp4, *.wmv, *.avi, *.mpeg, *.mpg, *.asf, *.jpg, *.jpeg, *.png, *.bmp, *.gif, *.tiff, *.ico)|*.mp4;*.wmv;*.avi;*.mpeg;*.mpg;*.asf;*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff;*.ico|"
                                   + "Video Files (*.mp4, *.wmv, *.avi, *.mpeg, *.mpg, *.asf)|*.mp4;*.wmv;*.avi;*.mpeg;*.mpg;*.asf|"
                                   + "Image Files (*.jpg, *.jpeg, *.png, *.bmp, *.gif, *.tiff, *.ico)|*.jpg;*.jpeg;*.png;*.bmp;*.gif;*.tiff;*.ico";
-        
+
         /// <summary>
         /// Shows file dialog, returns true if successful
         /// </summary>
