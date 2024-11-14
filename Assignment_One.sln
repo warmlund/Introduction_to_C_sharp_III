@@ -8,18 +8,20 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaPlayerPL", "MediaPlaye
 		{04D39C90-5123-4733-8572-8AD30780F08B} = {04D39C90-5123-4733-8572-8AD30780F08B}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerDA", "MediaPlayerDA\MediaPlayerDA.csproj", "{33D3354C-18AF-42D6-BC87-3005D4EC8050}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaPlayerDA", "MediaPlayerDA\MediaPlayerDA.csproj", "{33D3354C-18AF-42D6-BC87-3005D4EC8050}"
 	ProjectSection(ProjectDependencies) = postProject
 		{DF7D15FE-B111-4BF0-B82E-325D849A9046} = {DF7D15FE-B111-4BF0-B82E-325D849A9046}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerBL", "MediaPlayerBL\MediaPlayerBL.csproj", "{04D39C90-5123-4733-8572-8AD30780F08B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaPlayerBL", "MediaPlayerBL\MediaPlayerBL.csproj", "{04D39C90-5123-4733-8572-8AD30780F08B}"
 	ProjectSection(ProjectDependencies) = postProject
 		{33D3354C-18AF-42D6-BC87-3005D4EC8050} = {33D3354C-18AF-42D6-BC87-3005D4EC8050}
 		{DF7D15FE-B111-4BF0-B82E-325D849A9046} = {DF7D15FE-B111-4BF0-B82E-325D849A9046}
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaDTO", "MediaStorage\MediaDTO.csproj", "{DF7D15FE-B111-4BF0-B82E-325D849A9046}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MediaDTO", "MediaStorage\MediaDTO.csproj", "{DF7D15FE-B111-4BF0-B82E-325D849A9046}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MediaPlayerBL_Tests", "MediaPlayerBL_Tests\MediaPlayerBL_Tests.csproj", "{FE837924-1F07-4DA8-80CA-97B24538796E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -43,6 +45,10 @@ Global
 		{DF7D15FE-B111-4BF0-B82E-325D849A9046}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DF7D15FE-B111-4BF0-B82E-325D849A9046}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DF7D15FE-B111-4BF0-B82E-325D849A9046}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FE837924-1F07-4DA8-80CA-97B24538796E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FE837924-1F07-4DA8-80CA-97B24538796E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FE837924-1F07-4DA8-80CA-97B24538796E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FE837924-1F07-4DA8-80CA-97B24538796E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

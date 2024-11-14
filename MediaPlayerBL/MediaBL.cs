@@ -170,7 +170,6 @@ namespace MediaPlayerBL
                 {
                     path = new Uri(filePath, UriKind.Absolute);
                 }
-
             }
 
             catch
