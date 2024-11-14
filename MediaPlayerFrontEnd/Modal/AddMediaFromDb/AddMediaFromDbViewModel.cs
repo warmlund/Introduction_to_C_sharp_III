@@ -30,7 +30,7 @@ namespace MediaPlayerPL
 
         private bool CanAddMedia()
         {
-            if (SelectedMedia.Count>0)
+            if (SelectedMedia.Count > 0)
                 return true;
             return false;
         }

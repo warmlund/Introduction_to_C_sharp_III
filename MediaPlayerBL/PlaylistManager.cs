@@ -2,7 +2,6 @@
 using MediaPlayerDA;
 using System.Collections.Generic;
 using System.IO;
-using System.Windows;
 
 
 namespace MediaPlayerBL
@@ -21,38 +20,19 @@ namespace MediaPlayerBL
         /// <summary>
         /// Method for saving a playlist
         /// </summary>
-        public void SavePlaylist(string title, IMediaDA mediaDA, string filepath, ICollection<Media> currentMedia)
+        public bool SavePlaylist(string title, IMediaDA mediaDA, string filepath, ICollection<Media> currentMedia)
         {
             foreach (var item in currentMedia)
             {
                 item.PlaylistName = title;
             }
-            bool result = mediaDA.SavePlaylist(filepath, title, currentMedia); //Saves the playlist
 
-            if (result)
-            {
-                MessageBox.Show("Successfully saved playlist to desktop");
-            }
-
-            else
-            {
-                MessageBox.Show("Failed to save playlist to desktop");
-            }
+            return mediaDA.SavePlaylist(filepath, title, currentMedia); //Saves the playlist
         }
 
-        public void SavePlaylistToDb(string title, IMediaDA mediaDA, ICollection<Media> currentMedia)
+        public bool SavePlaylistToDb(string title, IMediaDA mediaDA, ICollection<Media> currentMedia)
         {
-            bool result = mediaDA.SavePlaylistToDatabase(title, currentMedia);
-
-            if (result)
-            {
-                MessageBox.Show("Successfully saved playlist to database");
-            }
-
-            else
-            {
-                MessageBox.Show("Failed to save playlist to database");
-            }
+            return mediaDA.SavePlaylistToDatabase(title, currentMedia);
         }
 
         /// <summary>

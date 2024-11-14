@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
 
@@ -19,10 +14,10 @@ namespace MediaPlayerPL
         {
             if (value is int count) //checks if value is an integer
             {
-                return count<1 ? Visibility.Visible : Visibility.Collapsed; //returns visible if integer is less than 1
+                return count < 1 ? Visibility.Visible : Visibility.Collapsed; //returns visible if integer is less than 1
             }
 
-            return Visibility.Collapsed; 
+            return Visibility.Collapsed;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

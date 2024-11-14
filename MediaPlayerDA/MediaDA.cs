@@ -1,6 +1,5 @@
 ﻿using MediaDTO;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -106,7 +105,7 @@ namespace MediaPlayerDA
 
         public bool SavePlaylistToDatabase(string title, ICollection<Media> currentMedia)
         {
-           return _databaseManager.SavePlaylistToDb(title, currentMedia);
+            return _databaseManager.SavePlaylistToDb(title, currentMedia);
         }
 
         public void RemoveMediaFromDatabase(ICollection<Media> media)
@@ -131,7 +130,7 @@ namespace MediaPlayerDA
 
         public bool IsPlaylistInDatabase(string name)
         {
-           return _databaseManager.IsPlaylistInDatabase(name);
+            return _databaseManager.IsPlaylistInDatabase(name);
         }
     }
 }
