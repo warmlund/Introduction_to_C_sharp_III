@@ -9,6 +9,7 @@ namespace MediaPlayerDA
 {
     public class DatabaseManager
     {
+        public MediaPlayerDbContext DbContext { get { return db; } }
         private readonly MediaPlayerDbContext db;
         public DatabaseManager()
         {
@@ -55,7 +56,7 @@ namespace MediaPlayerDA
             db.SaveChanges(); // Save media files
         }
 
-        private void AddMediaIfNotExists(MediaPlayerDbContext db, string fileName, string filePath, string format, string playlistName)
+        private static void AddMediaIfNotExists(MediaPlayerDbContext db, string fileName, string filePath, string format, string playlistName)
         {
             // Check if the media file already exists
             var existingMedia = db.Media.FirstOrDefault(m => m.FileName == fileName || m.PlaylistName == playlistName);
@@ -135,7 +136,7 @@ namespace MediaPlayerDA
             }
         }
 
-        internal Playlist LoadPlaylistFormDb(string name)
+        public Playlist LoadPlaylistFromDb(string name)
         {
             return db.Playlist.Where(p => p.PlaylistName.Equals(name)).FirstOrDefault();
         }

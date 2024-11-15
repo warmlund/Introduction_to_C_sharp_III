@@ -90,7 +90,7 @@ namespace MediaPlayerDA
 
         public Playlist LoadPlaylistFromDatabase(string name)
         {
-            return _databaseManager.LoadPlaylistFormDb(name);
+            return _databaseManager.LoadPlaylistFromDb(name);
         }
 
         public List<Media> GetMediaFromPlaylist(Playlist playlist)
