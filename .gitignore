@@ -1,0 +1,25 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/Assignment_One
+/MediaStorage/obj
+/MediaStorage/bin/Debug
+*.txt
+/MediaPlayerFrontEnd/bin/Debug/net8.0-windows
+/MediaPlayerFrontEnd/obj/Debug/net8.0-windows
+/MediaPlayerFrontEnd/obj/Release/net8.0-windows
+/MediaPlayerFrontEnd/obj
+/MediaPlayerDA/.vs
+/MediaPlayerDA/bin/Debug
+/MediaPlayerDA/obj
+/MediaPlayerDA/Sample_Data/Media/Images
+/MediaPlayerDA/Sample_Data/Media/Videos
+/MediaPlayerBL_Tests/bin/Debug/net8.0-windows
+/MediaPlayerBL_Tests/obj/Debug
+/MediaPlayerBL_Tests/obj
+/MediaPlayerBL/.vs
+/MediaPlayerBL/bin/Debug
+/MediaPlayerBL/obj/Debug
+/MediaPlayerBL/obj/Release
+/MediaPlayerBL/obj
