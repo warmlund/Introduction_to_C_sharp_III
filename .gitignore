@@ -23,3 +23,6 @@
 /MediaPlayerBL/obj/Debug
 /MediaPlayerBL/obj/Release
 /MediaPlayerBL/obj
+/MediaPlayerDA_Tests/bin/Debug/net8.0
+/MediaPlayerDA_Tests/Documentation
+/MediaPlayerDA_Tests/obj
